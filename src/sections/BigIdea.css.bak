@@ -1,0 +1,100 @@
+.idea {
+  position: relative;
+  color: var(--ink);
+}
+
+.idea__seam {
+  margin-bottom: clamp(3rem, 9vh, 7rem);
+  color: rgba(26, 66, 95, 0.2);
+  text-transform: uppercase;
+}
+
+.idea__seam .marquee__item {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(26, 66, 95, 0.3);
+}
+
+.idea__grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.idea__statement {
+  text-transform: none;
+  letter-spacing: -0.04em;
+  font-size: 5.2vw !important;
+  line-height: 0.9 !important;
+}
+
+.idea__line {
+  display: block;
+}
+
+/* The line currently driving the right-hand panel. */
+.idea__line.is-active { color: var(--blue); }
+
+/* Reserve the panel's height so swapping copy never nudges the layers below. */
+.idea__service { min-height: 8.5em; }
+
+.idea__service-title {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: var(--blue);
+}
+
+.idea__word {
+  display: inline-block;
+  opacity: 0.14;
+  transition: opacity 0.1s linear;
+}
+
+.idea__aside {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 52ch;
+}
+
+.idea__aside .body { color: var(--fg-soft); }
+
+/* ---- Assembling stack ---- */
+
+.idea__stack {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+}
+
+.idea__layer {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.idea__layer span {
+  display: block;
+  width: var(--w);
+  height: 10px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
+
+.idea__layer:nth-child(4) span { background: linear-gradient(90deg, var(--cyan), var(--yellow)); }
+.idea__layer:nth-child(5) span { background: var(--yellow); }
+
+.idea__layer em {
+  font-style: normal;
+  color: var(--fg-soft);
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .idea__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .idea__aside { padding-top: 0.9rem; }
+}

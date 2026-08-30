@@ -1,0 +1,51 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+}
+
+.wordmark__logo {
+  width: 135px;
+  height: auto;
+  display: block;
+}
+
+.wordmark__glyph {
+  width: 1.45em;
+  height: auto;
+  fill: currentColor;
+  overflow: visible;
+}
+
+.wordmark__glyph rect {
+  transition: transform 0.5s var(--ease-out);
+  transform-origin: left center;
+}
+
+.wordmark__mid { fill: var(--cyan); }
+.wordmark__top { fill: var(--yellow); }
+
+.wordmark:hover .wordmark__top { transform: scaleX(1.55); }
+.wordmark:hover .wordmark__mid { transform: scaleX(1.18); }
+
+.wordmark__text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variation-settings: 'wdth' 88;
+  line-height: 1;
+}
+
+.wordmark--sm { font-size: 1.05rem; }
+.wordmark--lg { font-size: clamp(2rem, 7vw, 5rem); }
+
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+}
+
+.wordmark__logo {
+  display: block;
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}

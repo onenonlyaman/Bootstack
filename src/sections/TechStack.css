@@ -1,0 +1,40 @@
+.tech {
+  color: var(--ink);
+  --rule: rgba(35, 87, 132, 0.2);
+  overflow: hidden;
+}
+
+.tech__lede h2 {
+  letter-spacing: -0.035em;
+  max-width: none;
+  margin-bottom: var(--s-3);
+}
+
+.tech__lede h2 .techstack__first-line {
+  white-space: nowrap;
+}
+
+.tech__lede .body { max-width: 50ch; }
+
+/* ---- Technology flow ----
+   Two full-bleed rows running against each other, framed by the same rules the
+   old seam used. Each row is the existing seam Marquee, so the loop mechanics,
+   the yellow dot separators and the reduced-motion switch all come from
+   Marquee.css rather than being restated here. */
+
+.tech__flow {
+  display: grid;
+  gap: clamp(0.25rem, 0.9vh, 0.75rem);
+  margin-top: clamp(3rem, 8vh, 5.5rem);
+  padding-block: clamp(1.25rem, 3.5vh, 2.25rem);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--fg-soft);
+}
+
+/* Move Section 07 upward */
+@media (min-width: 1024px) {
+  .tech {
+    margin-top: -10rem;
+  }
+}

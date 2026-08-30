@@ -1,0 +1,138 @@
+.approach {
+  color: var(--ink);
+  --fg: var(--ink);
+  --fg-soft: rgba(8, 22, 31, 0.6);
+  --fg-faint: rgba(8, 22, 31, 0.34);
+  --rule: rgba(26, 66, 95, 0.18);
+  overflow: hidden;
+}
+
+.approach__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 6vh, 4rem);
+}
+
+.approach__head {
+  display: grid;
+  gap: var(--s-3);
+  align-items: end;
+}
+
+.approach__head h2 { letter-spacing: -0.045em; }
+.approach__head .body { max-width: 44ch; }
+
+/* ---- Rail ---- */
+
+.approach__rail {
+  width: 100%;
+}
+
+.approach__track {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-inline: var(--gutter);
+}
+
+.approach__stage {
+  position: relative;
+  display: grid;
+  gap: var(--s-2);
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--rule);
+}
+
+.approach__stage::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 3px;
+  background: var(--yellow);
+  transition: width 0.7s var(--ease-out);
+}
+
+.approach__stage:hover::after { width: 100%; }
+
+.approach__num {
+  font-size: clamp(3rem, 9vw, 7rem);
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1.25px rgba(26, 66, 95, 0.42);
+  letter-spacing: -0.05em;
+}
+
+.approach__stage:hover .approach__num {
+  -webkit-text-stroke-color: var(--yellow);
+}
+
+.approach__title {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  margin-bottom: 0.35rem;
+}
+
+.approach__line {
+  font-size: var(--t-md);
+  color: var(--blue);
+  margin-bottom: 0.6rem;
+}
+
+.approach__text {
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  color: var(--fg-soft);
+  max-width: 40ch;
+}
+
+/* ---- Progress ---- */
+
+.approach__progress {
+  height: 2px;
+  background: var(--rule);
+}
+
+.approach__progress span {
+  display: block;
+  height: 100%;
+  background: var(--yellow);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+@media (min-width: 1024px) {
+  /* The section gets pinned, so it must not exceed the viewport: the band's own
+     padding is dropped and the inner frame carries the spacing instead. */
+  .approach { padding-block: 0; }
+
+  .approach__inner {
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: clamp(5rem, 12vh, 8rem) clamp(2rem, 6vh, 4rem);
+  }
+
+  .approach__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  }
+
+  .approach__track {
+    display: flex;
+    width: max-content;
+    align-items: stretch;
+    will-change: transform;
+  }
+
+  .approach__stage {
+    width: clamp(340px, 30vw, 460px);
+    flex: none;
+  }
+
+  .approach__progress { display: block; }
+}
+
+@media (max-width: 1023px) {
+  .approach__progress { display: none; }
+}

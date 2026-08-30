@@ -1,0 +1,546 @@
+.cap {
+  color: var(--ink);
+  --fg: var(--ink);
+  --fg-soft: rgba(8, 22, 31, 0.62);
+  --fg-faint: rgba(8, 22, 31, 0.36);
+  --rule: rgba(26, 66, 95, 0.18);
+}
+
+.cap__head {
+  display: grid;
+  gap: var(--s-2);
+  max-width: 30ch;
+  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+}
+
+.cap__head h2 { letter-spacing: -0.035em; }
+.cap__head .body { color: var(--fg-faint); }
+
+/* ---- Rows ---- */
+
+.cap__list {
+  border-top: 1px solid var(--rule);
+}
+
+.cap__row {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+  --tone: var(--cyan-deep);
+}
+
+/* The card itself. One link, laid out as the row used to be. */
+.cap__link {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cap__link > .cap__panel { grid-column: 1 / -1; }
+
+.cap__row--yellow { --tone: var(--yellow); }
+.cap__row--cyan { --tone: var(--cyan); }
+.cap__row--blue { --tone: var(--cyan-deep); }
+
+/* Colour wipes up behind the row as it opens. */
+.cap__row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tone);
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.6s var(--ease-out);
+  z-index: 0;
+}
+
+.cap__row.is-open::before { transform: scaleY(1); }
+
+.cap__trigger {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(0.9rem, 2.5vw, 2.5rem);
+  width: 100%;
+  padding-block: clamp(1.1rem, 2.4vw, 1.9rem);
+  text-align: left;
+  color: inherit;
+  transition: color 0.4s var(--ease-out), padding 0.5s var(--ease-out);
+}
+
+.cap__index {
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+/* The service title. Self-contained type so it does not depend on the .display
+   class also being present, and one identical treatment for all eight — a long
+   name wraps to two lines rather than being set smaller. The transform
+   transition is the row's existing hover slide and stays untouched. */
+.cap__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+
+  /* At rest the title carries the same blue-to-cyan ramp as the section
+     headings. The gradient stays painted underneath at all times and only the
+     fill colour changes, which is what lets the swap to ink animate — a
+     background-image cannot be transitioned, a colour can. */
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  transition:
+    transform 0.6s var(--ease-out),
+    -webkit-text-fill-color 0.4s var(--ease-out),
+    color 0.4s var(--ease-out);
+}
+
+/* Hovered, or open — on a pointer device those are the same state. The title
+   returns to solid ink, which is how it read before. */
+.cap__row:hover .cap__title,
+.cap__row.is-open .cap__title {
+  color: var(--ink);
+  -webkit-text-fill-color: var(--ink);
+}
+
+/* Where background-clip: text is unavailable the titles stay ink rather than
+   turning invisible. */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .cap__title {
+    color: var(--ink);
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+.cap__verb {
+  display: none;
+  color: var(--fg-soft);
+  font-size: var(--t-md);
+  transition: color 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+}
+
+/* ---- Open state ---- */
+
+.cap__row.is-open .cap__trigger { color: var(--ink); }
+.cap__row.is-open .cap__index { color: rgba(8, 22, 31, 0.55); }
+.cap__row.is-open .cap__verb { color: rgba(8, 22, 31, 0.72); }
+
+/* ---- Panel ---- */
+
+.cap__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.6s var(--ease-out);
+}
+
+.cap__row.is-open .cap__panel { grid-template-rows: 1fr; }
+
+.cap__panel-inner {
+  overflow: hidden;
+  display: grid;
+  gap: var(--s-2);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out) 0.05s;
+}
+
+.cap__row.is-open .cap__panel-inner { opacity: 1; }
+
+.cap__blurb {
+  max-width: 48ch;
+  color: rgba(8, 22, 31, 0.78);
+  font-size: var(--t-md);
+}
+
+.cap__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: clamp(1.4rem, 3vw, 2.4rem);
+}
+
+.cap__item {
+  display: block;
+}
+
+.cap__items span.mono {
+  display: inline-block;
+  padding: 0.55em 1em;
+  border: 1px solid rgba(8, 22, 31, 0.28);
+  border-radius: 999px;
+  color: rgba(8, 22, 31, 0.85);
+}
+
+
+@media (min-width: 900px) {
+  .cap__trigger {
+    grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .cap__verb { display: block; }
+
+  .cap__row:not(.is-open):hover .cap__title { transform: translateX(12px); }
+
+  .cap__row.is-open .cap__trigger {
+    padding-inline: clamp(1rem, 2vw, 2rem);
+  }
+
+  .cap__row.is-open .cap__panel-inner {
+    padding-inline: clamp(1rem, 2vw, 2rem);
+  }
+}
+
+@media (max-width: 899px) {
+  .cap__row.is-open .cap__trigger,
+  .cap__row.is-open .cap__panel-inner {
+    padding-inline: 1rem;
+  }
+}
+
+/* ---- Explore ----
+   One action per card, in the slot the + used to occupy. It rides the row's
+   existing hover and open states rather than introducing its own interaction. */
+
+.cap__explore {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out), padding 0.5s var(--ease-out);
+}
+
+.cap__explore span:last-child {
+  transition: transform 0.4s var(--ease-out);
+}
+
+.cap__row:hover .cap__explore,
+.cap__row.is-open .cap__explore {
+  color: var(--ink);
+}
+
+.cap__row:hover .cap__explore span:last-child,
+.cap__explore:focus-visible span:last-child {
+  transform: translateX(5px);
+}
+
+/* Match the inset the trigger takes when the row opens. */
+.cap__row.is-open .cap__explore {
+  padding-right: clamp(1rem, 2vw, 2rem);
+}
+
+@media (max-width: 899px) {
+  .cap__row.is-open .cap__explore { padding-right: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cap__explore,
+  .cap__explore span:last-child {
+    transition: none;
+  }
+}
+
+/* Panels open on hover or focus. Touch devices have neither, so their preview
+   stays open rather than being locked behind a tap the card now consumes. */
+@media (hover: none) {
+  .cap__panel { grid-template-rows: 1fr; }
+  .cap__panel-inner { opacity: 1; }
+}
+
+/* The blurb was a <p>; as a span it still needs to be a block. */
+.cap__blurb { display: block; }
+
+
+/* ============================================================
+   SECTION 03 — WHAT BOOTSTACK DOES
+   ============================================================ */
+
+@media (min-width: 1024px) {
+
+  .cap__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: clamp(3rem, 6vw, 7rem);
+    align-items: center;
+
+    min-height: 70svh;
+
+    margin-top: clamp(3rem, 6vh, 5rem);
+    margin-bottom: clamp(4rem, 8vh, 6rem);
+  }
+
+
+  /* LEFT SIDE */
+
+  .cap__head {
+    max-width: 12ch;
+    margin: 0;
+  }
+
+  .cap__head h2 {
+    margin: 0;
+
+    font-size: clamp(3.2rem, 5vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+
+  /* RIGHT SIDE */
+
+  .cap__visual {
+    position: relative;
+
+    width: 100%;
+    max-width: 720px;
+
+    aspect-ratio: 600 / 420;
+
+    justify-self: end;
+  }
+
+
+  /* ----------------------------------------------------------
+     FLOWING LINES
+     ---------------------------------------------------------- */
+
+  .cap__connections {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+
+    pointer-events: none;
+
+    z-index: 0;
+  }
+
+  .cap__connections path {
+    fill: none;
+
+    stroke: rgba(35, 87, 132, 0.22);
+
+    stroke-width: 1.2;
+
+    stroke-dasharray: 5 7;
+
+    animation: cap-flow 5s linear infinite;
+  }
+
+  @keyframes cap-flow {
+    from {
+      stroke-dashoffset: 0;
+    }
+
+    to {
+      stroke-dashoffset: -100;
+    }
+  }
+
+
+  /* ----------------------------------------------------------
+     CENTRE
+     ---------------------------------------------------------- */
+
+  .cap__center {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 9rem;
+    height: 9rem;
+
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    place-items: center;
+    align-content: center;
+
+    text-align: center;
+
+    border: 1px solid rgba(35, 87, 132, 0.35);
+
+    border-radius: 50%;
+
+    background: var(--mist);
+
+    z-index: 3;
+  }
+
+  .cap__center .mono {
+    margin-bottom: 0.4rem;
+
+    color: var(--blue);
+
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+  }
+
+  .cap__center strong {
+    font-family: var(--font-display);
+
+    font-size: 1.4rem;
+
+    line-height: 1;
+
+    letter-spacing: -0.04em;
+  }
+
+  .cap__center strong span {
+    color: var(--cyan);
+  }
+
+
+  /* ----------------------------------------------------------
+     NODES
+     ---------------------------------------------------------- */
+
+  .cap__node {
+    position: absolute;
+
+    width: 9.5rem;
+    min-height: 4.7rem;
+
+    padding: 0.75rem 0.9rem;
+
+    display: grid;
+    align-content: center;
+
+    gap: 0.2rem;
+
+    background: var(--white);
+
+    border: 1px solid rgba(35, 87, 132, 0.18);
+
+    border-radius: 12px;
+
+    color: var(--ink);
+
+    text-decoration: none;
+
+    box-shadow:
+      0 8px 25px -20px rgba(8, 22, 31, 0.5);
+
+    z-index: 2;
+
+    transition:
+      transform 0.4s var(--ease-out),
+      border-color 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out);
+  }
+
+  .cap__node:hover {
+    transform: translateY(-5px);
+
+    border-color: var(--cyan);
+
+    box-shadow:
+      0 16px 30px -20px rgba(8, 22, 31, 0.45);
+  }
+
+  .cap__node-index {
+    color: var(--fg-faint);
+
+    font-size: 0.58rem;
+
+    letter-spacing: 0.15em;
+  }
+
+  .cap__node-title {
+    font-family: var(--font-display);
+
+    font-weight: 700;
+
+    font-size: 0.95rem;
+
+    line-height: 1;
+
+    letter-spacing: -0.02em;
+  }
+
+  .cap__node-arrow {
+    position: absolute;
+
+    top: 0.65rem;
+    right: 0.7rem;
+
+    color: var(--blue);
+
+    font-size: 0.75rem;
+  }
+
+
+  /* ----------------------------------------------------------
+     POSITIONS
+     ---------------------------------------------------------- */
+
+  .cap__node--1 {
+    top: 2%;
+    left: 3%;
+  }
+
+  .cap__node--2 {
+    top: 2%;
+    left: 50%;
+
+    transform: translateX(-50%);
+  }
+
+  .cap__node--3 {
+    top: 2%;
+    right: 3%;
+  }
+
+  .cap__node--4 {
+    bottom: 2%;
+    left: 3%;
+  }
+
+  .cap__node--5 {
+    bottom: 2%;
+    left: 50%;
+
+    transform: translateX(-50%);
+  }
+
+  .cap__node--6 {
+    bottom: 2%;
+    right: 3%;
+  }
+
+  .cap__node--2:hover,
+  .cap__node--5:hover {
+    transform: translateX(-50%) translateY(-5px);
+  }
+
+
+  /* ----------------------------------------------------------
+     SERVICE LIST BELOW
+     ---------------------------------------------------------- */
+
+  .cap__list {
+    margin-top: 0;
+  }
+
+}

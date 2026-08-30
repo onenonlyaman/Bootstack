@@ -1,0 +1,1029 @@
+/* ============================================================
+   /services/:slug — the service experience.
+   Built entirely on the existing tokens: no new colours, no new
+   type scale. `--sx-accent` just re-points at a brand colour the
+   site already owns, so a service can carry its Section 03 tone.
+   ============================================================ */
+
+.sx {
+  position: relative;
+  color: var(--ink);
+  /* The page never scrolls sideways, whatever floats over the edges. */
+  overflow-x: clip;
+
+  /* Page-local band padding. The global 15vh top *and* bottom stacked 30vh of
+     dead ground between every chapter here; these chapters carry their own
+     height and do not need the full page band as well. Scoped to .sx, so the
+     homepage rhythm is untouched. */
+  --band-y: clamp(2.75rem, 6.5vh, 5rem);
+}
+
+.sx--yellow {
+  --sx-accent: var(--yellow);
+}
+.sx--cyan {
+  --sx-accent: var(--cyan);
+}
+.sx--blue {
+  --sx-accent: var(--blue);
+}
+
+.sx__label {
+  color: var(--blue);
+  padding-bottom: var(--s-2);
+  margin-bottom: var(--s-4);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ---------- Chapter rail ---------- */
+
+.sx__rail {
+  position: fixed;
+  top: 50%;
+  right: clamp(0.75rem, 1.6vw, 1.5rem);
+  z-index: 40;
+  transform: translateY(-50%);
+  /* Decorative wayfinding — never in the way of a tap. */
+  pointer-events: none;
+}
+
+.sx__rail ol {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: end;
+}
+
+.sx__rail-dot {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  pointer-events: auto;
+}
+
+.sx__rail-dot i {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: rgba(8, 22, 31, 0.28);
+  transition:
+    width 0.45s var(--ease-out),
+    background-color 0.45s var(--ease-out);
+}
+
+.sx__rail-dot.is-here i {
+  width: 40px;
+  background: var(--sx-accent, var(--blue));
+}
+
+.sx__rail-label {
+  color: var(--fg-faint);
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out);
+}
+
+.sx__rail-dot.is-here .sx__rail-label,
+.sx__rail-dot:hover .sx__rail-label,
+.sx__rail-dot:focus-visible .sx__rail-label {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- 01 · Masthead ----------
+   One viewport, three bands, distributed. Nothing is centred into slack: the
+   crumb sits at the top, title and visual take the middle, marker and cue sit
+   on the floor — so the next chapter starts the moment the hero ends. */
+
+/* The navbar is fixed, so the hero has to reserve room for it or the crumb
+   sits underneath the logo. Matches the clearance the older service page uses.
+   Doubling the class beats .band's padding-block regardless of bundle order. */
+.sx__open.band {
+  padding-top: clamp(6.5rem, 14vh, 9rem);
+  padding-bottom: clamp(1.75rem, 4.5vh, 3rem);
+}
+
+/* No min-height: the hero is exactly as tall as its content, so "What it is"
+   starts inside the next viewport instead of after a reserved screenful. */
+.sx__open {
+  display: grid;
+}
+
+.sx__open-inner {
+  display: grid;
+  gap: clamp(1rem, 2.6vh, 1.75rem);
+}
+
+/* Marker row, directly under the navbar. */
+.sx__open-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--rule);
+  color: var(--fg-faint);
+}
+
+.sx__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--fg-faint);
+}
+
+.sx__crumb a {
+  color: var(--blue);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.35s var(--ease-out);
+}
+
+.sx__crumb a:hover {
+  border-color: currentColor;
+}
+
+.sx__open-main {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+.sx__open-copy {
+  display: grid;
+  gap: clamp(1rem, 2.5vh, 1.75rem);
+  align-content: center;
+}
+
+/* One scale for all eight services. The title wraps; it never re-sizes itself
+   around its own length, so "Branding & UI/UX" and "Social Media Management"
+   carry identical weight. display--xl is clamp(2rem, 4.6vw, 4rem). */
+.sx__title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.3em;
+  max-width: 15ch;
+  letter-spacing: -0.035em;
+}
+
+.sx__description {
+  max-width: 620px;
+  margin-top: -0.25rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--fg-soft);
+  text-wrap: pretty;
+}
+
+/* The title's own mask. Deliberately NOT base.css's .line-mask: that parks the
+   span at 105% until an ancestor gains `is-in`, which would fight the GSAP
+   tween and leave the title hidden. Here the span rests visible and GSAP is the
+   only thing that moves it, so reduced motion simply shows it. */
+.sx__title-line {
+  display: inline-block;
+  overflow: hidden;
+  /* Room for descenders, which the mask would otherwise clip. */
+  padding-bottom: 0.08em;
+}
+
+.sx__title-line > span {
+  display: block;
+}
+
+.sx__signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sx__signal {
+  padding: 0.5em 0.95em;
+  border: 1px solid rgba(35, 87, 132, 0.28);
+  border-radius: 999px;
+  color: var(--blue);
+}
+
+.sx__number {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.sx__number-value {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sx-accent, var(--blue));
+}
+
+/* ---------- The visual system ----------
+   Shared structure for all eight services: a technical grid, three stacked
+   frames reading as depth, an interface that draws itself, two floating
+   readouts carrying the service's own figures, and connecting wires.
+   `theme` shifts the composition; the data supplies every label. */
+
+.sx__viz {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  max-height: 46svh;
+  justify-self: stretch;
+}
+
+.sx__viz-grid {
+  position: absolute;
+  inset: -6% -4%;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.06) 1px, transparent 1px);
+  background-size: 2.25rem 2.25rem;
+  -webkit-mask-image: radial-gradient(
+    ellipse at 45% 50%,
+    #000 35%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(ellipse at 45% 50%, #000 35%, transparent 78%);
+}
+
+.sx__frame {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 82%;
+  height: 74%;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  background: rgba(255, 255, 255, 0.5);
+  will-change: transform, opacity;
+}
+
+.sx__frame--back {
+  transform: translate3d(9%, -9%, 0);
+  opacity: 0.3;
+}
+
+.sx__frame--mid {
+  transform: translate3d(4.5%, -4.5%, 0);
+  opacity: 0.55;
+}
+
+.sx__frame--front {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.sx__frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid rgba(35, 87, 132, 0.18);
+}
+
+.sx__frame-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(35, 87, 132, 0.28);
+  flex: none;
+}
+
+.sx__frame-bar i:first-child {
+  background: var(--sx-accent, var(--blue));
+}
+
+.sx__frame-label {
+  margin-left: 0.5rem;
+  min-width: 0;
+  color: var(--fg-faint);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sx__frame-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.9vw, 0.6rem);
+  padding: clamp(0.5rem, 1.3vw, 0.85rem);
+  align-content: start;
+}
+
+/* A readout tile. Never empty — the data supplies both halves. */
+.sx__tile {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: clamp(0.45rem, 1.1vw, 0.7rem);
+  border: 1px solid rgba(35, 87, 132, 0.16);
+  background: rgba(255, 255, 255, 0.55);
+  will-change: transform, opacity;
+}
+
+.sx__tile-value {
+  font-size: clamp(0.9rem, 1.6vw, 1.3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--blue);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sx__tile-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.13em;
+  color: var(--fg-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The only looping motion on the page: a slow sweep, and a blinking caret. */
+.sx__scan {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 34%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(64, 168, 196, 0.16),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: sx-scan 5.5s var(--ease-in-out) infinite;
+  pointer-events: none;
+}
+
+@keyframes sx-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(330%);
+  }
+}
+
+.sx__pulse {
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex: none;
+  animation: sx-pulse 2.2s var(--ease-in-out) infinite;
+}
+
+@keyframes sx-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+}
+
+/* Floating readouts. Values come from the service's own impact metrics. */
+.sx__chip {
+  position: absolute;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid rgba(35, 87, 132, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px -18px rgba(8, 22, 31, 0.5);
+  will-change: transform, opacity;
+}
+
+.sx__chip--1 {
+  top: 2%;
+  right: 0;
+}
+.sx__chip--2 {
+  bottom: 3%;
+  right: 8%;
+}
+
+.sx__chip-value {
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--sx-accent, var(--blue));
+}
+
+.sx__chip-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+
+.sx__wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.sx__wire {
+  fill: none;
+  stroke: rgba(35, 87, 132, 0.3);
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+/* ---- Theme hook ----
+   `hero.theme` moves the accent around the tile grid, so each family of
+   services reads a little differently while sharing one composition. */
+
+.sx__viz--interface .sx__tile:nth-child(1) .sx__tile-value,
+.sx__viz--identity .sx__tile:nth-child(2) .sx__tile-value,
+.sx__viz--campaign .sx__tile:nth-child(3) .sx__tile-value,
+.sx__viz--system .sx__tile:nth-child(4) .sx__tile-value,
+.sx__viz--automation .sx__tile:nth-child(1) .sx__tile-value {
+  color: var(--sx-accent, var(--blue));
+}
+
+/* ---------- 02 · What it is ---------- */
+
+.sx__what.band {
+  padding-top: clamp(2rem, 5vh, 3.25rem);
+}
+
+.sx__what-inner {
+  max-width: 68rem;
+}
+
+.sx__statement {
+  text-wrap: pretty;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- 03 · Importance ---------- */
+
+.sx__points {
+  position: relative;
+  display: grid;
+  gap: clamp(1.25rem, 3.5vh, 2.25rem);
+  padding-left: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+/* The spine: a hairline that fills as the list is read. */
+.sx__spine {
+  position: absolute;
+  top: 0.55em;
+  bottom: 0.55em;
+  left: clamp(0.6rem, 1.6vw, 1.1rem);
+  width: 2px;
+  background: rgba(35, 87, 132, 0.18);
+}
+
+.sx__spine-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sx-accent, var(--blue));
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.sx__point {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sx__point::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  left: calc(clamp(0.6rem, 1.6vw, 1.1rem) - clamp(2.5rem, 6vw, 4.5rem) - 3px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sx-accent, var(--blue));
+}
+
+.sx__point-num {
+  color: var(--blue);
+}
+
+.sx__point-text {
+  font-size: clamp(1.35rem, 3.1vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* ---------- 04 · Process ---------- */
+
+.sx__process-inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.sx__process-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.sx__process-count .mono {
+  color: var(--fg-faint);
+  letter-spacing: 0.16em;
+}
+
+.sx__stages {
+  position: relative;
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.75rem);
+  padding-left: clamp(2.25rem, 5vw, 3.25rem);
+}
+
+.sx__process-track {
+  position: absolute;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  left: clamp(0.45rem, 1.1vw, 0.8rem);
+  width: 2px;
+  background: rgba(35, 87, 132, 0.16);
+}
+
+.sx__process-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sx-accent, var(--blue));
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.sx__stage {
+  position: relative;
+  display: grid;
+  gap: 0.4rem;
+  padding: clamp(1rem, 2.5vh, 1.5rem) 0 clamp(1rem, 2.5vh, 1.5rem)
+    clamp(0.75rem, 2vw, 1.5rem);
+  border-top: 1px solid var(--rule);
+  /* The live stage lifts a touch; transform + opacity only. */
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+  opacity: 0.5;
+}
+
+.sx__stage.is-live {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.sx__stage-dot {
+  position: absolute;
+  top: calc(clamp(1rem, 2.5vh, 1.5rem) + 0.5em);
+  /* `left` is measured from this stage's padding-box edge, which sits at the
+     list's padding-left — so only that is subtracted, not the stage's own. */
+  left: calc(
+    clamp(0.45rem, 1.1vw, 0.8rem) - clamp(2.25rem, 5vw, 3.25rem) - 4px
+  );
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--mist);
+  border: 2px solid rgba(35, 87, 132, 0.3);
+  transition:
+    background-color 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out);
+}
+
+.sx__stage.is-live .sx__stage-dot {
+  background: var(--sx-accent, var(--blue));
+  border-color: var(--sx-accent, var(--blue));
+  transform: scale(1.3);
+}
+
+.sx__stage-num {
+  color: var(--blue);
+}
+
+.sx__stage-title {
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.sx__stage-text {
+  max-width: 52ch;
+  color: var(--fg-soft);
+}
+
+/* ---------- 05 · Why it matters ---------- */
+
+.sx__why-inner {
+  max-width: 60rem;
+}
+
+.sx__why-text {
+  position: relative;
+  padding-left: clamp(1rem, 2.5vw, 1.75rem);
+  border-left: 3px solid var(--yellow);
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+
+/* ---------- 06 · Business impact ---------- */
+
+.sx__equation {
+  max-width: 20ch;
+  margin-bottom: clamp(2rem, 5vh, 3.5rem);
+  letter-spacing: -0.04em;
+}
+
+/* The ratio drawn to scale. Segments are sized by flex-grow from the data. */
+.sx__bar {
+  display: flex;
+  gap: 4px;
+  height: clamp(2.5rem, 6vh, 4rem);
+  margin-bottom: var(--s-3);
+}
+
+.sx__bar-seg {
+  display: block;
+  background: var(--ink);
+  will-change: transform;
+}
+
+.sx__bar-seg:nth-child(2) {
+  background: rgba(8, 22, 31, 0.55);
+}
+.sx__bar-seg:nth-child(3) {
+  background: rgba(8, 22, 31, 0.28);
+}
+
+.sx__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin: 0;
+}
+
+.sx__metric {
+  flex-basis: clamp(8rem, 22%, 14rem);
+  display: grid;
+  gap: 0.2rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(8, 22, 31, 0.35);
+}
+
+.sx__metric-value {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.sx__metric-label {
+  margin: 0;
+  color: rgba(8, 22, 31, 0.68);
+}
+
+/* ---------- 07 · Close ----------
+   The closing chapter is compact: a label, a medium heading, the actions and
+   the walk. Never a second hero. */
+
+.sx__close.band {
+  padding-block: clamp(2.5rem, 6vh, 4rem);
+}
+
+.sx__close-inner {
+  display: grid;
+  gap: clamp(0.75rem, 2vh, 1.25rem);
+}
+
+.sx__close-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variation-settings: "wdth" 92;
+  text-wrap: balance;
+  max-width: 24ch;
+  font-size: clamp(3.2rem, 6.4vw, 5.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.sx__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.sx__walk {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+  align-items: center;
+}
+
+.sx__walk-link {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--ink);
+}
+
+.sx__walk-link .mono {
+  color: var(--blue);
+}
+
+.sx__walk-name {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  transition: color 0.35s var(--ease-out);
+}
+
+.sx__walk-link:hover .sx__walk-name {
+  color: var(--blue);
+}
+
+.sx__walk-back {
+  justify-self: start;
+  padding: 0.7em 1.3em;
+  border: 1px solid rgba(8, 22, 31, 0.35);
+  border-radius: 999px;
+  color: var(--ink);
+  transition:
+    background-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out);
+}
+
+.sx__walk-back:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* ---------- 404 ---------- */
+
+.sx__missing-links {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: var(--s-4);
+}
+
+.sx__missing-links a {
+  color: var(--blue);
+}
+
+/* ============================================================
+   Responsive. Mobile is the base above; these only add the room
+   that wider viewports can actually use.
+   ============================================================ */
+
+/* The rail is wayfinding, not navigation — it would crowd a phone. */
+@media (max-width: 899px) {
+  .sx__rail {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Content-sized rather than viewport-sized: on a short phone a forced 88svh
+     is exactly the empty space this redesign exists to remove. */
+  .sx__open {
+    min-height: 0;
+  }
+
+  .sx__viz {
+    aspect-ratio: 4 / 3;
+    max-height: 34svh;
+    margin-top: clamp(0.5rem, 2vh, 1rem);
+  }
+
+  .sx__chip {
+    padding: 0.45rem 0.65rem;
+  }
+  .sx__chip--1 {
+    top: 0;
+    right: 0;
+  }
+  .sx__chip--2 {
+    bottom: 0;
+    right: 4%;
+  }
+}
+
+/* Below ~400px the second readout would sit on top of the interface. */
+@media (max-width: 399px) {
+  .sx__chip--2 {
+    display: none;
+  }
+  .sx__title {
+    max-width: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .sx__walk {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .sx__walk-link--next {
+    justify-items: end;
+    text-align: right;
+  }
+
+  .sx__walk-back {
+    justify-self: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sx__open-main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+
+  .sx__process-inner {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+  }
+
+  /* The aside holds still while the stages run past it. Sticky rather than
+     pinned: no pin-spacing to measure, so nothing to break on refresh. */
+  .sx__process-aside {
+    position: sticky;
+    top: clamp(6rem, 18vh, 9rem);
+  }
+
+  .sx__metric {
+    flex-basis: clamp(10rem, 18%, 16rem);
+  }
+}
+
+/* ============================================================
+   Reduced motion — the page still tells the story, it just does
+   not move. Anything the GSAP timeline would have revealed is
+   already in its resting state.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .sx__spine-fill,
+  .sx__process-fill {
+    transform: scaleY(1);
+  }
+
+  .sx__stage {
+    opacity: 1;
+    transform: none;
+  }
+
+  .sx__bar-seg {
+    transform: none;
+  }
+
+  .sx__scan,
+  .sx__pulse {
+    animation: none;
+  }
+
+  .sx__scan {
+    opacity: 0;
+  }
+
+  .sx__wire {
+    stroke-dashoffset: 0;
+  }
+
+  .sx__rail-dot i,
+  .sx__rail-label,
+  .sx__stage,
+  .sx__stage-dot {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   COMPACT SERVICE CTA
+   ============================================================ */
+
+/* The walk sits tight under the actions, closing the page without a gap. */
+.sx__walk {
+  margin-top: clamp(0.75rem, 2vh, 1.25rem);
+  padding-top: var(--s-3);
+}
+
+
+/* ---------- 03b · the points, stacked ----------
+   Fills the right half of the Importance chapter. One plate per point,
+   widening as the stack rises, so the reasons read as compounding. Purely a
+   visual restatement of the list beside it, which is why it is aria-hidden. */
+
+.sx__importance-grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.sx__importance-copy {
+  min-width: 0;
+}
+
+.sx__weigh {
+  position: relative;
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: clamp(1rem, 3vw, 2rem) 0;
+}
+
+.sx__weigh-grid {
+  position: absolute;
+  inset: -8% -6%;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.06) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+  -webkit-mask-image: radial-gradient(ellipse at 40% 60%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 40% 60%, #000 25%, transparent 78%);
+  pointer-events: none;
+}
+
+/* Bottom-up: plate 01 is the base the rest sit on. */
+.sx__weigh-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.sx__weigh-plate {
+  display: flex;
+  align-items: center;
+  /* Each plate is wider than the one below it. */
+  width: calc(46% + var(--i) * 13%);
+  max-width: 100%;
+  min-height: clamp(2.1rem, 4.5vh, 3rem);
+  padding-inline: clamp(0.6rem, 1.6vw, 1rem);
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--white) 82%, transparent),
+    color-mix(in srgb, var(--white) 40%, transparent)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* The topmost plate is the one everything has built toward. */
+.sx__weigh-plate:first-child {
+  border-color: color-mix(in srgb, var(--blue) 55%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--blue) 14%, transparent),
+    transparent
+  );
+}
+
+.sx__weigh-num {
+  color: var(--blue);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.sx__weigh-crown {
+  position: relative;
+  margin-top: 0.35rem;
+  padding-left: 0.15rem;
+  color: var(--fg-faint);
+}
+
+@media (min-width: 1024px) {
+  .sx__importance-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.78fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx__weigh-plate {
+    transform: scaleX(1);
+  }
+}

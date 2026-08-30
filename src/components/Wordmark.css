@@ -1,0 +1,61 @@
+.wordmark__glyph {
+  width: 1.45em;
+  height: auto;
+  fill: currentColor;
+  overflow: visible;
+}
+
+.wordmark__glyph rect {
+  transition: transform 0.5s var(--ease-out);
+  transform-origin: left center;
+}
+
+.wordmark__mid { fill: var(--cyan); }
+.wordmark__top { fill: var(--yellow); }
+
+.wordmark:hover .wordmark__top { transform: scaleX(1.55); }
+.wordmark:hover .wordmark__mid { transform: scaleX(1.18); }
+
+.wordmark__text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variation-settings: 'wdth' 88;
+  line-height: 1;
+}
+
+.wordmark--sm { font-size: 1.05rem; }
+.wordmark--lg { font-size: clamp(2rem, 7vw, 5rem); }
+
+/*
+ * The supplied PNG is 1536x1024, but the mark itself occupies only 1037x211 of
+ * it (67.5% of the width, 20.6% of the height) - the rest is empty margin.
+ * Sizing the <img> directly therefore paints a tiny mark inside a very tall
+ * box, which is exactly what made the logo look undersized while holding the
+ * nav bar open.
+ *
+ * The frame below is the mark's own box; the image is scaled up and offset
+ * inside it so only the artwork shows. The image keeps its natural aspect
+ * ratio (width set, height auto) - nothing is stretched.
+ *
+ * A 70px frame keeps .nav__bar at its current 108px total once the bar's own
+ * padding is restored. The mark renders 177 x 36 (previously 101 x 21).
+ */
+.wordmark {
+  position: relative;
+  display: block;
+  width: 177px;
+  height: 70px;
+  overflow: hidden;
+  flex: none;
+}
+
+.wordmark__logo {
+  position: absolute;
+  top: -45.6px;   /* centres the mark vertically in the frame */
+  left: -42.3px;  /* trims the artwork's left margin */
+  width: 262px;   /* 1037/1536 of this = the 177px visible mark */
+  height: auto;   /* aspect ratio preserved */
+  display: block;
+  max-width: none;
+}

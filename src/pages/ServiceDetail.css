@@ -1,0 +1,577 @@
+/* /services/:slug — reuses the homepage tokens; no new colours or type scales. */
+
+.svc {
+  position: relative;
+  color: var(--ink);
+}
+
+/* ---- Masthead ---- */
+
+.svc__head {
+  padding-top: clamp(7rem, 16vh, 11rem);
+}
+
+.svc__crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: var(--s-3);
+  color: var(--fg-faint);
+}
+
+.svc__crumb a {
+  color: var(--fg-soft);
+  transition: color 0.35s var(--ease-out);
+}
+
+.svc__crumb a:hover {
+  color: var(--blue);
+}
+
+.svc__title {
+  max-width: 18ch;
+  letter-spacing: -0.04em;
+}
+
+.svc__subtitle {
+  max-width: 58ch;
+  margin-top: var(--s-3);
+  color: var(--fg-soft);
+}
+
+.svc__highlights {
+  display: grid;
+  gap: var(--s-2);
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+}
+
+.svc__highlights li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+
+.svc__highlight-num {
+  color: var(--cyan);
+}
+
+/* ---- About + why it matters ---- */
+
+.svc__body-grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+.svc__block > .lead,
+.svc__block > .body {
+  max-width: 54ch;
+  color: var(--fg-soft);
+}
+
+.svc__pull {
+  margin-top: var(--s-3);
+  max-width: 22ch;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--blue);
+}
+
+/* ---- What we build ---- */
+
+.svc__list {
+  margin-top: var(--s-4);
+  border-top: 1px solid var(--rule);
+}
+
+.svc__list li {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(0.9rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.svc__list li > .mono {
+  color: var(--fg-faint);
+}
+
+.svc__list-label {
+  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/* ---- Process ---- */
+
+.svc__steps {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+}
+
+.svc__steps li {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.svc__step-num {
+  flex: none;
+  font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+  line-height: 1;
+  color: color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.svc__step-label {
+  font-size: var(--t-md);
+}
+
+/* ---- Why Bootstack ---- */
+
+.svc__why-text {
+  max-width: 22ch;
+  margin-top: var(--s-4);
+  letter-spacing: -0.035em;
+}
+
+/* ---- Close ---- */
+
+.svc__cta {
+  text-align: left;
+}
+
+/* The closing beat of a service page, not a second hero. One scale for every
+   service, so a long name never inflates the heading. Matches the scale used
+   by the newer service experience, so both page types read identically. */
+.svc__cta.band {
+  padding-block: clamp(2.5rem, 6vh, 4rem);
+}
+
+.svc__cta-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variation-settings: "wdth" 92;
+  text-wrap: balance;
+  max-width: 24ch;
+  font-size: clamp(3.4rem, 6.8vw, 5.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+/* The bottom service navigation. column-gap alone sets the distance between
+   the two groups; row-gap stays 0 so that when they wrap on narrow screens the
+   elements' own margin-top keeps the vertical rhythm exactly as it was.
+   flex-start (not center) preserves each element's existing vertical offset. */
+/* The bottom service navigation. Deliberately the same shape as .sx__walk on
+   the newer service pages: one row, previous pinned left, back centred, next
+   pinned right, the 1fr columns pushing them apart across whatever width the
+   shell gives. Stacks to a single column below 768px. */
+.svc__service-nav {
+  display: grid;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding-top: var(--s-3);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.svc__nav-link {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--ink);
+}
+
+.svc__nav-link .mono {
+  color: color-mix(in srgb, var(--ink) 62%, transparent);
+}
+
+.svc__nav-name {
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  transition: color 0.35s var(--ease-out);
+}
+
+.svc__nav-link:hover .svc__nav-name {
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+}
+
+@media (min-width: 768px) {
+  .svc__service-nav {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .svc__nav-link--next {
+    justify-items: end;
+    text-align: right;
+  }
+}
+
+.svc__back {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  padding: 0.7em 1.3em;
+  border: 1px solid rgba(8, 22, 31, 0.35);
+  border-radius: 999px;
+  color: var(--ink);
+  transition:
+    background-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out);
+}
+
+.svc__back:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc__back {
+    transition: none;
+  }
+}
+
+.svc__eyebrow {
+  display: block;
+  margin-bottom: var(--s-3);
+  color: color-mix(in srgb, var(--ink) 62%, transparent);
+}
+
+.svc__cta .lead {
+  max-width: 46ch;
+  margin-top: var(--s-3);
+}
+
+.svc__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+
+
+/* ---- 404 ---- */
+
+.svc--missing {
+  display: grid;
+  align-content: center;
+  min-height: 78vh;
+  padding-top: clamp(6rem, 14vh, 9rem);
+}
+
+.svc__missing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-block: var(--s-4);
+}
+
+.svc__missing-links a {
+  padding: 0.5em 1em;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--fg-soft);
+  transition:
+    border-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out);
+}
+
+.svc__missing-links a:hover {
+  border-color: var(--cyan);
+  color: var(--blue);
+}
+
+@media (min-width: 900px) {
+  .svc__highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .svc__body-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .svc__steps {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+
+
+
+
+
+/* ============================================================
+   The visual layer. Added on top of the rules above — no
+   existing declaration is changed, and every element here is
+   decorative and aria-hidden.
+   ============================================================ */
+
+/* ---- Masthead: depth behind the title ---- */
+
+.svc__head {
+  position: relative;
+  overflow: hidden;
+}
+
+.svc__head-inner {
+  position: relative;
+  z-index: 1;
+}
+
+/* A short fade-and-rise on arrival. Keyed off `key={slug}` in the JSX, so it
+   replays when you walk from one service to the next. */
+@keyframes svc-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.svc__head-inner {
+  animation: svc-enter 0.55s var(--ease-out) both;
+}
+
+.svc__grid {
+  position: absolute;
+  inset: -10% -5% 0;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.055) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  -webkit-mask-image: radial-gradient(ellipse at 30% 30%, #000 15%, transparent 72%);
+  mask-image: radial-gradient(ellipse at 30% 30%, #000 15%, transparent 72%);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.svc__glow {
+  position: absolute;
+  top: -22%;
+  right: -12%;
+  width: min(48rem, 70%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--cyan) 22%, transparent),
+    transparent 68%
+  );
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ---- About / Why it matters: an accent that marks the statement ---- */
+
+.svc__pull {
+  position: relative;
+  padding-left: clamp(0.9rem, 2vw, 1.4rem);
+  border-left: 3px solid var(--yellow);
+}
+
+/* ---- Why Bootstack: the service's own name, set as ground ---- */
+
+.svc__why {
+  position: relative;
+  overflow: hidden;
+}
+
+.svc__why-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.svc__why-ghost {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.22em;
+  max-width: none;
+  font-size: clamp(5rem, 16vw, 14rem);
+  line-height: 0.8;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(35, 87, 132, 0.13);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* ---- CTA: a quiet grid under the closing beat ---- */
+
+.svc__cta {
+  position: relative;
+  overflow: hidden;
+}
+
+.svc__cta-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.svc__cta-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(8, 22, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8, 22, 31, 0.05) 1px, transparent 1px);
+  background-size: 3.25rem 3.25rem;
+  -webkit-mask-image: radial-gradient(ellipse at 80% 20%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 80% 20%, #000 10%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---- Service to service: the arrows answer the hover ---- */
+
+.svc__nav-link .mono span,
+.svc__nav-link {
+  transition: color 0.35s var(--ease-out);
+}
+
+.svc__nav-link .mono {
+  display: inline-flex;
+  gap: 0.4rem;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.svc__nav-link:hover .mono {
+  transform: translateX(-4px);
+}
+
+.svc__nav-link--next:hover .mono {
+  transform: translateX(4px);
+}
+
+/* ============================================================
+   Reduced motion — the page still reads, it just holds still.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .svc__head-inner {
+    animation: none;
+  }
+
+  .svc__list li,
+  .svc__list-arrow,
+  .svc__list-label,
+  .svc__steps li,
+  .svc__step-dot,
+  .svc__step-num,
+  .svc__nav-link,
+  .svc__nav-link .mono {
+    transition: none;
+  }
+
+  .svc__list-line {
+    transform: scaleX(1);
+  }
+
+  .svc__steps-fill {
+    transform: scaleY(1);
+  }
+}
+
+/* ---- Narrow screens: nothing escapes the viewport ---- */
+
+@media (max-width: 640px) {
+  .svc__glow {
+    width: 120%;
+    right: -30%;
+  }
+
+  .svc__list-line {
+    display: none;
+  }
+
+  .svc__why-ghost {
+    font-size: clamp(4rem, 22vw, 8rem);
+  }
+}
+
+
+/* ============================================================
+   The editorial composition: copy on the left, visual on the
+   right. Every heading starts at the container's left edge.
+   ============================================================ */
+
+.svc__split {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.svc__copy {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  /* Non-negotiable: headings and copy start at the left of the shell. */
+  justify-items: start;
+  text-align: left;
+}
+
+.svc__copy > * {
+  max-width: 46ch;
+}
+
+/* Headings set their own measure; the prose cap above is for paragraphs. */
+.svc__copy > .svc__title,
+.svc__copy > .svc__crumb {
+  max-width: none;
+}
+
+/* SectionMarker is a flex row; it must span the column to keep its rule. */
+.svc__copy > .marker {
+  width: 100%;
+  max-width: none;
+}
+
+.svc__visual {
+  position: relative;
+  min-width: 0;
+}
+
+/* The statement outranks the supporting lines. */
+.svc__pull {
+  position: relative;
+  padding-left: clamp(0.9rem, 2vw, 1.4rem);
+  border-left: 3px solid var(--yellow);
+  font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.svc__why-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.svc__why-text {
+  max-width: 20ch;
+  margin-top: 0;
+}
+
+/* Air between chapters, so each composition reads on its own. */
+.svc .band {
+  padding-block: clamp(4rem, 11vh, 8rem);
+}
+
+@media (min-width: 1024px) {
+  .svc__split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Build and process give their visual the wider half. */
+  .svc__split--wide {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+}
+
+/* Below that everything stacks; the visual keeps a workable height. */
+@media (max-width: 1023px) {
+  .svc__visual {
+    margin-top: var(--s-3);
+  }
+}

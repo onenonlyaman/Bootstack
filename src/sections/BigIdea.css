@@ -1,0 +1,207 @@
+.idea {
+  position: relative;
+  color: var(--ink);
+}
+
+.idea__seam {
+  margin-bottom: clamp(3rem, 9vh, 7rem);
+  color: rgba(26, 66, 95, 0.2);
+  text-transform: uppercase;
+}
+
+.idea__seam .marquee__item { 
+  color: var(--blue); 
+  -webkit-text-stroke: 0; 
+}
+
+.idea__grid {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.idea__statement {
+  text-transform: none;
+  letter-spacing: -0.04em;
+  /* Sized so the longest name - "Brand Identity & Branding", 25 characters -
+     still fits the statement column on one line at every width. */
+  font-size: clamp(1.25rem, 3.5vw, 3.2rem) !important;
+  line-height: 1.06 !important;
+}
+
+.idea__line {
+  display: block;
+}
+
+/* The line currently driving the right-hand panel. */
+.idea__line.is-active { color: var(--blue); }
+
+/* Reserve the panel's height so swapping copy never nudges the layers below. */
+.idea__service { min-height: 8.5em; }
+
+.idea__service-title {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: var(--blue);
+}
+
+.idea__word {
+  display: inline-block;
+  /* An inline-block eats its own trailing space, which is why the words ran
+     together as "ERPSolutions". */
+  margin-right: 0.22em;
+}
+
+
+.idea__aside {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 52ch;
+}
+
+.idea__aside .body { color: var(--fg-soft); }
+
+/* ---- Assembling stack ---- */
+
+.idea__stack {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+}
+
+.idea__layer {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.idea__layer span {
+  display: block;
+  width: var(--w);
+  height: 10px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
+
+.idea__layer:nth-child(4) span { background: linear-gradient(90deg, var(--cyan), var(--yellow)); }
+.idea__layer:nth-child(5) span { background: var(--yellow); }
+
+.idea__layer em {
+  font-style: normal;
+  color: var(--fg-soft);
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .idea__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .idea__aside { padding-top: 0.9rem; }
+}
+
+/* ---- Section 02 lines are links to their service page ----
+ *
+ * Nothing here touches .idea__word opacity: that is owned by the scrubbed GSAP
+ * reveal, which writes an inline style. The hover state uses colour + a small
+ * translate on an inner wrapper instead, so the two never fight.
+ * At rest the section renders exactly as it did before.
+ */
+
+.idea__line {
+  display: block;
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.idea__line-inner {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.55s var(--ease-out), color 0.4s var(--ease-out);
+
+  /* One name, one line. */
+  white-space: nowrap;
+
+  /* The ramp is sized to this line, not the viewport, so every name - short or
+     long - runs the full blue-to-cyan sweep. It also has to be the element the
+     scrubbed reveal fades: see the note in BigIdea.jsx. */
+  opacity: 0.14;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The Explore tag would inherit the transparent fill and vanish. */
+.idea__line-inner .idea__explore {
+  -webkit-text-fill-color: var(--blue);
+}
+
+/* Active and hovered go solid: a gradient cannot show a colour change. */
+.idea__line.is-active .idea__line-inner,
+.idea__line.is-hovered .idea__line-inner {
+  -webkit-text-fill-color: var(--blue);
+}
+
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .idea__line-inner {
+    color: var(--ink);
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+.idea__line.is-hovered { color: var(--blue); }
+
+.idea__line.is-hovered .idea__line-inner {
+  transform: translateX(clamp(6px, 0.7vw, 16px));
+}
+
+/* The "Explore" tag sits outside the flow, so showing it never reflows the type. */
+.idea__explore {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-left: 0.5em;
+  padding: 0.35em 0.75em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: clamp(0.6rem, 0.8vw, 0.78rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--blue);
+  opacity: 0;
+  transform: translate(-6px, -50%);
+  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+  pointer-events: none;
+}
+
+.idea__line.is-hovered .idea__explore {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.idea__line:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 6px;
+}
+
+/* No hover to give: surface the tag on whichever line the scroll has made active. */
+@media (hover: none) {
+  .idea__line.is-active .idea__explore {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idea__line-inner,
+  .idea__explore { transition: none; }
+  .idea__line.is-hovered .idea__line-inner { transform: none; }
+}

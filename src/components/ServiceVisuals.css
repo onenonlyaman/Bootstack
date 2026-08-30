@@ -1,0 +1,506 @@
+/* ============================================================
+   The service page's visual system.
+   Existing tokens only: blue, cyan, yellow, navy, white, mist.
+   Thin lines, layered surfaces, no rounded SaaS cards.
+   ============================================================ */
+
+/* ==================================================== 1 · Service panel == */
+
+.vpanel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  max-height: 30rem;
+}
+
+.vpanel__grid {
+  position: absolute;
+  inset: -8%;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.06) 1px, transparent 1px);
+  background-size: 2.25rem 2.25rem;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 82%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 82%);
+}
+
+/* Two plates behind the surface. Depth, not decoration. */
+.vpanel__plate {
+  position: absolute;
+  inset: 12% 6% 18% 2%;
+  border: 1px solid rgba(35, 87, 132, 0.2);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.vpanel__plate--far {
+  transform: translate(7%, -8%);
+  opacity: 0.4;
+}
+
+.vpanel__plate--near {
+  transform: translate(3.5%, -4%);
+  opacity: 0.7;
+}
+
+.vpanel__surface {
+  position: absolute;
+  inset: 12% 6% 18% 2%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  border: 1px solid rgba(35, 87, 132, 0.28);
+  background: var(--white);
+  box-shadow: 0 24px 50px -34px rgba(8, 22, 31, 0.5);
+}
+
+.vpanel__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid rgba(35, 87, 132, 0.18);
+}
+
+.vpanel__bar i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(35, 87, 132, 0.25);
+}
+
+.vpanel__bar i:first-child {
+  background: var(--yellow);
+}
+
+.vpanel__caption {
+  margin-left: 0.5rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: var(--fg-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vpanel__live {
+  width: 6px;
+  height: 6px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--cyan);
+  flex: none;
+  animation: vpanel-live 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes vpanel-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.vpanel__body {
+  display: grid;
+  align-content: start;
+  gap: clamp(0.6rem, 1.6vw, 0.95rem);
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+}
+
+.vpanel__row {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.vpanel__label {
+  font-size: 0.56rem;
+  letter-spacing: 0.13em;
+  color: var(--fg-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vpanel__meter {
+  display: block;
+  height: 5px;
+  background: rgba(35, 87, 132, 0.1);
+}
+
+.vpanel__meter i {
+  display: block;
+  width: var(--w);
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  will-change: transform;
+}
+
+.vpanel__trace {
+  width: 100%;
+  height: clamp(2.5rem, 6vw, 3.75rem);
+  border-top: 1px solid rgba(35, 87, 132, 0.14);
+}
+
+.vpanel__trace path {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 100;
+}
+
+/* Floating modules, named by the service's own deliverables. */
+.vpanel__chip {
+  position: absolute;
+  padding: 0.5em 0.85em;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 14px 30px -20px rgba(8, 22, 31, 0.5);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+  white-space: nowrap;
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  will-change: transform;
+}
+
+.vpanel__chip--1 { top: 2%; right: 0; }
+.vpanel__chip--2 { bottom: 10%; right: 4%; }
+.vpanel__chip--3 { bottom: 0; left: 12%; }
+
+/* Kind variants: the same surface, weighted differently. */
+.vpanel--device .vpanel__surface { inset: 6% 26% 10% 22%; }
+.vpanel--device .vpanel__plate { inset: 6% 26% 10% 22%; }
+.vpanel--browser .vpanel__surface,
+.vpanel--browser .vpanel__plate { inset: 16% 4% 20% 4%; }
+.vpanel--funnel .vpanel__surface,
+.vpanel--funnel .vpanel__plate { inset: 10% 10% 16% 6%; }
+.vpanel--board .vpanel__body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.vpanel--workflow .vpanel__body { gap: 0.55rem; }
+
+/* ==================================================== 2 · Keyword field == */
+
+.vkeys {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  max-height: 26rem;
+}
+
+.vkeys__path {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vkeys__path path {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.2;
+  stroke-dasharray: 100;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+}
+
+.vkeys__word {
+  position: absolute;
+  font-size: clamp(1.1rem, 2.6vw, 2rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--navy);
+  white-space: nowrap;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  will-change: transform;
+}
+
+.vkeys__word--1 { left: 2%; bottom: 16%; }
+.vkeys__word--2 { left: 24%; top: 44%; color: var(--blue); }
+.vkeys__word--3 { right: 4%; top: 22%; }
+.vkeys__word--4 {
+  right: 10%;
+  top: 2%;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(35, 87, 132, 0.4);
+}
+
+/* ======================================================= 3 · Blueprint == */
+
+.vblue {
+  position: relative;
+  padding-block: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.vblue__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.05) 1px, transparent 1px);
+  background-size: 2.75rem 2.75rem;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 88%);
+  mask-image: linear-gradient(180deg, #000, transparent 88%);
+  pointer-events: none;
+}
+
+.vblue__modules {
+  position: relative;
+  display: grid;
+  gap: clamp(0.6rem, 1.6vw, 1rem);
+}
+
+/* Asymmetric: every other module is inset and narrower, so the column reads
+   as a composition rather than a stack of equal rows. */
+.vblue__module {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: clamp(0.75rem, 2vw, 1.4rem);
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  border: 1px solid rgba(35, 87, 132, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  transition:
+    transform 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    background-color 0.4s var(--ease-out);
+  will-change: transform;
+}
+
+.vblue__num {
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+.vblue__label {
+  min-width: 0;
+  font-size: clamp(1.05rem, 2.3vw, 1.65rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+/* The connector between one module and the next. */
+.vblue__edge {
+  position: absolute;
+  left: clamp(1.4rem, 3vw, 2rem);
+  bottom: calc(-1 * clamp(0.6rem, 1.6vw, 1rem) - 1px);
+  width: 1px;
+  height: clamp(0.6rem, 1.6vw, 1rem);
+  background: rgba(35, 87, 132, 0.3);
+}
+
+.vblue__module:last-child .vblue__edge { display: none; }
+
+.vblue__module:hover {
+  transform: translateX(6px);
+  border-color: color-mix(in srgb, var(--cyan) 60%, transparent);
+  background: var(--white);
+}
+
+.vblue__module:hover .vblue__num { color: var(--yellow); }
+
+@media (min-width: 700px) {
+  .vblue__module:nth-child(even) {
+    margin-left: clamp(2rem, 8%, 5rem);
+  }
+
+  .vblue__module:nth-child(3n) {
+    margin-right: clamp(2rem, 10%, 6rem);
+  }
+
+  .vblue__module:nth-child(even) .vblue__edge {
+    left: auto;
+    right: clamp(1.4rem, 3vw, 2rem);
+  }
+}
+
+/* ==================================================== 4 · Process board == */
+
+.vboard {
+  display: grid;
+  gap: clamp(0.9rem, 2.4vw, 1.6rem);
+  margin-top: var(--s-4);
+}
+
+.vboard__stage {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  opacity: 0.78;
+  transition:
+    opacity 0.5s var(--ease-out),
+    transform 0.5s var(--ease-out);
+  will-change: transform, opacity;
+}
+
+.vboard__stage.is-on { opacity: 1; }
+
+/* An organic staircase: each stage steps further in than the last. */
+@media (min-width: 700px) {
+  .vboard__stage {
+    margin-left: calc(var(--i) * clamp(1rem, 3.5%, 2.75rem));
+  }
+}
+
+.vboard__num {
+  font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: color-mix(in srgb, var(--navy) 52%, transparent);
+  transition: color 0.5s var(--ease-out);
+}
+
+.vboard__stage.is-on .vboard__num { color: var(--blue); }
+
+.vboard__rule {
+  width: clamp(1.5rem, 6vw, 4.5rem);
+  height: 1px;
+  background: rgba(35, 87, 132, 0.45);
+  transform: scaleX(0.35);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.vboard__stage.is-on .vboard__rule { transform: scaleX(1); }
+
+.vboard__label {
+  min-width: 0;
+  font-size: var(--t-md);
+  color: var(--ink);
+  transition: color 0.5s var(--ease-out);
+}
+
+.vboard__stage.is-on .vboard__label { color: var(--navy); }
+
+.vboard__stage:hover { transform: translateX(5px); }
+
+/* ================================================== 4b · Process orbit == */
+
+.vorbit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 17rem;
+  aspect-ratio: 1;
+  margin-top: var(--s-4);
+}
+
+.vorbit svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vorbit__ring,
+.vorbit__arc {
+  fill: none;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.vorbit__ring {
+  stroke: rgba(35, 87, 132, 0.22);
+}
+
+.vorbit__arc {
+  stroke: var(--blue);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  /* Start at twelve, travel clockwise. */
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.vorbit__node {
+  fill: var(--white);
+  stroke: var(--blue);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.vorbit__centre {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+}
+
+.vorbit__count {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--navy);
+}
+
+.vorbit__caption {
+  color: var(--fg-faint);
+}
+
+/* =================================================== 5 · Advantage stack == */
+
+.vstack {
+  display: grid;
+  justify-items: start;
+  gap: 0.15rem;
+}
+
+.vstack__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.vstack__term {
+  font-size: clamp(1.3rem, 3.2vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.vstack__op {
+  color: var(--cyan);
+  font-size: 0.85rem;
+}
+
+.vstack__bar {
+  width: min(16rem, 70%);
+  height: 2px;
+  margin-block: 0.5rem;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+}
+
+.vstack__op--eq { color: var(--blue); }
+
+.vstack__term--sum {
+  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  color: var(--blue);
+}
+
+/* ============================================================
+   Reduced motion — everything already assembled, nothing moving.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .vpanel__live { animation: none; }
+
+  .vblue__module,
+  .vblue__num,
+  .vboard__stage,
+  .vboard__num,
+  .vboard__rule,
+  .vboard__label {
+    transition: none;
+  }
+
+  .vboard__rule { transform: scaleX(1); }
+}

@@ -1,0 +1,50 @@
+.badge {
+  position: fixed;
+  right: clamp(0.9rem, 2.2vw, 2rem);
+  bottom: clamp(0.9rem, 2.2vw, 2rem);
+  z-index: 65;
+  display: grid;
+  place-items: center;
+  width: clamp(72px, 8vw, 96px);
+  height: clamp(72px, 8vw, 96px);
+  border-radius: 50%;
+  background: var(--yellow);
+  color: var(--ink);
+  transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+
+.badge:hover {
+  background: var(--ink);
+  color: var(--yellow);
+}
+
+.badge__ring {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.badge__ring svg {
+  width: 100%;
+  height: 100%;
+}
+
+.badge__ring text {
+  font-family: var(--font-mono);
+  font-size: 7.4px;
+  letter-spacing: 0.06em;
+  fill: currentColor;
+}
+
+.badge__arrow {
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.45s var(--ease-out);
+}
+
+.badge:hover .badge__arrow { transform: translateY(-4px); }
+
+@media (max-width: 640px) {
+  .badge { width: 60px; height: 60px; }
+  .badge__ring text { font-size: 8.6px; }
+}

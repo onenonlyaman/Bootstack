@@ -1,0 +1,91 @@
+/* ============================================================
+   BOOTSTACK — DESIGN TOKENS
+   The single source of truth for colour, type, space + motion.
+   ============================================================ */
+
+:root {
+  /* ---- Brand palette (fixed) ---- */
+  --yellow: #f7aa00;
+  --blue: #235784;
+  --navy: #1a425f;
+  --cyan: #40a8c4;
+  --mist: #eef6f7;
+
+  /* ---- Grounds ----
+     The site runs light: white and soft cyan tints, with brand yellow kept for
+     full-bleed moments and fills. There is no dark ground. */
+  --white: #ffffff;
+  --paper: #f7fbfc;        /* a half-step off white */
+  --cyan-soft: #dceef2;    /* soft cyan band */
+  --cyan-deep: #cbe6ed;    /* the same band, one step down */
+  --ink: #08161f;          /* text only — never a ground */
+  --ink-2: #0d2130;        /* case-study artwork ground */
+
+  /* ---- Semantic ---- */
+  --bg: var(--white);
+  --fg: var(--ink);
+  --fg-soft: rgba(8, 22, 31, 0.66);
+  --fg-faint: rgba(8, 22, 31, 0.42);
+  --rule: rgba(26, 66, 95, 0.18);
+
+  /* The heading ramp: dark Bootstack blue on the left into cyan on the right.
+     Declared once here so every gradient heading on the site shares it. */
+  --gradient-heading: linear-gradient(
+    95deg,
+    var(--navy) 0%,
+    var(--blue) 45%,
+    var(--cyan) 100%
+  );
+
+  /* Text accent. Yellow is unreadable as type on a light ground (≈2:1), so it
+     is reserved for fills and the brand blue carries accented words. */
+  --accent: var(--blue);
+
+  /* ---- Type families ---- */
+  --font-display: 'Bricolage Grotesque', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* ---- Fluid type scale (min 360px → max 1600px) ---- */
+  --t-mega: clamp(3.4rem, 13.2vw, 13rem);    /* hero / closing statements */
+  --t-xxl: clamp(2.6rem, 7.6vw, 7rem);       /* section statements */
+  --t-xl: clamp(2rem, 4.6vw, 4rem);          /* sub statements */
+  --t-lg: clamp(1.5rem, 2.6vw, 2.25rem);     /* lead paragraphs */
+  --t-md: clamp(1.05rem, 1.35vw, 1.25rem);   /* body */
+  --t-sm: 0.95rem;
+  --t-xs: 0.75rem;                            /* labels, mono */
+
+  /* ---- Space scale ---- */
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2.5rem;
+  --s-5: 4rem;
+  --s-6: 6rem;
+  --s-7: 9rem;
+  --s-8: 13rem;
+
+  /* ---- Layout ---- */
+  --gutter: clamp(1.25rem, 4.2vw, 4.5rem);
+  --max: 1680px;
+  /* Chapters get real air around them — the page should breathe, not compress. */
+  --band-y: clamp(6rem, 15vh, 13rem);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.35s;
+  --dur: 0.7s;
+  --dur-slow: 1.2s;
+
+  /* ---- Effects ---- */
+  --z-nav: 80;
+  --z-cursor: 200;
+  --z-loader: 300;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --band-y: 5rem;
+  }
+}

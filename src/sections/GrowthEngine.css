@@ -1,0 +1,197 @@
+.engine {
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.engine__shell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  padding-block: clamp(5rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
+}
+
+.engine__head {
+  display: grid;
+  gap: var(--s-3);
+  margin-bottom: clamp(2.5rem, 7vh, 5rem);
+}
+
+.engine__head h2 { letter-spacing: -0.04em; }
+
+.engine__head .body {
+  max-width: 48ch;
+  color: var(--fg-soft);
+}
+
+/* ---- Plot band ---- */
+
+.engine__chart {
+  position: relative;
+  height: clamp(220px, 34vh, 360px);
+  margin-bottom: clamp(140px, 17vh, 180px);
+}
+
+.engine__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.engine__ghost,
+.engine__path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.engine__ghost {
+  stroke: rgba(26, 66, 95, 0.22);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+
+.engine__path {
+  stroke: var(--yellow);
+  stroke-width: 2;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+/* ---- Nodes ---- */
+
+.engine__nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.engine__node {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: clamp(104px, 11vw, 180px);
+  height: 100%;
+  transform: translateX(-50%);
+  opacity: 0;
+}
+
+.engine__node::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: var(--y);
+  height: calc(100% - var(--y));
+  width: 1px;
+  background: linear-gradient(180deg, rgba(247, 170, 0, 0.95), rgba(26, 66, 95, 0.08));
+}
+
+.engine__dot {
+  position: absolute;
+  top: var(--y);
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--blue);
+}
+
+.engine__node--last .engine__dot {
+  width: 20px;
+  height: 20px;
+  background: var(--yellow);
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 6px rgba(247, 170, 0, 0.16);
+}
+
+.engine__stage {
+  position: absolute;
+  top: calc(100% + 26px);
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.engine__num {
+  display: block;
+  color: var(--blue);
+  font-size: 0.65rem;
+  margin-bottom: 0.4rem;
+}
+
+.engine__label {
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.3vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 0.35rem;
+}
+
+.engine__node--last .engine__label { color: var(--blue); }
+
+.engine__note {
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--fg-faint);
+}
+
+@media (min-width: 1024px) {
+  /* Pinned section: the band padding would push it past one viewport. */
+  .engine { padding-block: 0; }
+}
+
+/* ---- Stacked layout ---- */
+
+@media (max-width: 1023px) {
+  .engine__shell {
+    min-height: 0;
+    display: block;
+  }
+
+  .engine__chart {
+    height: auto;
+    margin-bottom: 0;
+    padding-left: 1.35rem;
+    border-left: 1px solid rgba(26, 66, 95, 0.2);
+  }
+
+  .engine__svg { display: none; }
+
+  .engine__nodes {
+    position: static;
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .engine__node {
+    position: relative;
+    left: auto;
+    width: auto;
+    height: auto;
+    transform: none;
+  }
+
+  .engine__node::before { display: none; }
+
+  .engine__dot {
+    position: absolute;
+    top: 0.55rem;
+    left: calc(-1.35rem - 1px);
+    transform: translateX(-50%);
+  }
+
+  .engine__stage {
+    position: static;
+    transform: translateY(14px);
+  }
+
+  .engine__note { font-size: 0.85rem; }
+
+  .engine__label { font-size: 1.35rem; }
+}

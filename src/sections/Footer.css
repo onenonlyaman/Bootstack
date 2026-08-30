@@ -1,0 +1,254 @@
+/* ============================================================
+   Footer — five columns on the site's soft cyan ground.
+   Existing tokens only. Structure is unchanged; this is the
+   colour treatment the footer carried before the redesign.
+   ============================================================ */
+
+.foot {
+  position: relative;
+  padding-block: clamp(2.75rem, 7vh, 4.25rem) clamp(1.25rem, 3vh, 1.75rem);
+  background: var(--cyan-deep);
+  color: var(--ink);
+
+  /* Local rules and heading colour, so nothing global has to change. */
+  --rule: rgba(26, 66, 95, 0.2);
+  --foot-head: var(--navy);
+}
+
+/* ---------- The five columns ---------- */
+
+.foot__cols {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  padding-bottom: clamp(2rem, 5vh, 3rem);
+  /* Headings line up across every column. */
+  align-items: start;
+}
+
+/* ---------- 1 · Brand ---------- */
+
+.foot__brandcol {
+  display: grid;
+  gap: var(--s-2);
+  align-content: start;
+}
+
+.foot__brand {
+  justify-self: start;
+}
+
+.foot__blurb {
+  max-width: 26ch;
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  color: rgba(8, 22, 31, 0.68);
+}
+
+.foot__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+
+.foot__social a {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: rgba(26, 66, 95, 0.1);
+  color: var(--blue);
+  transition:
+    background-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out);
+}
+
+.foot__social svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.foot__social a:hover {
+  background: var(--blue);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+/* ---------- 2–5 · Link columns ---------- */
+
+.foot__label {
+  margin: 0 0 var(--s-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--foot-head);
+}
+
+.foot__col ul {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.foot__col a,
+.foot__soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  color: rgba(8, 22, 31, 0.72);
+  transition: color 0.3s var(--ease-out);
+}
+
+.foot__col a:hover {
+  color: var(--blue);
+}
+
+/* A resource with no page yet. Present, but plainly not a link. */
+.foot__soon {
+  color: rgba(8, 22, 31, 0.72);
+  cursor: default;
+}
+
+.foot__contact {
+  font-style: normal;
+}
+
+.foot__ico {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+  color: rgba(8, 22, 31, 0.45);
+}
+
+/* The same enquiry form the service pages open. */
+.foot__book {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--s-3);
+  font-family: var(--font-body);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--blue);
+  cursor: pointer;
+  transition: color 0.3s var(--ease-out);
+}
+
+.foot__book span {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.foot__book:hover span {
+  transform: translateX(4px);
+}
+
+/* ---------- Base row ---------- */
+
+.foot__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--rule);
+  color: rgba(8, 22, 31, 0.5);
+}
+
+.foot__top-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(8, 22, 31, 0.7);
+  transition: color 0.3s var(--ease-out);
+}
+
+.foot__top-link:hover {
+  color: var(--blue);
+}
+
+.foot__top-link span {
+  transition: transform 0.4s var(--ease-out);
+}
+
+.foot__top-link:hover span {
+  transform: translateY(-4px);
+}
+
+/* ============================================================
+   Responsive. Mobile is the base: one column, brand first.
+   ============================================================ */
+
+/* Tablet — brand spans the row, the four link columns pair up. */
+@media (min-width: 640px) {
+  .foot__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .foot__brandcol {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 900px) {
+  .foot__cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Desktop — the five columns of the reference, brand widest so the
+   description wraps naturally rather than being squeezed. */
+@media (min-width: 1100px) {
+  .foot__cols {
+    grid-template-columns:
+      minmax(0, 1.35fr)
+      minmax(0, 0.85fr)
+      minmax(0, 1.05fr)
+      minmax(0, 0.95fr)
+      minmax(0, 1fr);
+  }
+
+  .foot__brandcol {
+    grid-column: auto;
+    padding-right: var(--s-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foot__social a,
+  .foot__col a,
+  .foot__book,
+  .foot__book span,
+  .foot__top-link,
+  .foot__top-link span {
+    transition: none;
+  }
+}
+
+/* Cookie Settings sits with the resource links and matches them exactly; it is
+   a button because it opens a panel rather than going anywhere. */
+.foot__cookies {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-body);
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  color: rgba(8, 22, 31, 0.72);
+  cursor: pointer;
+  transition: color 0.3s var(--ease-out);
+}
+
+.foot__cookies:hover {
+  color: var(--blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .foot__cookies {
+    transition: none;
+  }
+}

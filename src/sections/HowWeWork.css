@@ -1,0 +1,426 @@
+/* ============================================================
+   Our process — the five stages as one connected run.
+   Existing tokens only: blue, cyan, mist, white, ink, yellow.
+   ============================================================ */
+
+.how {
+  color: var(--ink);
+
+  /* A full screen of its own. The run is centred in it rather than sitting at
+     the top, so the height reads as composition instead of slack — and the
+     mist ground holds the viewport long enough for the transition into and out
+     of it to be felt. svh, not vh, so a phone's collapsing URL bar cannot make
+     the section jump. */
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+
+  --band-y: clamp(2.75rem, 6.5vh, 4.5rem);
+
+  /* The five columns and the gap between them. The line's endpoints are
+     derived from these, so it always lands on the first and last card centre
+     however wide the track is. */
+  --how-cols: 5;
+  --how-gap: clamp(0.5rem, 1.4vw, 1.1rem);
+  --how-col: calc(
+    (100% - (var(--how-cols) - 1) * var(--how-gap)) / var(--how-cols)
+  );
+}
+
+.how__inner {
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.4rem, 1.2vh, 0.75rem);
+}
+
+.how__eyebrow {
+  color: var(--blue);
+  opacity: 0.72;
+}
+
+.how__title {
+  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--blue);
+  text-align: center;
+}
+
+.how__stop {
+  color: var(--cyan);
+}
+
+/* ---------- The track ---------- */
+
+.how__track {
+  position: relative;
+  width: 100%;
+  /* Five cards of ~135px plus their gaps. Keeps the run compact rather than
+     stretching it across the full shell. */
+  max-width: 46rem;
+  margin-top: clamp(1.25rem, 3vh, 2.25rem);
+}
+
+.how__steps {
+  display: grid;
+  grid-template-columns: repeat(var(--how-cols), minmax(0, 1fr));
+  gap: var(--how-gap);
+}
+
+/* ---------- The flow line ----------
+   Runs behind the cards, from the centre of the first to the centre of the
+   last. Both ends are half a column in, so it never pokes out past the run. */
+
+.how__line {
+  position: absolute;
+  left: calc(var(--how-col) / 2);
+  right: calc(var(--how-col) / 2);
+  /* Dead on the icon centre: .how__step's 0.85rem padding-top + half its
+     1.4rem icon. */
+  top: 1.55rem;
+  height: 2px;
+  background: rgba(35, 87, 132, 0.16);
+  z-index: 0;
+}
+
+.how__line-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* A wrapper spanning the whole line: translating it by a percentage lands the
+   dot exactly on a stage, and stays correct when the track is resized. */
+.how__marker {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.how__marker i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--cyan) 22%, transparent),
+    0 2px 8px -2px rgba(8, 22, 31, 0.35);
+}
+
+/* ---------- The cards ---------- */
+
+.how__step {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.15rem;
+  min-height: 4.9rem;
+  /* padding-top + half the icon = the icon's centre, which is where the flow
+     line is pinned. Keep the two in step if either changes. */
+  padding: 0.85rem 0.5rem 0.75rem;
+  border: 1px solid rgba(35, 87, 132, 0.14);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 1px 2px rgba(8, 22, 31, 0.04);
+  transition:
+    transform 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
+}
+
+.how__icon {
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-bottom: 0.15rem;
+  color: rgba(35, 87, 132, 0.45);
+  transition: color 0.45s var(--ease-out);
+}
+
+.how__icon svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.how__index {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  transition: color 0.45s var(--ease-out);
+}
+
+.how__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-align: center;
+  transition: color 0.45s var(--ease-out);
+}
+
+/* A stage the marker has already passed keeps a quiet mark of completion. */
+.how__step.is-done {
+  border-color: rgba(35, 87, 132, 0.22);
+}
+
+.how__step.is-done .how__icon {
+  color: var(--blue);
+}
+
+/* The stage the marker is on. A lift, a firmer edge, a stronger icon — no
+   scaling, nothing flashy. */
+.how__step.is-active {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
+  box-shadow:
+    0 10px 22px -14px rgba(8, 22, 31, 0.45),
+    0 0 0 1px color-mix(in srgb, var(--cyan) 22%, transparent);
+}
+
+.how__step.is-active .how__icon {
+  color: var(--yellow);
+}
+
+.how__step.is-active .how__index,
+.how__step.is-active .how__label {
+  color: var(--blue);
+}
+
+/* ============================================================
+   Narrow: the same run, turned on its side. Five cards cannot
+   hold their shape across a phone, so the flow becomes vertical
+   with the line through the icon column — the timeline drives
+   the other axis and nothing else changes.
+   ============================================================ */
+
+@media (max-width: 699px) {
+  .how {
+    --how-gap: 0.55rem;
+    --how-row: calc(
+      (100% - (var(--how-cols) - 1) * var(--how-gap)) / var(--how-cols)
+    );
+  }
+
+  .how {
+    /* The vertical run plus the heading already fills a phone; forcing a full
+       screen on top of that would only add the empty space this avoids. */
+    min-height: 0;
+  }
+
+  .how__track {
+    max-width: 26rem;
+  }
+
+  .how__steps {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: 1fr;
+  }
+
+  .how__step {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    justify-items: start;
+    align-items: center;
+    gap: 0 0.65rem;
+    min-height: 3.4rem;
+    padding: 0.6rem 0.85rem;
+  }
+
+  .how__icon {
+    grid-row: span 2;
+    margin-bottom: 0;
+  }
+
+  .how__label {
+    text-align: left;
+  }
+
+  /* Vertical, and through the icon centre: 0.85rem of padding plus half of
+     the 1.4rem icon, rounded to the icon column's middle. */
+  .how__line {
+    left: 1.55rem;
+    right: auto;
+    top: calc(var(--how-row) / 2);
+    bottom: calc(var(--how-row) / 2);
+    width: 2px;
+    height: auto;
+  }
+
+  .how__line-fill {
+    background: linear-gradient(180deg, var(--blue), var(--cyan));
+    transform: scaleY(0);
+    transform-origin: top center;
+  }
+
+  .how__marker i {
+    top: 0;
+    left: 50%;
+  }
+
+  .how__step.is-active {
+    transform: translateX(3px);
+  }
+}
+
+/* ============================================================
+   Reduced motion — the run reads as complete, and holds still.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .how__step,
+  .how__icon,
+  .how__index,
+  .how__label {
+    transition: none;
+  }
+
+  .how__step.is-active,
+  .how__step.is-done {
+    transform: none;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  /* ============================================================
+     HOW WE WORK - LARGE FULL DESKTOP COMPOSITION
+     ============================================================ */
+
+  section.how.band {
+    width: 100%;
+    height: 100svh !important;
+    min-height: 100svh !important;
+
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    box-sizing: border-box;
+
+    display: grid;
+    align-content: center;
+  }
+
+  .how__inner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: grid;
+    justify-items: center;
+
+    gap: 1rem;
+  }
+
+  /* ---------- Eyebrow ---------- */
+
+  .how__eyebrow {
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* ---------- Main heading ---------- */
+
+  .how__title {
+    font-size: clamp(4rem, 6vw, 6.5rem) !important;
+    line-height: 0.92;
+    letter-spacing: -0.055em;
+    margin: 0;
+  }
+
+  /* ---------- Process track ---------- */
+
+  .how__track {
+    width: min(1250px, 92vw);
+    max-width: none;
+
+    margin-top: clamp(2.5rem, 5vh, 4rem);
+  }
+
+  /* ---------- Five columns ---------- */
+
+  .how__steps {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    gap: clamp(1rem, 2vw, 2rem);
+  }
+
+  /* ---------- Cards ---------- */
+
+  .how__step {
+    width: 100%;
+    min-height: 150px;
+    height: 150px;
+
+    padding: 1.25rem 1rem;
+
+    border-radius: 16px;
+
+    justify-self: center;
+  }
+
+  /* ---------- Icons ---------- */
+
+  .how__icon {
+    width: 2rem;
+    height: 2rem;
+
+    margin-bottom: 0.45rem;
+  }
+
+  /* ---------- Numbers ---------- */
+
+  .how__index {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+
+  /* ---------- Card titles ---------- */
+
+  .how__label {
+    font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  }
+
+  /* ---------- Connecting line ---------- */
+
+  .how__line {
+    height: 2px;
+  }
+
+  /* ---------- Moving marker ---------- */
+
+  .how__marker i {
+    width: 14px;
+    height: 14px;
+
+    margin: -7px 0 0 -7px;
+  }
+}
+
+@media (min-width: 1024px) {
+  section.how.band {
+    align-content: start;
+  }
+
+  .how__inner {
+    padding-top: clamp(2.5rem, 6vh, 4rem);
+  }
+}

@@ -1,0 +1,239 @@
+.about {
+  color: var(--ink);
+  overflow: hidden;
+
+  /* Chapter-local band padding. The global 15vh top *and* bottom is most of the
+     empty ground in this section; the coda already carries plenty of height, so
+     About does not need the full page band stacked on top of it. Scoped here so
+     every other section keeps the page rhythm untouched. */
+  --band-y: clamp(3.5rem, 8vh, 6.5rem);
+}
+
+/* The chapter runs on one vertical rhythm so the movements read as continuous
+   prose rather than as stacked blocks. The marker keeps its rule but hands its
+   own trailing margin over to that rhythm. */
+.about__inner {
+  display: grid;
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.about__inner > .marker {
+  margin-bottom: 0;
+}
+
+/* ---- Two columns: the argument left, the founder right ---- */
+
+.about__main {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  align-items: start;
+}
+
+.about__col {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vh, 1.75rem);
+  align-content: start;
+}
+
+/* Editorial weight without swallowing the viewport: one step down from the
+   section statements elsewhere on the page. */
+.about__statement {
+  max-width: 20ch;
+  letter-spacing: -0.035em;
+}
+
+.about__copy {
+  display: grid;
+  gap: var(--s-3);
+  max-width: 58ch;
+}
+
+.about__copy .lead {
+  color: var(--ink);
+}
+
+/* ---- Founder column ---- */
+
+.about__founder {
+  display: grid;
+  gap: var(--s-2);
+  align-content: start;
+}
+
+/* Portrait frame. Square corners and a hairline, the same rule language the
+   markers and the ledger already use — no new card style. */
+.about__portrait {
+  width: 100%;
+  max-width: 26rem;
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--blue) 5%, transparent);
+  overflow: hidden;
+}
+
+.about__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about__thanks {
+  max-width: 34ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+  line-height: 1.45;
+  color: rgba(8, 22, 31, 0.86);
+}
+
+.about__ledger {
+  display: grid;
+  gap: var(--s-2);
+  max-width: 34ch;
+}
+
+.about__ledger-row {
+  display: grid;
+  gap: 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---- Shared attribution type ---- */
+
+.about__meta {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: var(--s-3);
+}
+
+.about__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.about__role {
+  color: var(--blue);
+}
+.about__where {
+  color: var(--fg-faint);
+}
+
+/* ---- On the record: bracketed by two full-measure rules, so it reads as a
+   pull-out inside the chapter rather than a card sitting on top of it. ---- */
+
+.about__record {
+  display: grid;
+  gap: clamp(1rem, 2.5vh, 1.5rem);
+  padding-block: clamp(1.1rem, 2.5vh, 1.75rem);
+  border-top: none;
+  border-bottom: none;
+}
+
+.about__record-label {
+  color: var(--fg-faint);
+}
+
+.about__record-pair {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+}
+
+.about__position {
+  margin: 0;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--yellow);
+}
+
+.about__position-text {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  color: rgba(8, 22, 31, 0.86);
+  max-width: 42ch;
+  letter-spacing: -0.015em;
+
+  font-style: italic;
+  transform: skewX(-5deg);
+  transform-origin: left center;
+}
+
+.about__position .about__meta {
+  margin-top: var(--s-2);
+}
+
+/* ---- Coda: the drifting intersection words close the section ---- */
+
+.about__words {
+  display: grid;
+  gap: clamp(0.1rem, 0.6vh, 0.4rem);
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  user-select: none;
+}
+
+.about__word {
+  display: block;
+  font-size: clamp(2.6rem, 11vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(26, 66, 95, 0.3);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.about__word:nth-child(1) {
+  padding-left: 4%;
+}
+.about__word:nth-child(2) {
+  padding-left: 18%;
+}
+.about__word:nth-child(3) {
+  padding-left: 9%;
+  color: var(--blue);
+  -webkit-text-stroke: 0;
+}
+.about__word:nth-child(4) {
+  padding-left: 26%;
+}
+.about__word:nth-child(5) {
+  padding-left: 12%;
+}
+
+@media (min-width: 900px) {
+  .about__record-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  /* The founder column (portrait plus its ledger) runs far taller than the
+     statement and copy, which left a tall empty band under the left column.
+     Letting it span both rows lifts the record block into that ground instead
+     of stacking it below the whole grid. Nothing is resized. */
+  .about__main {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-content: start;
+  }
+
+  .about__col {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .about__founder {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .about__record {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  /* One column now that the block sits in the narrower measure. */
+  .about__record-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

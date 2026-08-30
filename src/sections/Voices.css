@@ -1,0 +1,84 @@
+.voices {
+  color: var(--ink);
+  --fg: var(--ink);
+  --fg-soft: rgba(8, 22, 31, 0.62);
+  --fg-faint: rgba(8, 22, 31, 0.34);
+  --rule: rgba(26, 66, 95, 0.18);
+}
+
+.voices__lead {
+  position: relative;
+  padding-block: clamp(1.5rem, 4vh, 3rem) clamp(2.5rem, 6vh, 4rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.voices__quote-mark {
+  position: absolute;
+  top: -0.15em;
+  left: -0.06em;
+  font-size: clamp(7rem, 20vw, 16rem);
+  line-height: 1;
+  color: var(--yellow);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.voices__lead-text {
+  position: relative;
+  max-width: 22ch;
+  font-size: clamp(1.8rem, 4.6vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.voices__meta {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: var(--s-3);
+}
+
+.voices__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.voices__role { color: var(--blue); }
+.voices__industry { color: var(--fg-faint); }
+
+.voices__pair {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-top: clamp(2rem, 5vh, 3.5rem);
+}
+
+.voices__item {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--yellow);
+}
+
+.voices__text {
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.45;
+  color: rgba(8, 22, 31, 0.86);
+  max-width: 42ch;
+}
+
+@media (min-width: 900px) {
+  .voices__lead-text { max-width: 20ch; }
+
+  .voices__lead .voices__meta {
+    position: absolute;
+    right: 0;
+    bottom: clamp(2.5rem, 6vh, 4rem);
+    text-align: right;
+    justify-items: end;
+    margin-top: 0;
+  }
+
+  .voices__pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

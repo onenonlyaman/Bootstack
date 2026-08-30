@@ -1,0 +1,195 @@
+/* ============================================================
+   BuildFlow — the deliverables as a connected route.
+   ============================================================ */
+
+.bflow {
+  position: relative;
+  margin-top: var(--s-4);
+  padding-left: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+/* ---- The spine ---- */
+
+.bflow__spine {
+  position: absolute;
+  top: 1.4rem;
+  bottom: 1.4rem;
+  left: clamp(0.55rem, 1.2vw, 0.9rem);
+  width: 4px;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.bflow__track,
+.bflow__draw {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.bflow__track {
+  stroke: rgba(35, 87, 132, 0.16);
+}
+
+.bflow__draw {
+  stroke: var(--blue);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+/* ---- Rows ---- */
+
+.bflow__list {
+  display: grid;
+}
+
+.bflow__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  padding-block: clamp(0.9rem, 2vw, 1.35rem);
+  border-bottom: 1px solid var(--rule);
+  opacity: 0.62;
+  transition:
+    opacity 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out);
+  will-change: transform, opacity;
+}
+
+.bflow__item.is-done {
+  opacity: 1;
+}
+
+.bflow__item.is-live {
+  transform: translateX(5px);
+}
+
+/* ---- The node ---- */
+
+/* `left` is measured from the row's padding-box edge, which sits at the
+   wrapper's padding-left — so only that is subtracted. */
+.bflow__node {
+  position: absolute;
+  left: calc(clamp(0.55rem, 1.2vw, 0.9rem) - clamp(2.5rem, 5vw, 3.5rem) - 0.55rem);
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 50%;
+  background: var(--white);
+}
+
+.bflow__node svg {
+  width: 100%;
+  height: 100%;
+}
+
+.bflow__ring {
+  fill: var(--white);
+  stroke: rgba(35, 87, 132, 0.35);
+  stroke-width: 2;
+  transition: fill 0.4s var(--ease-out), stroke 0.4s var(--ease-out);
+}
+
+.bflow__tick {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 0.45s var(--ease-out);
+}
+
+.bflow__item.is-live .bflow__ring {
+  fill: var(--cyan);
+  stroke: var(--cyan);
+}
+
+/* A row already passed keeps its mark: the tick draws in. */
+.bflow__item.is-done .bflow__ring {
+  fill: var(--blue);
+  stroke: var(--blue);
+}
+
+.bflow__item.is-done .bflow__tick {
+  stroke-dashoffset: 0;
+}
+
+/* ---- Type ---- */
+
+.bflow__num {
+  flex: none;
+  color: var(--fg-faint);
+  transition: color 0.4s var(--ease-out);
+}
+
+.bflow__item.is-live .bflow__num,
+.bflow__item.is-done .bflow__num {
+  color: var(--blue);
+}
+
+.bflow__label {
+  min-width: 0;
+  font-size: clamp(1.3rem, 3.2vw, 2.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  transition: color 0.35s var(--ease-out);
+}
+
+.bflow__rule {
+  flex: 1 1 auto;
+  align-self: center;
+  min-width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--blue) 40%, transparent),
+    transparent
+  );
+}
+
+.bflow__arrow {
+  flex: none;
+  color: var(--blue);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out);
+}
+
+.bflow__item:hover .bflow__label {
+  color: var(--blue);
+}
+
+.bflow__item:hover .bflow__arrow,
+.bflow__item.is-live .bflow__arrow {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .bflow__rule {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bflow__item,
+  .bflow__ring,
+  .bflow__tick,
+  .bflow__num,
+  .bflow__label,
+  .bflow__arrow {
+    transition: none;
+  }
+
+  .bflow__draw {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,72 @@
+.cursor {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+}
+
+.cursor__dot,
+.cursor__ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.cursor__dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--blue);
+}
+
+.cursor__ring {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid rgba(35, 87, 132, 0.5);
+  transition:
+    width 0.4s var(--ease-out),
+    height 0.4s var(--ease-out),
+    margin 0.4s var(--ease-out),
+    background-color 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out);
+}
+
+.cursor__ring span {
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  white-space: nowrap;
+}
+
+.cursor__ring.is-active {
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  background: rgba(35, 87, 132, 0.1);
+  border-color: rgba(35, 87, 132, 0.75);
+}
+
+.cursor__ring.is-labelled {
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+
+.cursor__ring.is-labelled span {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor { display: none; }
+}

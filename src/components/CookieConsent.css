@@ -1,0 +1,293 @@
+/* ============================================================
+   Cookie consent — a corner notice, and a modal for the detail.
+   Existing Bootstack tokens only.
+   ============================================================ */
+
+/* ---------- The corner notice ----------
+   Deliberately not an overlay: the page stays visible and usable behind it. */
+
+.cc {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 260;
+
+  /* Never wider than the viewport allows. */
+  width: min(26.5rem, calc(100vw - 40px));
+
+  padding: clamp(1.1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--white);
+  box-shadow: 0 24px 60px -30px rgba(8, 22, 31, 0.45);
+
+  animation: cc-rise 0.45s var(--ease-out) both;
+}
+
+@keyframes cc-rise {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cc__eyebrow {
+  color: var(--cyan);
+}
+
+.cc__title {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--navy);
+}
+
+.cc__text {
+  margin: 0.55rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--fg-soft);
+}
+
+/* ---------- Buttons ---------- */
+
+.cc__actions {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: var(--s-3);
+}
+
+.cc__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8em 1.1em;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
+}
+
+.cc__btn--solid {
+  background: var(--blue);
+  color: var(--white);
+}
+
+.cc__btn--solid:hover {
+  background: var(--navy);
+}
+
+.cc__btn--soft {
+  background: var(--mist);
+  color: var(--navy);
+}
+
+.cc__btn--soft:hover {
+  background: var(--cyan-soft);
+}
+
+.cc__btn--line {
+  background: transparent;
+  border-color: rgba(35, 87, 132, 0.35);
+  color: var(--navy);
+}
+
+.cc__btn--line:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* The brand accent, kept for the one thing that needs to be findable. */
+.cc__btn:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* ---------- The preferences modal ---------- */
+
+.cc__veil {
+  position: fixed;
+  inset: 0;
+  z-index: 310;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  background: rgba(8, 22, 31, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: cc-veil 0.3s var(--ease-out);
+}
+
+@keyframes cc-veil {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cc__panel {
+  position: relative;
+  width: min(34rem, 100%);
+  margin: auto;
+  max-height: 88vh;
+  max-height: min(88svh, 46rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 40px 80px -40px rgba(8, 22, 31, 0.6);
+  animation: cc-rise 0.4s var(--ease-out) both;
+}
+
+.cc__close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 1.5rem);
+  right: clamp(1rem, 3vw, 1.5rem);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--fg-soft);
+  cursor: pointer;
+  transition: color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+
+.cc__close:hover {
+  color: var(--ink);
+  background: var(--mist);
+}
+
+/* ---------- Categories ---------- */
+
+.cc__list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: var(--s-3);
+  /* The scroller, so the buttons below stay reachable on a short screen. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.35rem;
+}
+
+.cc__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--mist) 55%, transparent);
+}
+
+.cc__row-copy {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.cc__row-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--navy);
+}
+
+.cc__row-note {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--fg-soft);
+}
+
+.cc__always {
+  flex: none;
+  padding-top: 0.15rem;
+  color: var(--blue);
+}
+
+/* ---------- Switch ---------- */
+
+.cc__switch {
+  flex: none;
+  position: relative;
+  width: 2.75rem;
+  height: 1.55rem;
+  margin-top: 0.1rem;
+  border-radius: 999px;
+  background: rgba(35, 87, 132, 0.22);
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease-out);
+}
+
+.cc__switch[aria-checked="true"] {
+  background: var(--blue);
+}
+
+.cc__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 1px 3px rgba(8, 22, 31, 0.3);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.cc__switch[aria-checked="true"] .cc__knob {
+  transform: translateX(1.2rem);
+}
+
+.cc__switch:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* Three across in the modal, where there is room. */
+.cc__actions--row {
+  flex: none;
+}
+
+@media (min-width: 520px) {
+  .cc__actions--row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Mobile: the notice spans the width, with a margin ---------- */
+
+@media (max-width: 640px) {
+  .cc {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc,
+  .cc__panel,
+  .cc__veil {
+    animation: none;
+  }
+
+  .cc__btn,
+  .cc__close,
+  .cc__switch,
+  .cc__knob {
+    transition: none;
+  }
+}

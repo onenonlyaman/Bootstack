@@ -1,0 +1,287 @@
+/* ============================================================
+   Schedule a Call — the enquiry modal.
+   Existing tokens only; matches the reference screenshots.
+   ============================================================ */
+
+body.has-modal {
+  overflow: hidden;
+}
+
+.sc {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+
+  /* Flex with `margin: auto` on the panel, NOT `place-items: center`. A
+     centred grid/flex item that outgrows its container overflows past both
+     edges and neither can be scrolled back to — which is why the top of the
+     form was unreachable. This centres while still allowing a scroll. */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: clamp(0.75rem, 3vw, 2rem);
+  background: rgba(8, 22, 31, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: sc-veil 0.3s var(--ease-out);
+}
+
+@keyframes sc-veil {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sc__panel {
+  position: relative;
+  width: min(38rem, 100%);
+  margin: auto;
+
+  /* Two declarations on purpose. `svh` is the better unit, but where it is not
+     supported the whole `min()` is invalid and the browser drops the property
+     entirely — leaving the panel with no height cap at all, which is the other
+     half of the bug. The vh line below is the floor if that happens. */
+  max-height: 88vh;
+  max-height: min(88svh, 52rem);
+
+  /* The panel is the frame; its children do the scrolling, so the header and
+     the close button stay put. */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 40px 80px -40px rgba(8, 22, 31, 0.6);
+  animation: sc-rise 0.4s var(--ease-out);
+}
+
+@keyframes sc-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.sc__close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 1.6rem);
+  right: clamp(1rem, 3vw, 1.6rem);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--fg-soft);
+  transition: color 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+
+.sc__close:hover {
+  color: var(--ink);
+  background: var(--mist);
+}
+
+/* ---------- Head ---------- */
+
+.sc__eyebrow {
+  color: var(--cyan);
+}
+
+.sc__title {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--navy);
+}
+
+.sc__about {
+  margin-top: var(--s-2);
+  font-size: 0.95rem;
+  color: var(--fg-soft);
+}
+
+/* The service the visitor came from, stated before anything is typed. */
+.sc__pill {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.6em 1.1em;
+  border-radius: 999px;
+  background: var(--mist);
+  color: var(--blue);
+  font-size: 0.95rem;
+}
+
+/* ---------- Fields ---------- */
+
+/* The head is fixed height; everything else gives way to it. */
+.sc__eyebrow,
+.sc__title,
+.sc__about,
+.sc__pill {
+  flex: none;
+}
+
+.sc__form {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+
+  /* The scroller. `min-height: 0` is the critical line: without it a flex
+     child refuses to shrink below its content, so the panel grows instead of
+     the form scrolling, and the fields below the fold are clipped away. */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  /* Clearance so the scrollbar never sits on top of a field. */
+  padding-right: 0.4rem;
+}
+
+.sc__field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.sc__label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--navy);
+}
+
+.sc__input {
+  width: 100%;
+  padding: 0.85em 1em;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.sc__input::placeholder {
+  color: var(--fg-faint);
+}
+
+.sc__input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 22%, transparent);
+}
+
+.sc__input[aria-invalid="true"] {
+  border-color: #c2453d;
+}
+
+.sc__textarea {
+  resize: vertical;
+  min-height: 6.5rem;
+  line-height: 1.5;
+}
+
+.sc__select {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23235784' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1.1rem;
+}
+
+/* Read-only: it reflects the page, it is not a choice. */
+.sc__service {
+  margin: 0;
+  padding: 0.85em 1em;
+  border-radius: 10px;
+  background: var(--mist);
+  color: var(--blue);
+  font-size: 1rem;
+}
+
+.sc__error {
+  font-size: 0.85rem;
+  color: #c2453d;
+}
+
+.sc__failure {
+  margin: 0;
+  padding: 0.85em 1em;
+  border: 1px solid rgba(194, 69, 61, 0.35);
+  border-radius: 10px;
+  background: rgba(194, 69, 61, 0.06);
+  color: #8f2f29;
+  font-size: 0.92rem;
+}
+
+/* ---------- Submit ---------- */
+
+.sc__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 1em 1.5em;
+  border-radius: 10px;
+  background: var(--blue);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+}
+
+.sc__submit:hover {
+  background: var(--navy);
+}
+
+.sc__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ---------- Success ---------- */
+
+.sc__done {
+  display: grid;
+  gap: var(--s-2);
+  padding-block: var(--s-3);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sc__note {
+  margin: 0;
+  color: var(--fg-soft);
+  line-height: 1.55;
+}
+
+.sc__done .sc__submit {
+  justify-self: start;
+  width: auto;
+  margin-top: var(--s-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc,
+  .sc__panel {
+    animation: none;
+  }
+
+  .sc__close,
+  .sc__input,
+  .sc__submit {
+    transition: none;
+  }
+}

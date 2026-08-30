@@ -1,0 +1,67 @@
+.impact {
+  color: var(--ink);
+  --fg: var(--ink);
+  --fg-soft: rgba(8, 22, 31, 0.68);
+  --fg-faint: rgba(8, 22, 31, 0.5);
+  --rule: rgba(8, 22, 31, 0.24);
+}
+
+.impact .marker__num { color: var(--ink); }
+
+.impact__title {
+  max-width: 16ch;
+  letter-spacing: -0.04em;
+  margin-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.impact__ledger {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+
+.impact__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem 1.5rem;
+  align-items: baseline;
+  padding-block: clamp(1.1rem, 2.6vh, 1.9rem);
+  border-bottom: 1px solid var(--rule);
+  transition: background-color 0.5s var(--ease-out), padding-inline 0.5s var(--ease-out);
+}
+
+.impact__row:hover {
+  background: rgba(8, 22, 31, 0.06);
+  padding-inline: clamp(0.5rem, 1.5vw, 1.25rem);
+}
+
+.impact__value {
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+
+.impact__label {
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.impact__note {
+  font-size: var(--t-sm);
+  color: var(--fg-soft);
+}
+
+.impact__foot {
+  margin-top: var(--s-3);
+  color: rgba(8, 22, 31, 0.55);
+}
+
+@media (min-width: 768px) {
+  .impact__row {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 0.7fr) minmax(0, 1fr);
+  }
+
+  .impact__note { text-align: right; }
+}

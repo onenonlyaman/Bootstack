@@ -130,13 +130,13 @@ export default function Nav({ ready }) {
 
           <div className="nav__actions">
             <a
-  className="nav__cta mono"
-  href="https://wa.me/+919975499956?text=Hi%20Bootstack%20Team%2C%0A%0AI%20visited%20your%20website%20and%20would%20like%20to%20discuss%20my%20project.%20Please%20get%20in%20touch%20with%20me."
-  target="_blank"
-  rel="noopener noreferrer"
->
-  Contact Us
-</a>
+              className="nav__cta mono"
+              href="https://wa.me/+919975499956?text=Hi%20Bootstack%20Team%2C%0A%0AI%20visited%20your%20website%20and%20would%20like%20to%20discuss%20my%20project.%20Please%20get%20in%20touch%20with%20me."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Contact Us
+            </a>
             <button
               type="button"
               className={`nav__toggle${open ? " is-open" : ""}`}
@@ -173,6 +173,17 @@ export default function Nav({ ready }) {
                 {link.label}
               </a>
             ))}
+
+            <a
+              href="https://wa.me/+919975499956?text=Hi%20Bootstack%20Team%2C%0A%0AI%20visited%20your%20website%20and%20would%20like%20to%20discuss%20my%20project.%20Please%20get%20in%20touch%20with%20me."
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ "--i": navLinks.length }}
+              className="display display--xl"
+            >
+              <span className="menu__index mono">0{navLinks.length + 1}</span>
+              Contact Us
+            </a>
           </nav>
 
           <div className="menu__foot">

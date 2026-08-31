@@ -207,9 +207,9 @@
 
 .vkeys__word {
   position: absolute;
-  font-size: clamp(1.1rem, 2.6vw, 2rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-size: clamp(1rem, 1.6vw, 1.45rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   color: var(--navy);
   white-space: nowrap;
@@ -279,9 +279,9 @@
 
 .vblue__label {
   min-width: 0;
-  font-size: clamp(1.05rem, 2.3vw, 1.65rem);
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 
@@ -350,9 +350,9 @@
 }
 
 .vboard__num {
-  font-size: clamp(1.9rem, 4.6vw, 3.4rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.4rem, 2.2vw, 2rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   color: color-mix(in srgb, var(--navy) 52%, transparent);
   transition: color 0.5s var(--ease-out);
 }
@@ -435,9 +435,9 @@
 }
 
 .vorbit__count {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.65rem, 2.6vw, 2.3rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   color: var(--navy);
 }
 
@@ -460,9 +460,9 @@
 }
 
 .vstack__term {
-  font-size: clamp(1.3rem, 3.2vw, 2.4rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   color: var(--navy);
 }
@@ -482,7 +482,7 @@
 .vstack__op--eq { color: var(--blue); }
 
 .vstack__term--sum {
-  font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+  font-size: clamp(1.3rem, 2vw, 1.85rem);
   color: var(--blue);
 }
 

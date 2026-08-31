@@ -14,7 +14,119 @@
   white-space: nowrap;
 }
 
-.tech__lede .body { max-width: 50ch; }
+.tech__lede .body {
+  max-width: 50ch;
+}
+
+/* Heading left, lede right — the statement is three short lines, so stacking
+   them left a wide empty band down the right of the section. */
+@media (min-width: 1024px) {
+  .tech__lede {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: end;
+  }
+
+  .tech__lede h2 {
+    margin-bottom: 0;
+  }
+
+  .tech__lede .body {
+    padding-bottom: 0.35rem;
+  }
+}
+
+/* ---- The stack, by layer ----
+   Four columns of the same technologies the tickers carry, grouped by the
+   layer they sit in. This is what fills the section: the tickers are motion,
+   this is the substance. */
+
+.tech__layers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(2rem, 5vh, 3.25rem);
+  padding-top: clamp(1.75rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--rule);
+}
+
+.tech__layer {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.tech__layer-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.tech__layer-index {
+  color: var(--cyan);
+}
+
+.tech__layer-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+
+.tech__layer-note {
+  max-width: 30ch;
+  color: var(--fg-soft);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.tech__layer-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
+.tech__item {
+  padding: 0.45em 0.8em;
+  border: 1px solid rgba(35, 87, 132, 0.2);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--white) 70%, transparent);
+  color: var(--blue);
+  font-size: 0.62rem;
+  transition:
+    border-color 0.35s var(--ease-out),
+    background-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out);
+}
+
+.tech__item:hover {
+  border-color: var(--cyan);
+  background: var(--white);
+  color: var(--navy);
+}
+
+@media (min-width: 640px) {
+  .tech__layers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .tech__layers {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech__item {
+    transition: none;
+  }
+}
 
 /* ---- Technology flow ----
    Two full-bleed rows running against each other, framed by the same rules the
@@ -25,16 +137,13 @@
 .tech__flow {
   display: grid;
   gap: clamp(0.25rem, 0.9vh, 0.75rem);
-  margin-top: clamp(3rem, 8vh, 5.5rem);
-  padding-block: clamp(1.25rem, 3.5vh, 2.25rem);
+  margin-top: clamp(1.75rem, 4.5vh, 3rem);
+  padding-block: clamp(1.1rem, 3vh, 1.9rem);
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
   color: var(--fg-soft);
 }
 
-/* Move Section 07 upward */
-@media (min-width: 1024px) {
-  .tech {
-    margin-top: -10rem;
-  }
-}
+/* Section 07 sits on the page's own band rhythm — the -10rem pull it used to
+   carry was compensating for the section above it, which no longer reserves a
+   screenful of its own. */

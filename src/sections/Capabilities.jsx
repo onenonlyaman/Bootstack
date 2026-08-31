@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { gsap } from "../lib/motion";
 import SectionMarker from "../components/SectionMarker.jsx";
 import { capabilities } from "../data/capabilities";
 import { useIsDesktop } from "../hooks/useMediaQuery";
@@ -38,6 +39,14 @@ export default function Capabilities() {
 
   const listRef = useRef(null);
 
+  // Which discipline row is lit. -1 is the resting state; on a pointer device
+  // hover claims it, and on scroll the ScrollTrigger below walks it down the
+  // stack so a touch device sees the same relationship being drawn.
+
+  // The service index and the discipline rows are the same eight records, so
+  // the chips read their titles from here rather than restating them.
+
+
   /*
    * Keep the active row in sync with the rendered list.
    *
@@ -54,20 +63,12 @@ export default function Capabilities() {
   }, [active]);
 
   /*
-   * Use the existing capability data for the visual system.
-   *
-   * This means if you change:
-   *
-   * capabilities[0]
-   * capabilities[1]
-   * ...
-   *
-   * the visual nodes automatically follow the same service data.
-   *
-   * We use a maximum of six nodes because the visual is designed
-   * around six territories.
+   * The stack assembles as it is read: each discipline row draws its rail and
+   * claims the lit state as it crosses the reading line, and hands it back on
+   * the way up. Scoped to a gsap.context so every trigger is reverted with the
+   * component — the same pattern the other sections use.
    */
-  const visualCapabilities = capabilities.slice(0, 6);
+
 
   return (
     <section
@@ -94,7 +95,7 @@ export default function Capabilities() {
         <div className="cap__intro">
 
           {/* ----------------------------------------------------
-              LEFT SIDE
+              STATEMENT
               ---------------------------------------------------- */}
 
           <div className="cap__head">
@@ -105,105 +106,17 @@ export default function Capabilities() {
               Everything a business needs to be seen, believed
               and bought kept under one roof.
             </h2>
+
+            <p className="cap__lede body" data-reveal>
+              Five disciplines, one team. Each one carries its own services, and
+              the same people run all of them so the brand, the build and
+              the campaign are never three different conversations.
+            </p>
+          </div>
+
           </div>
 
 
-          {/* ----------------------------------------------------
-              RIGHT SIDE
-              ---------------------------------------------------- */}
-
-          <div
-            className="cap__visual"
-            aria-label="Bootstack service ecosystem"
-          >
-
-            {/* ==================================================
-                CONNECTING LINES
-                ================================================== */}
-
-            <svg
-              className="cap__connections"
-              viewBox="0 0 600 420"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              {/* 01 → centre */}
-              <path
-                d="M 80 75 C 180 75, 210 170, 300 210"
-              />
-
-              {/* 02 → centre */}
-              <path
-                d="M 300 75 C 300 130, 300 160, 300 210"
-              />
-
-              {/* 03 → centre */}
-              <path
-                d="M 520 75 C 420 75, 390 170, 300 210"
-              />
-
-              {/* centre → 04 */}
-              <path
-                d="M 300 210 C 210 250, 180 345, 80 345"
-              />
-
-              {/* centre → 05 */}
-              <path
-                d="M 300 210 C 300 270, 300 300, 300 345"
-              />
-
-              {/* centre → 06 */}
-              <path
-                d="M 300 210 C 390 250, 420 345, 520 345"
-              />
-            </svg>
-
-
-            {/* ==================================================
-                CENTRE NODE
-                ================================================== */}
-
-            <div className="cap__center">
-              <span className="mono">
-                BOOTSTACK
-              </span>
-
-              <strong>
-                One roof<span></span>
-              </strong>
-            </div>
-
-
-            {/* ==================================================
-                SIX SERVICE NODES
-                ================================================== */}
-
-            {visualCapabilities.map((item, i) => (
-              <Link
-                key={item.id}
-                to={`/services/${item.id}`}
-                className={`cap__node cap__node--${i + 1}`}
-                aria-label={`Explore ${item.title}`}
-              >
-                <span className="cap__node-index mono">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <span className="cap__node-title">
-                  {getVisualTitle(item.title)}
-                </span>
-
-                <span
-                  className="cap__node-arrow"
-                  aria-hidden="true"
-                >
-                  ↗
-                </span>
-              </Link>
-            ))}
-
-          </div>
-        </div>
 
 
         {/* ======================================================
@@ -320,70 +233,4 @@ export default function Capabilities() {
       </div>
     </section>
   );
-}
-
-
-/* ==============================================================
-   VISUAL NODE TITLES
-   ==============================================================
-
-   The visual is intentionally shorter than the actual service
-   names.
-
-   Example:
-
-   "Branding & UI/UX"       → "Branding"
-   "Website Development"    → "Websites"
-   "Performance Marketing"  → "Marketing"
-   "Software Development"   → "Software"
-   "Marketing Automation"   → "Automation"
-
-   If your capability title is already short, it simply uses
-   the original title.
-   ============================================================== */
-
-function getVisualTitle(title = "") {
-  const value = title.toLowerCase();
-
-  if (
-    value.includes("branding") ||
-    value.includes("ui/ux")
-  ) {
-    return "Branding";
-  }
-
-  if (
-    value.includes("website") ||
-    value.includes("web development")
-  ) {
-    return "Websites";
-  }
-
-  if (
-    value.includes("performance") ||
-    value.includes("marketing")
-  ) {
-    return "Marketing";
-  }
-
-  if (
-    value.includes("software") ||
-    value.includes("app development")
-  ) {
-    return "Software";
-  }
-
-  if (
-    value.includes("automation")
-  ) {
-    return "Automation";
-  }
-
-  if (
-    value.includes("content")
-  ) {
-    return "Content";
-  }
-
-  return title;
 }

@@ -9,12 +9,20 @@
 .cap__head {
   display: grid;
   gap: var(--s-2);
-  max-width: 30ch;
-  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+  margin-bottom: clamp(2rem, 5vh, 3.25rem);
 }
 
-.cap__head h2 { letter-spacing: -0.035em; }
-.cap__head .body { color: var(--fg-faint); }
+/* The measure belongs on the heading, not on this wrapper: `ch` resolves
+   against the element's own font-size, and the wrapper inherits body copy —
+   so `30ch` here was squeezing a 41px heading into ~200px and wrapping it to
+   eight or ten lines. A length says what it means at any size. */
+.cap__head h2 {
+  max-width: 30rem;
+  letter-spacing: -0.035em;
+}
+.cap__head .body {
+  color: var(--fg-faint);
+}
 
 /* ---- Rows ---- */
 
@@ -39,15 +47,23 @@
   cursor: pointer;
 }
 
-.cap__link > .cap__panel { grid-column: 1 / -1; }
+.cap__link > .cap__panel {
+  grid-column: 1 / -1;
+}
 
-.cap__row--yellow { --tone: var(--yellow); }
-.cap__row--cyan { --tone: var(--cyan); }
-.cap__row--blue { --tone: var(--cyan-deep); }
+.cap__row--yellow {
+  --tone: var(--yellow);
+}
+.cap__row--cyan {
+  --tone: var(--cyan);
+}
+.cap__row--blue {
+  --tone: var(--cyan-deep);
+}
 
 /* Colour wipes up behind the row as it opens. */
 .cap__row::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--tone);
@@ -57,7 +73,9 @@
   z-index: 0;
 }
 
-.cap__row.is-open::before { transform: scaleY(1); }
+.cap__row.is-open::before {
+  transform: scaleY(1);
+}
 
 .cap__trigger {
   position: relative;
@@ -69,10 +87,12 @@
   align-items: center;
   gap: clamp(0.9rem, 2.5vw, 2.5rem);
   width: 100%;
-  padding-block: clamp(1.1rem, 2.4vw, 1.9rem);
+  padding-block: clamp(0.95rem, 1.8vw, 1.45rem);
   text-align: left;
   color: inherit;
-  transition: color 0.4s var(--ease-out), padding 0.5s var(--ease-out);
+  transition:
+    color 0.4s var(--ease-out),
+    padding 0.5s var(--ease-out);
 }
 
 .cap__index {
@@ -83,13 +103,16 @@
 /* The service title. Self-contained type so it does not depend on the .display
    class also being present, and one identical treatment for all eight — a long
    name wraps to two lines rather than being set smaller. The transform
-   transition is the row's existing hover slide and stays untouched. */
+   transition is the row's existing hover slide and stays untouched.
+
+   Medium: at this scale even "Marketing Automation" holds one line on a laptop,
+   so the index reads as a scannable list instead of eight billboards. */
 .cap__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.3rem, 2.3vw, 2rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 
   /* At rest the title carries the same blue-to-cyan ramp as the section
@@ -129,14 +152,22 @@
   display: none;
   color: var(--fg-soft);
   font-size: var(--t-md);
-  transition: color 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+  transition:
+    color 0.4s var(--ease-out),
+    opacity 0.4s var(--ease-out);
 }
 
 /* ---- Open state ---- */
 
-.cap__row.is-open .cap__trigger { color: var(--ink); }
-.cap__row.is-open .cap__index { color: rgba(8, 22, 31, 0.55); }
-.cap__row.is-open .cap__verb { color: rgba(8, 22, 31, 0.72); }
+.cap__row.is-open .cap__trigger {
+  color: var(--ink);
+}
+.cap__row.is-open .cap__index {
+  color: rgba(8, 22, 31, 0.55);
+}
+.cap__row.is-open .cap__verb {
+  color: rgba(8, 22, 31, 0.72);
+}
 
 /* ---- Panel ---- */
 
@@ -148,7 +179,9 @@
   transition: grid-template-rows 0.6s var(--ease-out);
 }
 
-.cap__row.is-open .cap__panel { grid-template-rows: 1fr; }
+.cap__row.is-open .cap__panel {
+  grid-template-rows: 1fr;
+}
 
 .cap__panel-inner {
   overflow: hidden;
@@ -158,7 +191,9 @@
   transition: opacity 0.45s var(--ease-out) 0.05s;
 }
 
-.cap__row.is-open .cap__panel-inner { opacity: 1; }
+.cap__row.is-open .cap__panel-inner {
+  opacity: 1;
+}
 
 .cap__blurb {
   max-width: 48ch;
@@ -185,15 +220,18 @@
   color: rgba(8, 22, 31, 0.85);
 }
 
-
 @media (min-width: 900px) {
   .cap__trigger {
-    grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .cap__verb { display: block; }
+  .cap__verb {
+    display: block;
+  }
 
-  .cap__row:not(.is-open):hover .cap__title { transform: translateX(12px); }
+  .cap__row:not(.is-open):hover .cap__title {
+    transform: translateX(12px);
+  }
 
   .cap__row.is-open .cap__trigger {
     padding-inline: clamp(1rem, 2vw, 2rem);
@@ -223,7 +261,9 @@
   gap: 0.5rem;
   white-space: nowrap;
   color: var(--fg-faint);
-  transition: color 0.4s var(--ease-out), padding 0.5s var(--ease-out);
+  transition:
+    color 0.4s var(--ease-out),
+    padding 0.5s var(--ease-out);
 }
 
 .cap__explore span:last-child {
@@ -246,7 +286,9 @@
 }
 
 @media (max-width: 899px) {
-  .cap__row.is-open .cap__explore { padding-right: 1rem; }
+  .cap__row.is-open .cap__explore {
+    padding-right: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -259,288 +301,418 @@
 /* Panels open on hover or focus. Touch devices have neither, so their preview
    stays open rather than being locked behind a tap the card now consumes. */
 @media (hover: none) {
-  .cap__panel { grid-template-rows: 1fr; }
-  .cap__panel-inner { opacity: 1; }
+  .cap__panel {
+    grid-template-rows: 1fr;
+  }
+  .cap__panel-inner {
+    opacity: 1;
+  }
 }
 
 /* The blurb was a <p>; as a span it still needs to be a block. */
-.cap__blurb { display: block; }
-
+.cap__blurb {
+  display: block;
+}
 
 /* ============================================================
-   SECTION 03 — WHAT BOOTSTACK DOES
+   SECTION 03 — THE STACK
+
+   Five discipline rows, each holding the services inside it,
+   over a closing "one roof" plate.
+
+   The composition it replaces was a radial diagram whose every
+   rule — nodes, centre, connectors — lived inside a
+   min-width:1024px block, so below that it collapsed into
+   unstyled text and stray SVG. This is ordinary flow: grid rows
+   and wrapping chips. The same markup reflows from a large
+   desktop to a 320px phone with no separate mobile diagram and
+   nothing to crop.
    ============================================================ */
 
-@media (min-width: 1024px) {
+.cap__intro {
+  margin-bottom: clamp(2.5rem, 5vh, 3.75rem);
+}
 
-  .cap__intro {
-    display: grid;
-    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-    gap: clamp(3rem, 6vw, 7rem);
+.cap__head {
+  display: grid;
+  gap: var(--s-2);
+  margin-bottom: clamp(2rem, 4.5vh, 3rem);
+}
+
+/* The measure belongs on the heading, not on this wrapper: `ch` resolves
+   against the element's own font-size, and the wrapper inherits body copy. */
+.cap__head h2 {
+  max-width: 30rem;
+  letter-spacing: -0.035em;
+}
+
+.cap__lede {
+  max-width: 46rem;
+  color: var(--fg-soft);
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  line-height: 1.5;
+}
+
+/* ---------- The stack ---------- */
+
+.cap__stack {
+  display: grid;
+  gap: 1px;
+  background: var(--rule);
+  border-block: 1px solid var(--rule);
+}
+
+/* ---------- One discipline ---------- */
+
+.cap__pillar {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem) 0 clamp(1.1rem, 2.4vw, 1.6rem)
+    clamp(1rem, 2.5vw, 1.75rem);
+  background: var(--white);
+  transition: background-color 0.5s var(--ease-out);
+}
+
+.cap__pillar.is-live {
+  background: color-mix(in srgb, var(--mist) 70%, var(--white));
+}
+
+/* The rail that draws down the left edge as the stack assembles. */
+.cap__pillar-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--rule) 70%, transparent);
+}
+
+.cap__pillar-rail i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--blue), var(--cyan));
+  transform: scaleY(0);
+  transform-origin: top center;
+  will-change: transform;
+}
+
+.cap__pillar.is-live .cap__pillar-rail i {
+  background: linear-gradient(180deg, var(--cyan), var(--yellow));
+}
+
+.cap__pillar-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.cap__pillar-index {
+  color: var(--fg-faint);
+  transition: color 0.5s var(--ease-out);
+}
+
+.cap__pillar.is-live .cap__pillar-index {
+  color: var(--blue);
+}
+
+.cap__pillar-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+
+.cap__pillar-note {
+  max-width: 34rem;
+  color: var(--fg-soft);
+}
+
+/* The tally closes the row on wide screens, where the chips alone leave the
+   right third of the row empty. Below 768px it sits with the label. */
+.cap__pillar-count {
+  display: none;
+  color: var(--fg-faint);
+  transition: color 0.5s var(--ease-out);
+}
+
+.cap__pillar-count i {
+  display: block;
+  margin-top: 0.15rem;
+  font-style: normal;
+  font-size: 0.62em;
+  letter-spacing: 0.18em;
+}
+
+.cap__pillar.is-live .cap__pillar-count {
+  color: var(--blue);
+}
+
+/* ---------- The services inside a discipline ---------- */
+
+.cap__pillar-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.cap__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5em 0.95em;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--navy);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+  transition:
+    border-color 0.35s var(--ease-out),
+    background-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out);
+}
+
+.cap__chip span {
+  color: var(--blue);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.cap__chip:hover {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.cap__chip:hover span {
+  color: var(--white);
+  transform: translateX(3px);
+}
+
+/* ---------- The roof ---------- */
+
+.cap__roof {
+  display: grid;
+  gap: 0.35rem;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem) 0 clamp(1.1rem, 2.4vw, 1.6rem)
+    clamp(1rem, 2.5vw, 1.75rem);
+  background: var(--mist);
+}
+
+.cap__roof-mark {
+  color: var(--blue);
+}
+
+.cap__roof-line {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--navy);
+}
+
+.cap__roof-note {
+  max-width: 40rem;
+  color: var(--fg-soft);
+}
+
+/* ============================================================
+   Wider viewports get the row laid out across its width. The
+   rows themselves are unchanged — only the internal columns
+   appear, so nothing has to be re-drawn per breakpoint.
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .cap__pillar {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr) auto;
     align-items: center;
-
-    min-height: 70svh;
-
-    margin-top: clamp(3rem, 6vh, 5rem);
-    margin-bottom: clamp(4rem, 8vh, 6rem);
+    gap: 0.75rem clamp(1.5rem, 3vw, 3rem);
+    padding-right: clamp(1rem, 2.5vw, 1.75rem);
   }
 
+  .cap__pillar-head {
+    grid-column: 1;
+    grid-row: 1;
+  }
 
-  /* LEFT SIDE */
+  .cap__pillar-note {
+    grid-column: 1;
+    grid-row: 2;
+  }
 
+  .cap__pillar-services {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-content: flex-start;
+  }
+
+  .cap__pillar-count {
+    display: block;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .cap__roof {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* The statement and its lede share one header row and the stack runs the
+     full width beneath. A two-column split with the stack on the right left a
+     tall empty half on the left — the heading is three lines and the stack is
+     five rows, so those columns can never balance. */
   .cap__head {
-    max-width: 12ch;
-    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: end;
   }
 
   .cap__head h2 {
-    margin: 0;
-
-    font-size: clamp(3.2rem, 5vw, 5.2rem);
-    line-height: 0.95;
-    letter-spacing: -0.045em;
+    max-width: 34rem;
   }
 
-
-  /* RIGHT SIDE */
-
-  .cap__visual {
-    position: relative;
-
-    width: 100%;
-    max-width: 720px;
-
-    aspect-ratio: 600 / 420;
-
-    justify-self: end;
+  .cap__lede {
+    padding-bottom: 0.35rem;
   }
 
-
-  /* ----------------------------------------------------------
-     FLOWING LINES
-     ---------------------------------------------------------- */
-
-  .cap__connections {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: visible;
-
-    pointer-events: none;
-
-    z-index: 0;
+  .cap__pillar {
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.9fr) auto;
   }
 
-  .cap__connections path {
-    fill: none;
-
-    stroke: rgba(35, 87, 132, 0.22);
-
-    stroke-width: 1.2;
-
-    stroke-dasharray: 5 7;
-
-    animation: cap-flow 5s linear infinite;
-  }
-
-  @keyframes cap-flow {
-    from {
-      stroke-dashoffset: 0;
-    }
-
-    to {
-      stroke-dashoffset: -100;
-    }
-  }
-
-
-  /* ----------------------------------------------------------
-     CENTRE
-     ---------------------------------------------------------- */
-
-  .cap__center {
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 9rem;
-    height: 9rem;
-
-    transform: translate(-50%, -50%);
-
-    display: grid;
-    place-items: center;
-    align-content: center;
-
-    text-align: center;
-
-    border: 1px solid rgba(35, 87, 132, 0.35);
-
-    border-radius: 50%;
-
-    background: var(--mist);
-
-    z-index: 3;
-  }
-
-  .cap__center .mono {
-    margin-bottom: 0.4rem;
-
-    color: var(--blue);
-
-    font-size: 0.55rem;
-    letter-spacing: 0.18em;
-  }
-
-  .cap__center strong {
-    font-family: var(--font-display);
-
-    font-size: 1.4rem;
-
-    line-height: 1;
-
-    letter-spacing: -0.04em;
-  }
-
-  .cap__center strong span {
-    color: var(--cyan);
-  }
-
-
-  /* ----------------------------------------------------------
-     NODES
-     ---------------------------------------------------------- */
-
-  .cap__node {
-    position: absolute;
-
-    width: 9.5rem;
-    min-height: 4.7rem;
-
-    padding: 0.75rem 0.9rem;
-
-    display: grid;
-    align-content: center;
-
-    gap: 0.2rem;
-
-    background: var(--white);
-
-    border: 1px solid rgba(35, 87, 132, 0.18);
-
-    border-radius: 12px;
-
-    color: var(--ink);
-
-    text-decoration: none;
-
-    box-shadow:
-      0 8px 25px -20px rgba(8, 22, 31, 0.5);
-
-    z-index: 2;
-
-    transition:
-      transform 0.4s var(--ease-out),
-      border-color 0.4s var(--ease-out),
-      box-shadow 0.4s var(--ease-out);
-  }
-
-  .cap__node:hover {
-    transform: translateY(-5px);
-
-    border-color: var(--cyan);
-
-    box-shadow:
-      0 16px 30px -20px rgba(8, 22, 31, 0.45);
-  }
-
-  .cap__node-index {
-    color: var(--fg-faint);
-
-    font-size: 0.58rem;
-
-    letter-spacing: 0.15em;
-  }
-
-  .cap__node-title {
-    font-family: var(--font-display);
-
-    font-weight: 700;
-
-    font-size: 0.95rem;
-
-    line-height: 1;
-
-    letter-spacing: -0.02em;
-  }
-
-  .cap__node-arrow {
-    position: absolute;
-
-    top: 0.65rem;
-    right: 0.7rem;
-
-    color: var(--blue);
-
-    font-size: 0.75rem;
-  }
-
-
-  /* ----------------------------------------------------------
-     POSITIONS
-     ---------------------------------------------------------- */
-
-  .cap__node--1 {
-    top: 2%;
-    left: 3%;
-  }
-
-  .cap__node--2 {
-    top: 2%;
-    left: 50%;
-
-    transform: translateX(-50%);
-  }
-
-  .cap__node--3 {
-    top: 2%;
-    right: 3%;
-  }
-
-  .cap__node--4 {
-    bottom: 2%;
-    left: 3%;
-  }
-
-  .cap__node--5 {
-    bottom: 2%;
-    left: 50%;
-
-    transform: translateX(-50%);
-  }
-
-  .cap__node--6 {
-    bottom: 2%;
-    right: 3%;
-  }
-
-  .cap__node--2:hover,
-  .cap__node--5:hover {
-    transform: translateX(-50%) translateY(-5px);
-  }
-
-
-  /* ----------------------------------------------------------
-     SERVICE LIST BELOW
-     ---------------------------------------------------------- */
-
+  /* The list below opens straight out of the stack. */
   .cap__list {
     margin-top: 0;
   }
+}
 
+@media (prefers-reduced-motion: reduce) {
+  .cap__pillar,
+  .cap__pillar-index,
+  .cap__chip,
+  .cap__chip span {
+    transition: none;
+  }
+
+  .cap__pillar-rail i {
+    transform: scaleY(1);
+  }
+}
+
+/* ============================================================
+   MOBILE: HIDE SERVICE DETAIL PILLS
+   ============================================================ */
+
+@media (max-width: 767px) {
+  .cap__items {
+    display: none;
+  }
+}
+
+/* Section 03 heading: slightly larger, still medium */
+.cap__head h2 {
+  font-size: clamp(2rem, 2.8vw, 2.9rem);
+}
+
+/* ============================================================
+   MOBILE SERVICE ROW
+   Remove service numbers and use a clean left accent line
+   ============================================================ */
+
+@media (max-width: 767px) {
+  /* Hide 01, 02, 03, etc. */
+  .cap__index {
+    display: none;
+  }
+
+  /* Remove the space previously reserved for the number */
+  .cap__trigger {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    position: relative;
+  }
+
+  /* Small vertical line instead of the number */
+  .cap__trigger::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    bottom: 0.1rem;
+    width: 2px;
+    background: var(--blue);
+    transform: scaleY(0.7);
+    transform-origin: center;
+  }
+}
+
+/* ============================================================
+   SERVICE ROW ACCENT LINE
+   Desktop + Mobile
+   ============================================================ */
+
+/* Remove service numbers everywhere */
+.cap__index {
+  display: none;
+}
+
+/* Give the trigger room for the animated line */
+.cap__trigger {
+  position: relative;
+  padding-left: 1rem;
+}
+
+/* Animated vertical line */
+.cap__trigger::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 2px;
+
+  background: var(--tone);
+
+  transform: scaleY(0.25);
+  transform-origin: center;
+
+  transition:
+    transform 0.55s var(--ease-out),
+    opacity 0.35s var(--ease-out);
+}
+
+/* Hover: line grows */
+@media (hover: hover) and (pointer: fine) {
+  .cap__row:hover .cap__trigger::before {
+    transform: scaleY(1);
+  }
+}
+
+/* Open / active row: keep the line extended */
+.cap__row.is-open .cap__trigger::before {
+  transform: scaleY(1);
+}
+
+/* Slightly stronger line when the row is open */
+.cap__row.is-open .cap__trigger::before {
+  width: 3px;
 }

@@ -3,12 +3,19 @@
 .svc {
   position: relative;
   color: var(--ink);
+  /* The masthead's decorative grid and glow are sized past the viewport on
+     purpose; clip keeps them from inflating the document's width. Matches .sx. */
+  overflow-x: clip;
 }
 
 /* ---- Masthead ---- */
 
 .svc__head {
-  padding-top: clamp(7rem, 16vh, 11rem);
+  /* Nav clearance, not decoration: .nav__bar is fixed and measures ~96px on a
+     phone and ~108px on a desktop, so the breadcrumb needs a floor no viewport
+     height can undercut. Restated after `.svc .band` further down, whose
+     padding-block shorthand would otherwise reset this. */
+  padding-top: clamp(8.25rem, 14vh, 9.5rem);
 }
 
 .svc__crumb {
@@ -29,9 +36,15 @@
   color: var(--blue);
 }
 
-.svc__title {
+/* The service name, at the same step .sx__title uses on the newer service
+   pages — this one carried .display--xxl and rendered a third larger, which is
+   exactly the "one service page shouts, another doesn't" inconsistency.
+   Compounded with .display so base.css's later import cannot win. */
+.svc__title.display {
   max-width: 18ch;
-  letter-spacing: -0.04em;
+  font-size: var(--t-xl);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
 }
 
 .svc__subtitle {
@@ -73,10 +86,10 @@
 
 .svc__pull {
   margin-top: var(--s-3);
-  max-width: 22ch;
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  max-width: 26ch;
+  font-size: clamp(1.2rem, 1.85vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
   color: var(--blue);
 }
 
@@ -100,9 +113,9 @@
 }
 
 .svc__list-label {
-  font-size: clamp(1.4rem, 3.4vw, 2.6rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.1rem, 1.75vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
 }
 
@@ -124,7 +137,7 @@
 
 .svc__step-num {
   flex: none;
-  font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
   line-height: 1;
   color: color-mix(in srgb, var(--ink) 28%, transparent);
 }
@@ -135,10 +148,12 @@
 
 /* ---- Why Bootstack ---- */
 
-.svc__why-text {
-  max-width: 22ch;
+.svc__why-text.display {
+  max-width: 26ch;
   margin-top: var(--s-4);
-  letter-spacing: -0.035em;
+  font-size: clamp(1.35rem, 2.2vw, 1.95rem);
+  line-height: 1.3;
+  letter-spacing: -0.025em;
 }
 
 /* ---- Close ---- */
@@ -159,10 +174,10 @@
   font-weight: 700;
   font-variation-settings: "wdth" 92;
   text-wrap: balance;
-  max-width: 24ch;
-  font-size: clamp(3.4rem, 6.8vw, 5.9rem);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
+  max-width: 26ch;
+  font-size: clamp(1.85rem, 3.4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.032em;
 }
 
 /* The bottom service navigation. column-gap alone sets the distance between
@@ -193,7 +208,7 @@
 }
 
 .svc__nav-name {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   letter-spacing: -0.02em;
   transition: color 0.35s var(--ease-out);
 }
@@ -389,7 +404,7 @@
   right: -0.04em;
   bottom: -0.22em;
   max-width: none;
-  font-size: clamp(5rem, 16vw, 14rem);
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
   line-height: 0.8;
   white-space: nowrap;
   color: transparent;
@@ -486,7 +501,7 @@
   }
 
   .svc__why-ghost {
-    font-size: clamp(4rem, 22vw, 8rem);
+    font-size: clamp(2.6rem, 13vw, 5rem);
   }
 }
 
@@ -537,9 +552,9 @@
   position: relative;
   padding-left: clamp(0.9rem, 2vw, 1.4rem);
   border-left: 3px solid var(--yellow);
-  font-size: clamp(1.35rem, 2.8vw, 2.1rem);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.2rem, 1.85vw, 1.6rem);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
 }
 
 .svc__why-inner {
@@ -548,13 +563,21 @@
 }
 
 .svc__why-text {
-  max-width: 20ch;
+  max-width: 26ch;
   margin-top: 0;
 }
 
-/* Air between chapters, so each composition reads on its own. */
+/* Air between chapters, so each composition reads on its own — without the
+   double band that used to stack up to 22vh of empty ground between them. */
 .svc .band {
-  padding-block: clamp(4rem, 11vh, 8rem);
+  padding-block: clamp(2.75rem, 6.5vh, 5rem);
+}
+
+/* The masthead is also a .band, and the shorthand above resets its padding-top.
+   Restate the nav clearance so the breadcrumb never lands under the logo. */
+.svc .svc__head.band,
+.svc .svc__head {
+  padding-top: clamp(8.25rem, 14vh, 9.5rem);
 }
 
 @media (min-width: 1024px) {

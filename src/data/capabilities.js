@@ -169,3 +169,54 @@ export const growthChain = [
     note: "A business that compounds instead of restarting.",
   },
 ];
+
+/**
+ * Section 03 — the five disciplines Bootstack brings under one roof, and the
+ * services that sit inside each.
+ *
+ * `services` holds capability ids, so a pillar and the service index below it
+ * are always the same eight records — nothing is restated. A service can belong
+ * to more than one pillar (Branding & UI/UX is both a Branding and a Creativity
+ * discipline), which is the point the section is making.
+ *
+ * The groupings come from the categories the previous site carried on its
+ * services list (Marketing / Branding / Development / Automation), with
+ * Creativity separated out from Branding as its own discipline.
+ */
+export const pillars = [
+  {
+    id: "branding",
+    index: "01",
+    label: "Branding",
+    note: "A position, a name and a look that earn a second glance.",
+    services: ["brand-consultation", "branding-uiux"],
+  },
+  {
+    id: "creativity",
+    index: "02",
+    label: "Creativity",
+    note: "The work people actually remember seeing.",
+    services: ["branding-uiux", "social-media"],
+  },
+  {
+    id: "technology",
+    index: "03",
+    label: "Technology",
+    note: "The site, the software and the place it all lands.",
+    services: ["website-development", "software-development", "app-development"],
+  },
+  {
+    id: "marketing",
+    index: "04",
+    label: "Marketing",
+    note: "Distribution with a number attached to it.",
+    services: ["performance-marketing", "social-media"],
+  },
+  {
+    id: "automation",
+    index: "05",
+    label: "Automation",
+    note: "The follow-through that never gets forgotten.",
+    services: ["marketing-automation"],
+  },
+];

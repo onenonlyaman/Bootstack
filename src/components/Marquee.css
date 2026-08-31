@@ -36,8 +36,10 @@
   flex: none;
 }
 
-.marquee--lg .marquee__item { font-size: clamp(2.6rem, 8vw, 7rem); }
-.marquee--md .marquee__item { font-size: clamp(1.6rem, 4vw, 3rem); }
+/* Seam type: present and full-bleed, but no longer competing with the section
+   headings it runs above. */
+.marquee--lg .marquee__item { font-size: clamp(1.8rem, 4.2vw, 3.4rem); }
+.marquee--md .marquee__item { font-size: clamp(1.2rem, 2.2vw, 1.85rem); }
 .marquee--sm .marquee__item {
   font-family: var(--font-mono);
   font-size: var(--t-xs);

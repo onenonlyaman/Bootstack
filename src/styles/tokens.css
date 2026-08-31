@@ -46,14 +46,18 @@
   --font-body: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
-  /* ---- Fluid type scale (min 360px → max 1600px) ---- */
-  --t-mega: clamp(3.4rem, 13.2vw, 13rem);    /* hero / closing statements */
-  --t-xxl: clamp(2.6rem, 7.6vw, 7rem);       /* section statements */
-  --t-xl: clamp(2rem, 4.6vw, 4rem);          /* sub statements */
-  --t-lg: clamp(1.5rem, 2.6vw, 2.25rem);     /* lead paragraphs */
-  --t-md: clamp(1.05rem, 1.35vw, 1.25rem);   /* body */
-  --t-sm: 0.95rem;
-  --t-xs: 0.75rem;                            /* labels, mono */
+  /* ---- Fluid type scale (min 360px → max 1600px) ----
+     Medium and controlled by design. Every step is capped well below the
+     viewport so a wide screen adds measure, never scale: the type supports the
+     layout rather than becoming it. Steps stay clearly apart from each other so
+     the hierarchy still reads — medium, not uniformly small. */
+  --t-mega: clamp(2.5rem, 5.6vw, 5rem);      /* hero / closing statements */
+  --t-xxl: clamp(2rem, 4vw, 3.4rem);         /* section statements */
+  --t-xl: clamp(1.7rem, 3vw, 2.6rem);        /* section headings */
+  --t-lg: clamp(1.15rem, 1.6vw, 1.45rem);    /* lead paragraphs */
+  --t-md: clamp(0.975rem, 1.02vw, 1.0625rem);/* body */
+  --t-sm: 0.9rem;
+  --t-xs: 0.72rem;                            /* labels, mono */
 
   /* ---- Space scale ---- */
   --s-1: 0.5rem;
@@ -68,8 +72,10 @@
   /* ---- Layout ---- */
   --gutter: clamp(1.25rem, 4.2vw, 4.5rem);
   --max: 1680px;
-  /* Chapters get real air around them — the page should breathe, not compress. */
-  --band-y: clamp(6rem, 15vh, 13rem);
+  /* Chapters breathe without drifting apart. The old 15vh top *and* bottom put
+     up to 26vh of empty ground between every two sections, which is most of
+     what made the page feel thin. */
+  --band-y: clamp(3.5rem, 8vh, 6rem);
 
   /* ---- Motion ---- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -86,6 +92,6 @@
 
 @media (max-width: 640px) {
   :root {
-    --band-y: 5rem;
+    --band-y: 3rem;
   }
 }

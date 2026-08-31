@@ -1,6 +1,6 @@
-import SectionMarker from '../components/SectionMarker.jsx';
-import Marquee from '../components/Marquee.jsx';
-import './TechStack.css';
+import SectionMarker from "../components/SectionMarker.jsx";
+import Marquee from "../components/Marquee.jsx";
+import "./TechStack.css";
 
 /**
  * The technology flow. Every label below is one of the sixteen technologies the
@@ -14,29 +14,80 @@ import './TechStack.css';
  * Durations are scaled with the track so the pace stays ~50px/s.
  */
 const FLOW_TOP = [
-  'React',
-  'Node.js',
-  'PostgreSQL',
-  'AWS',
-  'Docker',
-  'GraphQL',
-  'Express.js',
-  'MongoDB',
+  "React",
+  "Node.js",
+  "PostgreSQL",
+  "AWS",
+  "Docker",
+  "GraphQL",
+  "Express.js",
+  "MongoDB",
 ];
 
 const FLOW_BOTTOM = [
-  'Cloudflare',
-  'Firebase',
-  'Supabase',
-  'Next.js',
-  'TypeScript',
-  'REST APIs',
-  'Tailwind CSS',
-  'GitHub',
+  "Cloudflare",
+  "Firebase",
+  "Supabase",
+  "Next.js",
+  "TypeScript",
+  "REST APIs",
+  "Tailwind CSS",
+  "GitHub",
 ];
 
 /** Three passes of a row, so one copy of the Marquee's track outruns any viewport. */
 const runs = (row) => [...row, ...row, ...row];
+
+/**
+ * The same technologies, grouped by the layer they belong to.
+ *
+ * The tickers read as motion; this reads as the actual stack. Every entry is
+ * one Bootstack builds on — the sixteen the two tickers already carry, plus the
+ * eight the previous site listed in a third row it defined but never rendered
+ * (React Native, Flutter, Framer Motion, Figma, Vercel, Netlify, OpenAI,
+ * Stripe). Nothing here is invented to fill space.
+ */
+const LAYERS = [
+  {
+    id: "frontend",
+    label: "Frontend",
+    note: "What the customer actually touches.",
+    items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+  },
+  {
+    id: "backend",
+    label: "Backend & Data",
+    note: "Where the business logic and the records live.",
+    items: [
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "PostgreSQL",
+      "REST APIs",
+      "GraphQL",
+    ],
+  },
+  {
+    id: "cloud",
+    label: "Cloud & Deployment",
+    note: "How it ships, scales and stays up.",
+    items: ["AWS", "Docker", "Cloudflare", "Vercel", "Netlify", "GitHub"],
+  },
+  {
+    id: "platform",
+    label: "Mobile & Platform",
+    note: "The apps, the services and the tools around them.",
+    items: [
+      "React Native",
+      "Flutter",
+      "Firebase",
+      "Supabase",
+      "Figma",
+      "OpenAI",
+      "Stripe",
+    ],
+  },
+];
 
 /**
  * Section 07 — the technology side, stated as a claim and then carried across
@@ -47,22 +98,27 @@ export default function TechStack() {
   return (
     <section className="tech band" data-bg="white">
       <div className="shell">
-        <SectionMarker index="07" title="Our Technology Stack" note="Engineering core" />
+        <SectionMarker
+          index="07"
+          title="Our Technology Stack"
+          note="Engineering core"
+        />
 
         <div className="tech__lede">
-          <h2 className="display display--xl section-gradient-heading" data-reveal>
-  <span className="techstack__first-line">
-    Our Technology Stack.
-  </span>
-  <br />
-  Modern Frameworks. Infinite
-  <br />
-  Scale.
-</h2>
-          <p className="body" data-reveal style={{ '--reveal-delay': '80ms' }}>
-            We code using languages designed for absolute security, rapid speed and dynamic
-            animations. No visual website builder constraints,  which is why our marketing
-            and our engineering never blame each other.
+          <h2
+            className="display display--xl section-gradient-heading"
+            data-reveal
+          >
+            <span className="techstack__first-line">Our Technology Stack.</span>
+            <br />
+            Modern Frameworks. Infinite
+            <br />
+            Scale.
+          </h2>
+          <p className="body" data-reveal style={{ "--reveal-delay": "80ms" }}>
+            We code using languages designed for absolute security, rapid speed
+            and dynamic animations. No visual website builder constraints, which
+            is why our marketing and our engineering never blame each other.
           </p>
         </div>
       </div>

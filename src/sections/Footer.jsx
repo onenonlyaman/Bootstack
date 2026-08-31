@@ -192,10 +192,6 @@ export default function Footer() {
           <p className="mono">
             &copy; {year} {brand.name}. All rights reserved.
           </p>
-          <a className="foot__top-link mono" href="#top">
-            Back to top
-            <span aria-hidden="true">&uarr;</span>
-          </a>
         </div>
       </div>
 

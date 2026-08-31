@@ -49,9 +49,9 @@ export const serviceExperiences = [
       theme: "identity",
       label: "brand-system.fig",
       signals: [
-        "Strtegy",
-        "Marketing",
-        "Development",
+        "Distinctive",
+        "Consistent",
+        "Documented",
       ],
       readouts: [
         { value: "Identity", label: "Designed" },
@@ -115,7 +115,7 @@ export const serviceExperiences = [
         { value: "40%", label: "Recognition" },
         { value: "35%", label: "Trust" },
         { value: "20%", label: "Customer Loyalty" },
-        { value: "10%", label: "Maeket Growth" },
+        { value: "10%", label: "Market Growth" },
       ],
     },
   },
@@ -134,9 +134,9 @@ export const serviceExperiences = [
       theme: "campaign",
       label: "content.plan",
       signals: [
-        "Strategy",
-        "Marketing",
-        "Development",
+        "Planned",
+        "Published",
+        "Measured",
       ],
       readouts: [
         { value: "Content", label: "Scheduled" },

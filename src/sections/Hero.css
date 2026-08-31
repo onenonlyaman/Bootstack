@@ -1,8 +1,11 @@
 .hero {
   position: relative;
   overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
   color: #ffffff;
-  background: #EEF6F7;
+  background: #eef6f7;
 }
 
 .hero__video {
@@ -19,28 +22,47 @@
   position: absolute;
   inset: 0;
   z-index: 1;
+  /* The old wash thinned to 8% through the middle, so whichever frame the loop
+     happened to be on decided whether the headline was readable. The reference
+     runs a much deeper plate, weighted to the left where the copy sits. */
   background:
-  linear-gradient(
-    to bottom,
-    rgba(5, 20, 30, 0.55) 0%,
-    rgba(5, 20, 30, 0.30) 20%,
-    rgba(5, 20, 30, 0.08) 50%,
-    rgba(5, 20, 30, 0.20) 100%
-  );
+    linear-gradient(
+      100deg,
+      rgba(5, 20, 30, 0.82) 0%,
+      rgba(5, 20, 30, 0.62) 38%,
+      rgba(5, 20, 30, 0.24) 68%,
+      rgba(5, 20, 30, 0.14) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(5, 20, 30, 0.5) 0%,
+      rgba(5, 20, 30, 0.26) 32%,
+      rgba(5, 20, 30, 0.26) 62%,
+      rgba(5, 20, 30, 0.5) 100%
+    );
   pointer-events: none;
 }
 
 .hero__inner {
   position: relative;
   z-index: 3;
+
+  min-height: 100vh;
+
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(2rem, 5vh, 3.5rem);
-  min-height: 92svh;
-  padding-block: clamp(6rem, 14vh, 9rem) clamp(1.75rem, 5vh, 3rem);
+  align-items: center;
+
+  padding-block: 0;
 }
 
+.hero__content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding-left: 4rem;
+}
 /* ---- Eyebrow ---- */
 
 .hero__eyebrow {
@@ -51,26 +73,32 @@
   overflow: hidden;
 }
 
-.hero__eyebrow > * { display: block; }
+.hero__eyebrow > * {
+  display: block;
+}
 
 .hero__eyebrow > *:first-child {
   color: var(--blue);
 }
 
-.hero__eyebrow-loc { margin-left: auto; }
+.hero__eyebrow-loc {
+  margin-left: auto;
+}
 
 /* ---- Headline ---- */
 
 .hero__type {
-  text-transform: uppercase;
-  margin-block: auto;
+  /* Title case, not caps: the reference sets the headline as a sentence. */
+  text-transform: none;
+  margin-block: 0;
 
-  /* Slightly smaller than the current mega heading */
-  font-size: clamp(4.5rem, 9.5vw, 11rem);
+  /* Medium-large editorial, not a viewport-filling slab. Capped at 5rem so a
+     large desktop gains measure rather than scale. */
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.032em;
 
-  /* Move the visual heading upward */
   position: relative;
-  top: -5vh;
 }
 
 .hero__line {
@@ -78,59 +106,178 @@
   overflow: hidden;
 }
 
+/* White for most of the line, resolving into the brand's light cyan on the
+   closing word. The dark navy stop the ramp used to end on turned the last word
+   almost unreadable against the footage. */
 .hero__line > span {
   color: transparent;
   background: linear-gradient(
     90deg,
     #ffffff 0%,
-    #ffffff 30%,
-    #d9f3f8 48%,
-    #8ed4e4 65%,
-    #40a8c4 82%,
-    #235784 100%
+    #ffffff 62%,
+    #eaf8fb 76%,
+    #a5dcea 90%,
+    #8ed4e4 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
 }
-.hero__line--2 { padding-left: 6%; }
 
-.hero__line--3 {
-  padding-left: 14%;
-}
+/* The staggered indents are gone: every line starts on the shell's left edge,
+   in one flush column with the copy and the actions below it. */
 
 /* ---- Supporting column ---- */
 
 .hero__aside {
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  align-items: end;
+  gap: clamp(1.25rem, 3vh, 2.25rem);
+  justify-items: start;
 }
 
+/* A length, not `ch`: this wrapper inherits body copy, so a `ch` measure here
+   would derive from the wrong font-size and set the paragraph far narrower
+   than it reads. */
 .hero__support {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  max-width: 46ch;
-}
-
-.hero__rule {
-  flex: none;
-  width: clamp(28px, 4vw, 64px);
-  height: 2px;
-  margin-top: 0.85em;
-  background: var(--yellow);
+  max-width: 34rem;
+  margin-left: 12px;
 }
 
 .hero__support .lead {
-  color: #ffffff;
-  font-size: clamp(1.1rem, 1.5vw, 1.4rem);
-  line-height: 1.4;
+  margin-top: 0.8rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1.02rem, 1.3vw, 1.2rem);
+  line-height: 1.62;
 }
 
 .hero__ctas {
   display: flex;
   flex-wrap: wrap;
   gap: 0.85rem;
+}
+
+/* ---- Hero actions ----
+   Two solid pills: brand blue, and white. Set in the body face at sentence
+   case rather than the mono/uppercase/letterspaced treatment the button carries
+   elsewhere. Scoped to .hero__ctas so MagneticButton keeps its magnetic hover
+   and its site-wide variants stay exactly as they are for every other CTA. */
+
+.hero__ctas .mag {
+  padding: 1.15em 2.15em;
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.1vw, 1.08rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* The arrow is not part of the reference; display:none also removes the
+   label's gap, so the text stays optically centred. */
+.hero__ctas .mag__arrow {
+  display: none;
+}
+
+.hero__ctas .mag--solid {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.hero__ctas .mag--ghost {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--blue);
+}
+
+/* Yellow hover for both hero buttons */
+.hero__ctas .mag--solid::before,
+.hero__ctas .mag--ghost::before {
+  background: #f7aa00;
+}
+
+.hero__ctas .mag--solid:hover,
+.hero__ctas .mag--ghost:hover {
+  background: #f7aa00;
+  border-color: #f7aa00;
+  color: #071521;
+  transform: translateY(-2px);
+}
+
+/* ---- Scroll cue ----
+   A ringed dot over a mono label, held in the bottom-right corner of the
+   opening screen. `margin-top: auto` inside the flex column is what pins it to
+   the floor without taking the content block out of the normal flow. */
+
+.hero__scroll {
+  position: absolute;
+  right: 0;
+  bottom: 2rem;
+
+  display: grid;
+  justify-items: end;
+
+  gap: clamp(0.85rem, 2vh, 1.4rem);
+
+  margin: 0;
+  padding: 0;
+
+  pointer-events: none;
+}
+
+.hero__scroll-dot {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-right: clamp(1.5rem, 5vw, 6rem);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+.hero__scroll-dot i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: hero-cue-pulse 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes hero-cue-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.68);
+  }
+}
+
+.hero__scroll-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.hero__scroll-label::after {
+  content: "";
+  width: 1px;
+  height: 1.6em;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* A phone has no room to spare below the value points, and the gesture needs
+   no explaining there. */
+@media (max-width: 600px) {
+  .hero__scroll {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__scroll-dot i {
+    animation: none;
+  }
 }
 
 /* ---- Foot ---- */
@@ -152,7 +299,9 @@
   transition: color 0.3s var(--ease-out);
 }
 
-.hero__cue:hover { color: var(--blue); }
+.hero__cue:hover {
+  color: var(--blue);
+}
 
 .hero__cue-line {
   position: relative;
@@ -164,7 +313,7 @@
 }
 
 .hero__cue-line::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--blue);
@@ -173,10 +322,22 @@
 }
 
 @keyframes cue-sweep {
-  0%   { transform: scaleX(0); transform-origin: left center; }
-  45%  { transform: scaleX(1); transform-origin: left center; }
-  55%  { transform: scaleX(1); transform-origin: right center; }
-  100% { transform: scaleX(0); transform-origin: right center; }
+  0% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
 }
 
 .hero__ledger {
@@ -186,64 +347,54 @@
   color: var(--fg-faint);
 }
 
-@media (min-width: 900px) {
-  .hero__aside {
-    grid-template-columns: minmax(0, 1fr) auto;
-    justify-items: start;
-  }
-
+@media (min-width: 601px) {
   .hero__values {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 2.5rem;
-  margin-top: -0.5rem;
-  color: #ffffff;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.hero__values span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  white-space: nowrap;
-}
-
-.hero__values b {
-  color: #F7AA00;
-  font-size: 1.4rem;
-  line-height: 1;
-  font-weight: 700;
-}
-
-  .hero__ctas {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: end;
-    justify-self: end;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2.75rem;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
   }
 
-  .hero__ctas { justify-self: end; }
+  .hero__values span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    white-space: nowrap;
+  }
 
-  .hero__ledger { display: grid; }
+  .hero__values b {
+    color: #f7aa00;
+    font-size: 1.15rem;
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  .hero__ledger {
+    display: grid;
+  }
 }
 
 @media (max-width: 899px) {
-  .hero__eyebrow-loc { display: none; }
-  .hero__line--2 { padding-left: 4%; }
-  .hero__line--3 { padding-left: 9%; }
+  .hero__eyebrow-loc {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__cue-line::after { animation: none; transform: scaleX(1); }
+  .hero__cue-line::after {
+    animation: none;
+    transform: scaleX(1);
+  }
 }
 
-
+/* The mega token is the site-wide closing scale; the hero keeps its own, one
+   step above it, and stays a single source of truth for the headline size. */
 .hero__type.display--mega {
-  font-size: clamp(4.3rem, 9.1vw, 10.5rem);
+  font-size: clamp(2.5rem, 5.6vw, 5rem);
 }
-
 
 /* ============================================================
    HERO CONSULTATION POPUP
@@ -282,8 +433,7 @@
   border: 1px solid rgba(35, 87, 132, 0.12);
   border-radius: 24px;
 
-  box-shadow:
-    0 30px 80px rgba(8, 22, 31, 0.25);
+  box-shadow: 0 30px 80px rgba(8, 22, 31, 0.25);
 
   animation: heroConsultationIn 0.45s var(--ease-out);
 }
@@ -309,9 +459,9 @@
 
   color: var(--ink);
 
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
 
 /* Description */
@@ -429,8 +579,7 @@
 
   transform: translateY(-3px);
 
-  box-shadow:
-    0 12px 28px rgba(35, 87, 132, 0.2);
+  box-shadow: 0 12px 28px rgba(35, 87, 132, 0.2);
 }
 
 .hero__consultation-services button:hover span:last-child {
@@ -481,9 +630,9 @@
   }
 
   .hero__consultation-box h2 {
-    max-width: 12ch;
+    max-width: 14ch;
 
-    font-size: clamp(1.9rem, 9vw, 2.7rem);
+    font-size: clamp(1.4rem, 6vw, 1.85rem);
   }
 
   .hero__consultation-description {
@@ -510,5 +659,182 @@
     height: 36px;
 
     font-size: 1.3rem;
+  }
+}
+
+/* ============================================================
+   MOBILE HERO
+   Mobile-only sizing, spacing and alignment. Nothing in this
+   block exists above 600px, so the desktop composition is
+   untouched.
+   ============================================================ */
+
+@media (max-width: 600px) {
+  /* -----------------------------
+     HERO INNER / MAIN POSITION
+     ----------------------------- */
+
+  /* 20px inline is the site gutter at this width, so the hero copy lines up
+     with the navbar logo and every section below it. */
+  .hero__inner {
+    position: relative;
+
+    width: 100%;
+    max-width: none;
+    min-height: 100svh;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: 145px 20px 3rem;
+  }
+
+  /* -----------------------------
+     HERO CONTENT
+     ----------------------------- */
+
+  /* Clears the desktop 4rem indent. No negative margins and no width tricks:
+     the column simply fills the padded inner. */
+  .hero__content {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  /* -----------------------------
+     HEADING
+     ----------------------------- */
+
+  /* .display sets text-wrap: balance, which evens the lines out and produced
+     "Technology / That Builds". `wrap` is the reset (`normal` is not a valid
+     text-wrap value).
+
+     The measure is in `em`, so it tracks the font-size instead of fighting it.
+     Measured at this weight and tracking, the three phrases run 5.98em,
+     8.36em and 7.28em wide, so a 7em column is the one width that fits
+     "Technology That" and "Tomorrow's" while breaking "Builds" and "Brands."
+     onto their own lines — the reference wrap, and it holds from 320px right
+     up to the 600px edge of this breakpoint without a per-width override. */
+  .hero__type,
+  .hero__type.display--mega {
+    width: 100%;
+    max-width: 7em;
+
+    margin: 0;
+
+    font-size: clamp(2.6rem, 13.5vw, 3.4rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-wrap: wrap;
+  }
+
+  /* -----------------------------
+     SUPPORTING COLUMN
+     ----------------------------- */
+
+  /* The blocks below carry their own margin-top, so the grid gap would stack
+     on top of them and double every gap. */
+  .hero__aside {
+    width: 100%;
+    gap: 0;
+  }
+
+  /* -----------------------------
+     DESCRIPTION
+     ----------------------------- */
+
+  /* The base rule indents this 12px; on mobile it has to sit flush with the
+     heading's left edge. The lead's own margin-top is cleared for the same
+     reason — spacing is owned by .hero__support here. */
+  /* No measure of its own: the 268px cap was holding the copy to ~62% of the
+     column and reading as undersized next to the reference. It now fills the
+     padded content width, which is what produces the reference's four lines. */
+  .hero__support {
+    width: 100%;
+    max-width: none;
+
+    margin-top: 22px;
+    margin-left: 0;
+  }
+
+  /* The measure goes on the paragraph, not the wrapper — the wrapper inherits
+     body copy, so an `em`/`ch` value there would resolve against the wrong
+     font-size. At 20em the two longest lines (16.79em and 19.06em) each just
+     fit, which is what gives the reference's four-line block. */
+  .hero__support .lead {
+    max-width: 20em;
+    margin-top: 0;
+
+    font-size: 0.95rem;
+    line-height: 1.58;
+  }
+
+  /* -----------------------------
+     BUTTONS
+     ----------------------------- */
+
+  .hero__ctas {
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin-top: 24px;
+    gap: 10px;
+  }
+
+  .hero__ctas .mag {
+    min-height: auto;
+
+    padding: 1em 2em;
+
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* -----------------------------
+     TRUST POINTS
+     ----------------------------- */
+
+  /* Below 601px this had no display of its own and fell back to block, so the
+     three items ran together as inline text and the gap did nothing. The
+     measure is what holds the reference's two-up-then-one wrap steady from
+     375px through 414px, where all three would otherwise fit on one row. */
+  /* Two items then one is the natural wrap at this size once the row is free
+     to use the full column, so no forced measure is needed to get there. */
+  .hero__values {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    width: 100%;
+
+    margin-top: 24px;
+    gap: 10px 22px;
+
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .hero__values span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    white-space: nowrap;
+  }
+
+  .hero__values b {
+    color: #f7aa00;
+    font-size: 0.9rem;
+    line-height: 1;
+    font-weight: 700;
   }
 }

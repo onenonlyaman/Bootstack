@@ -6,7 +6,7 @@ import { brand } from "../data/site";
 import heroVideo from "../assets/hero-background.mp4";
 import "./Hero.css";
 
-const LINES = ["Technology", "That Builds", "Tomorrow's Brands."];
+const LINES = ["Technology That Builds", "Tomorrow's Brands."];
 
 const CONSULTATION_SERVICES = [
   "Branding & UI/UX",
@@ -39,7 +39,7 @@ Thank you.`;
     const whatsappNumber = "919975499956";
 
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
@@ -71,12 +71,7 @@ Thank you.`;
             0.1,
           )
           .from(
-            [
-              ".hero__support",
-              ".hero__ctas",
-              ".hero__cue",
-              ".hero__ledger",
-            ],
+            [".hero__support", ".hero__ctas", ".hero__values", ".hero__scroll"],
             {
               y: 26,
               opacity: 0,
@@ -110,7 +105,9 @@ Thank you.`;
         },
       });
 
-      gsap.to(".hero__aside", {
+      // The cue leaves with the supporting column rather than riding on alone
+      // while everything around it fades.
+      gsap.to([".hero__aside", ".hero__scroll"], {
         y: -70,
         opacity: 0,
         ease: "none",
@@ -160,70 +157,85 @@ Thank you.`;
       <HeroField />
 
       <div className="hero__inner shell">
-        <p className="hero__eyebrow mono">
-          <span>{brand.positioning}</span>
-        </p>
+        {/* ============================================================
+            MAIN HERO CONTENT
+            ============================================================ */}
+        <div className="hero__content">
+          {/* Eyebrow */}
+          <p className="hero__eyebrow mono">
+            <span>{brand.positioning}</span>
+          </p>
 
-        <h1 id="hero-title" className="hero__type display display--mega">
-          {LINES.map((line, i) => (
-            <span
-              className={`hero__line hero__line--${i + 1}`}
-              key={line}
-            >
-              <span>{line}</span>
-            </span>
-          ))}
-        </h1>
+          {/* Main heading */}
+          <h1 id="hero-title" className="hero__type display display--mega">
+            {LINES.map((line, i) => (
+              <span className={`hero__line hero__line--${i + 1}`} key={line}>
+                <span>{line}</span>
+              </span>
+            ))}
+          </h1>
 
-        <div className="hero__aside">
-          <div className="hero__support">
-            <span className="hero__rule" aria-hidden="true" />
+          {/* Supporting content */}
+          <div className="hero__aside">
+            {/* Description */}
+            <div className="hero__support">
+              <p className="lead">
+                We build brands, websites, software, AI automation and marketing
+                systems that help ambitious businesses grow, scale and lead with
+                confidence.
+              </p>
+            </div>
 
-            <p className="lead">
-              We build brands, websites, software, AI automation and marketing
-              systems that help ambitious businesses grow, scale and lead with
-              confidence.
-            </p>
+            {/* CTA buttons */}
+            <div className="hero__ctas">
+              <MagneticButton
+                href="#consultation"
+                variant="solid"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowConsultation(true);
+                }}
+              >
+                Book Consultation Call
+              </MagneticButton>
+
+              <MagneticButton href="#capabilities" variant="ghost">
+                Explore Services
+              </MagneticButton>
+            </div>
+
+            {/* Value points */}
+            <div className="hero__values">
+              <span>
+                <b>✓</b> Innovation First
+              </span>
+
+              <span>
+                <b>✓</b> Results Focused
+              </span>
+
+              <span>
+                <b>✓</b> Business Growth
+              </span>
+            </div>
           </div>
+        </div>
 
-          {/* Value points below description */}
-          <div className="hero__values">
-            <span>
-              <b>✓</b> Innovation First
-            </span>
+        {/* ============================================================
+            SCROLL CUE
+            ============================================================ */}
+        <div className="hero__scroll" aria-hidden="true">
+          <span className="hero__scroll-dot">
+            <i />
+          </span>
 
-            <span>
-              <b>✓</b> Results Focused
-            </span>
-
-            <span>
-              <b>✓</b> Business Growth
-            </span>
-          </div>
-
-          <div className="hero__ctas">
-            <MagneticButton
-              href="#consultation"
-              variant="solid"
-              onClick={(e) => {
-                e.preventDefault();
-                setShowConsultation(true);
-              }}
-            >
-              Book Consultation Call
-            </MagneticButton>
-
-            <MagneticButton href="#capabilities" variant="ghost">
-              Explore Services
-            </MagneticButton>
-          </div>
+          <span className="hero__scroll-label mono">Scroll to explore</span>
         </div>
       </div>
 
       {/* ============================================================
           CONSULTATION POPUP
           ============================================================ */}
-
       {showConsultation && (
         <div
           className="hero__consultation-overlay"
@@ -233,6 +245,7 @@ Thank you.`;
             className="hero__consultation-box"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close button */}
             <button
               type="button"
               className="hero__consultation-close"
@@ -242,15 +255,19 @@ Thank you.`;
               ×
             </button>
 
+            {/* Popup label */}
             <p className="mono">BOOK A CONSULTATION</p>
 
+            {/* Popup heading */}
             <h2>What can we help you build?</h2>
 
+            {/* Popup description */}
             <p className="hero__consultation-description">
               Choose a service and we'll continue the conversation with you on
               WhatsApp.
             </p>
 
+            {/* Consultation services */}
             <div className="hero__consultation-services">
               {CONSULTATION_SERVICES.map((service) => (
                 <button
@@ -259,6 +276,7 @@ Thank you.`;
                   onClick={() => handleServiceClick(service)}
                 >
                   <span>{service}</span>
+
                   <span aria-hidden="true">↗</span>
                 </button>
               ))}

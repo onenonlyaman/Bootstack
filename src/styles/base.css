@@ -32,11 +32,20 @@ body.is-locked {
   height: 100vh;
 }
 
-h1, h2, h3, h4, p, figure, blockquote, ul, ol {
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol {
   margin: 0;
 }
 
-ul, ol {
+ul,
+ol {
   padding: 0;
   list-style: none;
 }
@@ -55,7 +64,10 @@ button {
   cursor: pointer;
 }
 
-img, svg, canvas, video {
+img,
+svg,
+canvas,
+video {
   display: block;
   max-width: 100%;
 }
@@ -88,9 +100,15 @@ img, svg, canvas, video {
 
 /* Ground helpers. Sections are normally transparent and let BackgroundStage
    paint behind them; these are for the few that need their own surface. */
-.band--white { background: var(--white); }
-.band--mist { background: var(--mist); }
-.band--cyan { background: var(--cyan-soft); }
+.band--white {
+  background: var(--white);
+}
+.band--mist {
+  background: var(--mist);
+}
+.band--cyan {
+  background: var(--cyan-soft);
+}
 
 .band--flush {
   padding-block: 0;
@@ -98,28 +116,37 @@ img, svg, canvas, video {
 
 /* ---------- Type primitives ---------- */
 
+/* Line-height opens up as the scale comes down: 0.84 was set for type that
+   filled a viewport, and at a medium size it reads as collapsed rather than
+   tight. Every step below is tuned to its own size. */
 .display {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -0.035em;
-  font-variation-settings: 'wdth' 92;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variation-settings: "wdth" 92;
   text-wrap: balance;
 }
 
 .display--mega {
   font-size: var(--t-mega);
-  line-height: 0.84;
-  letter-spacing: -0.045em;
+  line-height: 0.94;
+  letter-spacing: -0.038em;
 }
 
-.display--xxl { font-size: var(--t-xxl); }
-.display--xl  { font-size: var(--t-xl); line-height: 0.98; }
+.display--xxl {
+  font-size: var(--t-xxl);
+  line-height: 1;
+}
+.display--xl {
+  font-size: var(--t-xl);
+  line-height: 1.06;
+}
 
 .lead {
   font-size: var(--t-lg);
-  line-height: 1.32;
-  letter-spacing: -0.015em;
+  line-height: 1.42;
+  letter-spacing: -0.012em;
   color: var(--fg);
   text-wrap: pretty;
 }
@@ -138,7 +165,9 @@ img, svg, canvas, video {
   font-weight: 500;
 }
 
-.accent { color: var(--accent); }
+.accent {
+  color: var(--accent);
+}
 
 /* ---------- Section gradient heading ----------
    Dark Bootstack blue on the left ramping into cyan on the right. Type only:
@@ -176,7 +205,9 @@ img, svg, canvas, video {
     -webkit-text-fill-color: currentColor;
   }
 }
-.soft { color: var(--fg-soft); }
+.soft {
+  color: var(--fg-soft);
+}
 
 /* ---------- Section marker ---------- */
 
@@ -184,8 +215,8 @@ img, svg, canvas, video {
   display: flex;
   align-items: baseline;
   gap: var(--s-2);
-  padding-bottom: var(--s-3);
-  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-2);
+  margin-bottom: clamp(1.5rem, 3.5vh, 2.25rem);
   border-bottom: 1px solid var(--rule);
   color: var(--fg-faint);
 }
@@ -198,7 +229,9 @@ img, svg, canvas, video {
   color: var(--fg-soft);
 }
 
-.marker__spacer { flex: 1; }
+.marker__spacer {
+  flex: 1;
+}
 
 /* ---------- Reveal (IntersectionObserver driven) ---------- */
 
@@ -217,7 +250,7 @@ img, svg, canvas, video {
   transform: none;
 }
 
-[data-reveal='mask'] {
+[data-reveal="mask"] {
   opacity: 1;
   transform: none;
   clip-path: inset(0 0 100% 0);
@@ -225,7 +258,7 @@ img, svg, canvas, video {
   transition-delay: var(--reveal-delay, 0ms);
 }
 
-[data-reveal='mask'].is-in {
+[data-reveal="mask"].is-in {
   clip-path: inset(0 0 -20% 0);
 }
 

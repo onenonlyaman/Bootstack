@@ -64,8 +64,8 @@
    markers and the ledger already use — no new card style. */
 .about__portrait {
   width: 100%;
-  max-width: 26rem;
-  aspect-ratio: 4 / 5;
+  max-width: 30rem;
+  aspect-ratio: 4 / 4.4;
   border: 1px solid var(--rule);
   background: color-mix(in srgb, var(--blue) 5%, transparent);
   overflow: hidden;
@@ -77,20 +77,9 @@
   object-fit: cover;
 }
 
-.about__thanks {
-  max-width: 34ch;
-  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
-  line-height: 1.45;
-  color: rgba(8, 22, 31, 0.86);
-}
-
-.about__ledger {
-  display: grid;
-  gap: var(--s-2);
-  max-width: 34ch;
-}
-
-.about__ledger-row {
+/* The founder's line, directly under the portrait. Both children are spans, so
+   without this they sat on one line — this is what was rendering broken. */
+.about__founder-main {
   display: grid;
   gap: 0.25rem;
   padding-top: 0.75rem;
@@ -140,15 +129,20 @@
   gap: clamp(1.75rem, 4vw, 3.5rem);
 }
 
+/* Leadership and City. Both children are spans, so this has to stack them; the
+   rule above each is the same hairline the founder's line uses, which is how
+   these records read before. */
 .about__position {
+  display: grid;
+  gap: 0.25rem;
   margin: 0;
-  padding-left: 1.5rem;
-  border-left: 2px solid var(--yellow);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
 }
 
 .about__position-text {
-  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
-  line-height: 1.5;
+  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+  line-height: 1.55;
   color: rgba(8, 22, 31, 0.86);
   max-width: 42ch;
   letter-spacing: -0.015em;
@@ -162,43 +156,46 @@
   margin-top: var(--s-2);
 }
 
-/* ---- Coda: the drifting intersection words close the section ---- */
+/* ---- The founder's line, and the four stages ---- */
 
-.about__words {
-  display: grid;
-  gap: clamp(0.1rem, 0.6vh, 0.4rem);
-  margin-top: clamp(1.25rem, 3vh, 2rem);
-  user-select: none;
-}
-
-.about__word {
-  display: block;
-  font-size: clamp(2.6rem, 11vw, 9rem);
-  line-height: 0.92;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(26, 66, 95, 0.3);
-  white-space: nowrap;
-  will-change: transform;
+.about__note {
+  margin: 0;
+  padding-top: clamp(1rem, 2.5vh, 1.5rem);
+  border-top: 1px solid var(--rule);
 }
 
-.about__word:nth-child(1) {
-  padding-left: 4%;
+.about__thanks {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+  line-height: 1.55;
+  color: rgba(8, 22, 31, 0.86);
+  /* Declared twice before; the later rule won and carried no font-style, so the
+     quote lost the italic it is meant to have. */
+  font-style: italic;
 }
-.about__word:nth-child(2) {
-  padding-left: 18%;
+
+.about__stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
-.about__word:nth-child(3) {
-  padding-left: 9%;
+
+.about__stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5em 1em;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--white) 70%, transparent);
   color: var(--blue);
-  -webkit-text-stroke: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
-.about__word:nth-child(4) {
-  padding-left: 26%;
-}
-.about__word:nth-child(5) {
-  padding-left: 12%;
+
+.about__stage-num {
+  color: var(--fg-faint);
 }
 
 @media (min-width: 900px) {
@@ -208,32 +205,237 @@
 }
 
 @media (min-width: 1024px) {
-  /* The founder column (portrait plus its ledger) runs far taller than the
-     statement and copy, which left a tall empty band under the left column.
-     Letting it span both rows lifts the record block into that ground instead
-     of stacking it below the whole grid. Nothing is resized. */
+  /* ============================================================
+     DESKTOP ABOUT LAYOUT
+
+     LEFT  = Image + Aayush
+     RIGHT = All About content in ONE vertical column
+     ============================================================ */
+
   .about__main {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    align-content: start;
+    display: grid;
+
+    /* ONLY TWO COLUMNS */
+    grid-template-columns:
+      minmax(0, 0.78fr)
+      minmax(0, 1.22fr);
+
+    column-gap: clamp(3rem, 6vw, 7rem);
+
+    align-items: start;
   }
 
-  .about__col {
-    grid-column: 1;
-    grid-row: 1;
-  }
+  /* ============================================================
+     LEFT COLUMN
+     ============================================================ */
 
   .about__founder {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-column: 1;
+    grid-row: 1;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    align-content: start;
+
+    position: static;
   }
+
+  .about__portrait {
+    width: 100%;
+    max-width: 30rem;
+  }
+
+  .about__founder-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+
+    margin-top: 0;
+    padding-top: 0.75rem;
+
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ============================================================
+     RIGHT COLUMN
+
+     IMPORTANT:
+     Everything stays in ONE column.
+     ============================================================ */
+
+  .about__col {
+    grid-column: 2;
+    grid-row: 1;
+
+    display: grid;
+
+    /* FORCE ONE COLUMN */
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: clamp(1.25rem, 2.5vh, 1.75rem);
+
+    align-content: start;
+    min-width: 0;
+  }
+
+  /* ============================================================
+     HEADING
+     ============================================================ */
+
+  .about__statement {
+    grid-column: 1;
+
+    max-width: 20ch;
+
+    margin: 0;
+
+    letter-spacing: -0.035em;
+  }
+
+  /* ============================================================
+     COPY
+
+     Lead + body must stay underneath the heading,
+     NOT beside it.
+     ============================================================ */
+
+  .about__copy {
+    grid-column: 1;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: var(--s-3);
+
+    max-width: 58ch;
+  }
+
+  .about__copy .lead {
+    grid-column: 1;
+  }
+
+  .about__copy .body {
+    grid-column: 1;
+  }
+
+  /* ============================================================
+     THANK YOU
+     ============================================================ */
+
+  .about__note {
+    grid-column: 1;
+
+    margin: 0;
+
+    padding-top: clamp(1rem, 2.5vh, 1.5rem);
+
+    border-top: 1px solid var(--rule);
+  }
+
+  .about__thanks {
+    margin: 0;
+
+    max-width: 40ch;
+
+    font-size: clamp(1.02rem, 1.25vw, 1.18rem);
+
+    line-height: 1.55;
+
+    font-style: italic;
+  }
+
+  /* ============================================================
+     STAGES
+     ============================================================ */
+
+  .about__stages {
+    grid-column: 1;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.5rem;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ============================================================
+     LEADERSHIP + CITY
+
+     They stay UNDER the stages on desktop.
+     ============================================================ */
 
   .about__record {
     grid-column: 1;
-    grid-row: 2;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: 0;
+
+    width: 100%;
+
+    padding-block: 0;
+
+    margin-top: 0;
+
+    border-top: none;
+    border-bottom: none;
   }
 
-  /* One column now that the block sits in the narrower measure. */
-  .about__record-pair {
-    grid-template-columns: minmax(0, 1fr);
+  .about__position {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 0.25rem;
+
+    margin: 0;
+
+    padding-top: 0.75rem;
+
+    padding-bottom: 0.75rem;
+
+    padding-left: 0;
+
+    border-left: none;
+
+    border-top: 1px solid var(--rule);
+  }
+
+  .about__position:first-child {
+    margin-top: 0.5rem;
+  }
+}
+/* ============================================================
+   MOBILE — @media (max-width: 899px)
+
+   Two duplicate blocks used to sit here, both re-ordering
+   .about__main with flex `order`, and one of them styling
+   .about__ledger — a class no longer in the markup.
+
+   Neither was doing anything: below 1024px .about__main has no
+   grid-template-columns, so it is already a single column that
+   renders in DOM order, and the DOM order is already the order
+   this section needs —
+
+     portrait -> Aayush -> heading -> paragraphs -> quote
+     -> stages -> Leadership -> City
+
+   The grid placements that build the desktop composition are
+   scoped to min-width:1024px, so they never reach this width.
+   Only the portrait needs a mobile rule of its own.
+   ============================================================ */
+
+@media (max-width: 899px) {
+  /* Full-bleed within the column rather than the 30rem desktop frame, and a
+     shallower crop so the empty placeholder does not take most of the screen
+     before the copy starts. */
+  .about__portrait {
+    max-width: none;
+    aspect-ratio: 4 / 3.4;
   }
 }

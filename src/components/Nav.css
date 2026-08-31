@@ -371,3 +371,19 @@
     display: none;
   }
 }
+
+@media (max-width: 1023px) {
+  .menu__inner {
+    justify-content: flex-start;
+    gap: 2rem;
+    padding-block: 6rem 2rem;
+  }
+
+  .menu__links {
+    gap: 0.65rem;
+  }
+
+  .menu__foot {
+    margin-top: auto;
+  }
+}

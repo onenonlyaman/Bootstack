@@ -1,142 +1,171 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "../lib/motion";
 import SectionMarker from "../components/SectionMarker.jsx";
 import { testimonials } from "../data/approach";
 import "./About.css";
 
-const INTERSECTION = [
-  "Branding",
-  "Creativity",
-  "Marketing",
-  "Technology",
-  "Automation",
-];
+/* The four moves Bootstack runs, in order. */
+const STAGES = ["Consult", "Solution", "Execution", "Growth"];
 
-// The one founder area: name over role, read as a ledger under the portrait.
+/* About Bootstack information */
 const FOUNDER_INFO = [
-  { name: "Aayush Vora", label: "CEO, Co-Founder, Bootstack" },
-  { name: "Aman Bele, Shraddha Nayak", label: "Leadership" },
-  { name: "Pune, Mumbai, Nashik, Ahmedabad", label: "City" },
+  {
+    name: "Aayush Vora",
+    label: "CEO, Co-Founder, Bootstack",
+  },
+  {
+    name: "Aman Bele, Shraddha Nayak",
+    label: "Leadership",
+  },
+  {
+    name: "Pune, Mumbai, Nashik, Ahmedabad",
+    label: "City",
+  },
 ];
 
-// The founder's line heads the founder column; the remaining two are
-// Bootstack's stated positions, kept together under a rule further down.
-const [founder, ...positions] = testimonials;
+/* Founder testimonial */
+const [founder] = testimonials;
 
-/**
- * Section 04 — About Bootstack.
- *
- * Two columns: the statement and the argument read down the left, the founder
- * — portrait, his line, then the ledger — sits together on the right. The
- * stated positions close the prose between two rules, and the drifting
- * intersection words run full-bleed underneath as the coda.
- */
 export default function About() {
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.to(".about__word", {
-          xPercent: (i) => (i % 2 ? -6 : 6),
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".about__words",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 0.9,
-          },
-        });
-      });
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={rootRef} id="about" className="about band" data-bg="cyan">
+    <section id="about" className="about band" data-bg="cyan">
       <div className="shell about__inner">
+        {/* SECTION MARKER */}
         <SectionMarker index="04" title="About Bootstack" />
 
+        {/* ============================================================
+            MAIN ABOUT LAYOUT
+            LEFT  = IMAGE + FOUNDER
+            RIGHT = ABOUT CONTENT + STAGES + LEADERSHIP + CITY
+            ============================================================ */}
+
         <div className="about__main">
+          {/* ==========================================================
+              LEFT COLUMN
+              ========================================================== */}
+
+          <aside className="about__founder">
+            {/* Founder image placeholder */}
+            <div
+              className="about__portrait"
+              data-reveal
+              aria-label="Founder image placeholder"
+            />
+
+            {/* Founder name + role */}
+            <div className="about__founder-main" data-reveal>
+              <span className="about__name">{FOUNDER_INFO[0].name}</span>
+
+              <span className="about__role mono">{FOUNDER_INFO[0].label}</span>
+            </div>
+          </aside>
+
+          {/* ==========================================================
+              RIGHT COLUMN
+              ========================================================== */}
+
           <div className="about__col">
-            <h2 className="about__statement display display--xl section-gradient-heading" data-reveal>
+            {/* MAIN HEADING */}
+            <h2
+              className="about__statement display display--xl section-gradient-heading"
+              data-reveal
+            >
               I didn&rsquo;t start Bootstack to build projects. I started it to{" "}
               <span className="accent">build businesses.</span>
             </h2>
 
+            {/* MAIN ABOUT COPY */}
             <div className="about__copy">
               <p className="lead" data-reveal>
                 Too many companies invest in websites, marketing and software
                 separately, without a clear strategy.
               </p>
-              <p className="body" data-reveal style={{ "--reveal-delay": "80ms" }}>
+
+              <p
+                className="body"
+                data-reveal
+                style={{ "--reveal-delay": "80ms" }}
+              >
                 Bootstack was created to bring everything together from branding
                 and technology to automation and growth, so every solution works
                 toward one goal: helping businesses scale. One team decides the
-                positioning, makes the work, ships the platform and runs the media,
-                so there is never a question about who is accountable for the
-                number.
+                positioning, makes the work, ships the platform and runs the
+                media, so there is never a question about who is accountable for
+                the number.
               </p>
             </div>
-          </div>
 
-          <aside className="about__founder">
-            {/* Portrait slot — drop the founder image in here as
-                <img src={...} alt="Aayush Vora" /> and it will fill the frame. */}
-            <div className="about__portrait" data-reveal />
+            {/* ========================================================
+                THANK YOU MESSAGE
+                ======================================================== */}
 
-            <p className="about__thanks" data-reveal style={{ "--reveal-delay": "70ms" }}>
-              {founder.quote}
-            </p>
+            <figure
+              className="about__note"
+              data-reveal
+              style={{ "--reveal-delay": "120ms" }}
+            >
+              <blockquote className="about__thanks">
+                {founder?.quote ||
+                  "Thank you for trusting Bootstack. We're excited to be part of your growth journey."}
+              </blockquote>
+            </figure>
 
-            <ul className="about__ledger">
-              {FOUNDER_INFO.map((row, i) => (
-                <li
-                  className="about__ledger-row"
-                  key={row.label}
-                  data-reveal
-                  style={{ "--reveal-delay": `${140 + i * 70}ms` }}
-                >
-                  <span className="about__name">{row.name}</span>
-                  <span className="about__role mono">{row.label}</span>
+            {/* ========================================================
+                FOUR STAGES
+                ======================================================== */}
+
+            <ul
+              className="about__stages"
+              data-reveal
+              style={{ "--reveal-delay": "180ms" }}
+            >
+              {STAGES.map((stage, i) => (
+                <li className="about__stage" key={stage}>
+                  <span className="about__stage-num mono">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+
+                  {stage}
                 </li>
               ))}
             </ul>
-          </aside>
 
-          {positions.length > 0 && (
+            {/* ========================================================
+                LEADERSHIP + CITY
+
+                IMPORTANT:
+                This is INSIDE about__col.
+
+                Therefore desktop and mobile naturally follow:
+
+                Thank You
+                    ↓
+                Stages
+                    ↓
+                Leadership
+                    ↓
+                City
+                ======================================================== */}
+
             <div className="about__record">
-              <div className="about__record-pair">
-                {positions.map((item, i) => (
-                  <figure
-                    className="about__position"
-                    key={item.id}
-                    data-reveal
-                    style={{ "--reveal-delay": `${i * 90}ms` }}
-                  >
-                    <blockquote className="about__position-text">
-                      {item.quote}
-                    </blockquote>
-                    <figcaption className="about__meta">
-                      <span className="about__role mono">{item.role}</span>
-                      <span className="about__where mono">{item.industry}</span>
-                    </figcaption>
-                  </figure>
-                ))}
+              {/* LEADERSHIP */}
+              <div className="about__position" data-reveal>
+                <span className="about__name">{FOUNDER_INFO[1].name}</span>
+
+                <span className="about__role mono">
+                  {FOUNDER_INFO[1].label}
+                </span>
+              </div>
+
+              {/* CITY */}
+              <div className="about__position" data-reveal>
+                <span className="about__name">{FOUNDER_INFO[2].name}</span>
+
+                <span className="about__role mono">
+                  {FOUNDER_INFO[2].label}
+                </span>
               </div>
             </div>
-          )}
+          </div>
         </div>
-      </div>
-
-      <div className="about__words" aria-hidden="true">
-        {INTERSECTION.map((word) => (
-          <span className="about__word display" key={word}>
-            {word}
-          </span>
-        ))}
       </div>
     </section>
   );

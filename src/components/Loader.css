@@ -31,7 +31,7 @@
 
 .loader__word {
   display: block;
-  font-size: clamp(2.4rem, 8vw, 6rem);
+  font-size: clamp(1.9rem, 4.6vw, 3.6rem);
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 1;

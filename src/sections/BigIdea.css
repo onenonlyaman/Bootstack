@@ -4,29 +4,43 @@
 }
 
 .idea__seam {
-  margin-bottom: clamp(3rem, 9vh, 7rem);
+  margin-bottom: clamp(1rem, 3vh, 2.5rem);
   color: rgba(26, 66, 95, 0.2);
   text-transform: uppercase;
 }
 
-.idea__seam .marquee__item { 
-  color: var(--blue); 
-  -webkit-text-stroke: 0; 
+.idea__seam {
+  margin-bottom: 1.5rem;
+  color: rgba(26, 66, 95, 0.2);
+  text-transform: uppercase;
+}
+
+/* Section 02 intro description */
+.idea__intro {
+  text-align: left;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.idea__intro-description {
+  max-width: none;
+  margin: 0;
+  color: var(--fg-soft);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.65;
 }
 
 .idea__grid {
   display: grid;
-  gap: clamp(2.5rem, 6vw, 6rem);
+  gap: 2rem;
   align-items: start;
 }
 
 .idea__statement {
   text-transform: none;
   letter-spacing: -0.04em;
-  /* Sized so the longest name - "Brand Identity & Branding", 25 characters -
-     still fits the statement column on one line at every width. */
-  font-size: clamp(1.25rem, 3.5vw, 3.2rem) !important;
-  line-height: 1.06 !important;
+  font-size: clamp(1.75rem, 3.2vw, 2.8rem) !important;
+  line-height: 1.16 !important;
 }
 
 .idea__line {
@@ -34,10 +48,14 @@
 }
 
 /* The line currently driving the right-hand panel. */
-.idea__line.is-active { color: var(--blue); }
+.idea__line.is-active {
+  color: var(--blue);
+}
 
 /* Reserve the panel's height so swapping copy never nudges the layers below. */
-.idea__service { min-height: 8.5em; }
+.idea__service {
+  min-height: 8.5em;
+}
 
 .idea__service-title {
   display: block;
@@ -52,14 +70,17 @@
   margin-right: 0.22em;
 }
 
-
 .idea__aside {
   display: grid;
   gap: var(--s-3);
   max-width: 52ch;
 }
 
-.idea__aside .body { color: var(--fg-soft); }
+.idea__aside .body {
+  color: var(--fg-soft);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.65;
+}
 
 /* ---- Assembling stack ---- */
 
@@ -86,8 +107,12 @@
   background: linear-gradient(90deg, var(--blue), var(--cyan));
 }
 
-.idea__layer:nth-child(4) span { background: linear-gradient(90deg, var(--cyan), var(--yellow)); }
-.idea__layer:nth-child(5) span { background: var(--yellow); }
+.idea__layer:nth-child(4) span {
+  background: linear-gradient(90deg, var(--cyan), var(--yellow));
+}
+.idea__layer:nth-child(5) span {
+  background: var(--yellow);
+}
 
 .idea__layer em {
   font-style: normal;
@@ -97,10 +122,12 @@
 
 @media (min-width: 1024px) {
   .idea__grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   }
 
-  .idea__aside { padding-top: 0.9rem; }
+  .idea__aside {
+    padding-top: 0;
+  }
 }
 
 /* ---- Section 02 lines are links to their service page ----
@@ -122,7 +149,9 @@
 .idea__line-inner {
   position: relative;
   display: inline-block;
-  transition: transform 0.55s var(--ease-out), color 0.4s var(--ease-out);
+  transition:
+    transform 0.55s var(--ease-out),
+    color 0.4s var(--ease-out);
 
   /* One name, one line. */
   white-space: nowrap;
@@ -156,7 +185,9 @@
   }
 }
 
-.idea__line.is-hovered { color: var(--blue); }
+.idea__line.is-hovered {
+  color: var(--blue);
+}
 
 .idea__line.is-hovered .idea__line-inner {
   transform: translateX(clamp(6px, 0.7vw, 16px));
@@ -178,7 +209,9 @@
   color: var(--blue);
   opacity: 0;
   transform: translate(-6px, -50%);
-  transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+  transition:
+    opacity 0.4s var(--ease-out),
+    transform 0.4s var(--ease-out);
   pointer-events: none;
 }
 
@@ -202,6 +235,23 @@
 
 @media (prefers-reduced-motion: reduce) {
   .idea__line-inner,
-  .idea__explore { transition: none; }
-  .idea__line.is-hovered .idea__line-inner { transform: none; }
+  .idea__explore {
+    transition: none;
+  }
+  .idea__line.is-hovered .idea__line-inner {
+    transform: none;
+  }
+}
+@media (max-width: 899px) {
+  .idea__seam {
+    margin-bottom: 1.5rem;
+  }
+
+  .idea__grid {
+    gap: 2rem;
+  }
+
+  .idea__service {
+    min-height: 7em;
+  }
 }

@@ -387,3 +387,13 @@
     margin-top: auto;
   }
 }
+
+@media (max-width: 1023px) {
+  .nav__toggle {
+    color: #ffffff;
+  }
+
+  .nav__toggle i {
+    background: #ffffff;
+  }
+}

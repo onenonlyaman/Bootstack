@@ -212,15 +212,15 @@
      RIGHT = All About content in ONE vertical column
      ============================================================ */
 
+  /* Two equal columns. The 0.78/1.22 split gave the copy a 752px cell it only
+     ever filled to 523px, which is where the dead ground on the right came
+     from. Even columns put the portrait and the argument on the same measure. */
   .about__main {
     display: grid;
 
-    /* ONLY TWO COLUMNS */
-    grid-template-columns:
-      minmax(0, 0.78fr)
-      minmax(0, 1.22fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    column-gap: clamp(3rem, 6vw, 7rem);
+    column-gap: clamp(2.5rem, 4.4vw, 4rem);
 
     align-items: start;
   }
@@ -241,9 +241,17 @@
     position: static;
   }
 
+  /* Fills its half and squares off, so the image column reads level with the
+     copy column instead of stopping short of it.
+
+     The copy column runs a roughly constant height while the grid columns keep
+     widening, so past ~1440px a true square would overshoot it — 200px lower
+     at 1680. The cap holds the frame level with the copy from 1280 up. */
   .about__portrait {
     width: 100%;
-    max-width: 30rem;
+    max-width: none;
+    aspect-ratio: 1 / 1;
+    max-height: 36rem;
   }
 
   .about__founder-main {
@@ -283,10 +291,14 @@
      HEADING
      ============================================================ */
 
+  /* The measures below were set for a narrower column and are what actually
+     held the content off the right edge. The heading now runs the full column;
+     the prose keeps a readable cap that the column reaches at this width and
+     only exceeds on a very wide screen. */
   .about__statement {
     grid-column: 1;
 
-    max-width: 20ch;
+    max-width: none;
 
     margin: 0;
 
@@ -308,7 +320,7 @@
 
     gap: var(--s-3);
 
-    max-width: 58ch;
+    max-width: 40rem;
   }
 
   .about__copy .lead {
@@ -336,7 +348,7 @@
   .about__thanks {
     margin: 0;
 
-    max-width: 40ch;
+    max-width: 40rem;
 
     font-size: clamp(1.02rem, 1.25vw, 1.18rem);
 

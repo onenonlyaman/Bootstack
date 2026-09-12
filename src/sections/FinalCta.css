@@ -9,22 +9,14 @@
   padding-block: clamp(3.5rem, 9vh, 6.5rem);
 }
 
-.cta__ghost {
-  position: absolute;
-  left: 0;
-  bottom: -0.16em;
-  font-size: clamp(4rem, 10vw, 9rem);
-  line-height: 0.8;
-  white-space: nowrap;
-  color: rgba(8, 22, 31, 0.07);
-  pointer-events: none;
-  user-select: none;
-  will-change: transform;
-}
-
+/* The closing frame reads as one centred column at every width: eyebrow,
+   heading, description, service pills, the action, then the contact line.
+   Colours, hover and the yellow ground are untouched — this only changes
+   where things sit. */
 .cta__inner {
   position: relative;
   z-index: 1;
+  text-align: center;
 }
 
 .cta__eyebrow {
@@ -51,20 +43,22 @@
 .cta__line > span {
   display: block;
 }
+/* The second line was indented to sit under a left-aligned first line; with
+   the heading centred both lines share the same axis. */
 .cta__line--2 {
-  padding-left: 8%;
+  padding-left: 0;
 }
 
 .cta__body {
   display: grid;
-  gap: clamp(1.5rem, 4vw, 3rem);
+  gap: clamp(1.5rem, 3vw, 2.25rem);
   align-items: end;
   padding-bottom: clamp(2rem, 5vh, 3.25rem);
-  border-bottom: 1px solid var(--rule);
 }
 
 .cta__support {
   max-width: 52ch;
+  margin-inline: auto;
   color: rgba(8, 22, 31, 0.82);
   font-size: clamp(1.05rem, 1.35vw, 1.25rem);
   line-height: 1.5;
@@ -73,6 +67,7 @@
 .cta__actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.85rem;
 }
 
@@ -111,6 +106,7 @@
 .cta__details li {
   display: grid;
   gap: 0.3rem;
+  justify-items: center;
 }
 
 .cta__details span.mono {
@@ -127,7 +123,7 @@
 
 .cta__details a {
   position: relative;
-  justify-self: start;
+  justify-self: center;
 }
 
 .cta__details a::after {
@@ -148,12 +144,9 @@
 }
 
 @media (min-width: 900px) {
-  .cta__body {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .cta__actions {
-    justify-content: flex-end;
-  }
+  /* The body was a two-column split with the action pushed to the right edge,
+     which is what held the whole section left-aligned. It now stacks down the
+     centre like the rest of the composition. */
   .cta__details {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -173,6 +166,7 @@
 /* FINAL CTA - medium description */
 .cta .cta__support {
   max-width: 52ch !important;
+  margin-inline: auto !important;
   font-size: clamp(1.05rem, 1.35vw, 1.25rem) !important;
   line-height: 1.5 !important;
   color: rgba(8, 22, 31, 0.82) !important;
@@ -183,9 +177,12 @@
 .cta__points {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.7rem;
-  margin-top: 1.5rem;
+  /* The grid gap above already separates this row. */
+  margin-top: 0;
   max-width: 65rem;
+  margin-inline: auto;
 }
 
 .cta__point {
@@ -267,5 +264,32 @@
     width: 100%;
     height: 96vh;
     border-radius: 16px;
+  }
+}
+
+/* ============================================================
+   MOBILE / TABLET — TEXT CONTRAST
+
+   Yellow is the darkest ground on the site, so ink needs a
+   higher alpha here than anywhere else to clear 4.5:1. Measured
+   against #f7aa00: the eyebrow sat at 3.80:1, the detail labels
+   at 3.39:1 and the local faint tier at ~2.60:1.
+
+   The ghost watermark is deliberately left at 0.07 — it is
+   texture behind the heading, not text to read.
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .cta {
+    --fg-soft: rgba(8, 22, 31, 0.8);
+    --fg-faint: rgba(8, 22, 31, 0.74);
+  }
+
+  .cta__eyebrow {
+    color: rgba(8, 22, 31, 0.76);
+  }
+
+  .cta__details span.mono {
+    color: rgba(8, 22, 31, 0.76);
   }
 }

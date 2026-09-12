@@ -78,17 +78,117 @@
   top: 1.55rem;
   height: 2px;
   background: rgba(35, 87, 132, 0.16);
+  /* Clips the sweeping segment at both ends of the run. */
+  overflow: hidden;
   z-index: 0;
 }
 
-.how__line-fill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-  transform: scaleX(0);
-  transform-origin: left center;
-  will-change: transform;
+/* ---------- The travelling signal ----------
+   Small dots running the connector from one stage toward the next.
+
+   One tiled radial-gradient rather than a set of elements: the tile repeats
+   forever, so there is no first or last dot, and shifting the pattern by
+   exactly one tile width returns it to an identical frame. The loop is
+   therefore seamless by construction — nothing resets, jumps or restarts, and
+   the spacing between dots is always the tile.
+
+   Geometry mirrors .how__line so the dots sit on the wire; it is a sibling of
+   that element because .how__line is clipped to its own 2px height, which
+   would flatten a round dot into a sliver. */
+
+.how__flow {
+  position: absolute;
+  left: calc(var(--how-col) / 2);
+  right: calc(var(--how-col) / 2);
+  top: calc(2.05rem - 2.5px);
+  height: 9px;
+
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---------- Individual moving particles ---------- */
+
+.how__flow > span {
+  position: absolute;
+  top: 50%;
+  left: -5px;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: var(--yellow);
+
+  transform: translateY(-50%);
+  opacity: 0;
+
+  animation: how-particle 4s linear infinite;
+}
+
+.how__flow > span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.how__flow > span:nth-child(2) {
+  animation-delay: -0.5s;
+}
+
+.how__flow > span:nth-child(3) {
+  animation-delay: -1s;
+}
+
+.how__flow > span:nth-child(4) {
+  animation-delay: -1.5s;
+}
+
+.how__flow > span:nth-child(5) {
+  animation-delay: -2s;
+}
+
+.how__flow > span:nth-child(6) {
+  animation-delay: -2.5s;
+}
+
+.how__flow > span:nth-child(7) {
+  animation-delay: -3s;
+}
+
+.how__flow > span:nth-child(8) {
+  animation-delay: -3.5s;
+}
+
+.how__flow > span:nth-child(9) {
+  animation-delay: -4s;
+}
+
+.how__flow > span:nth-child(10) {
+  animation-delay: -4.5s;
+}
+
+.how.is-running .how__flow {
+  animation-play-state: running;
+}
+
+@keyframes how-particle {
+  0% {
+    left: -5px;
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  92% {
+    opacity: 1;
+  }
+
+  100% {
+    left: calc(100% + 5px);
+    opacity: 0;
+  }
 }
 
 /* A wrapper spanning the whole line: translating it by a percentage lands the
@@ -202,77 +302,87 @@
 }
 
 /* ============================================================
-   Narrow: the same run, turned on its side. Five cards cannot
-   hold their shape across a phone, so the flow becomes vertical
-   with the line through the icon column — the timeline drives
-   the other axis and nothing else changes.
+   NARROW SCREENS
+
+   The run stays horizontal: the same five cards, the same order,
+   the same connector and the same travelling dots behind them —
+   the desktop composition, scaled down to fit a phone rather
+   than turned into a vertical timeline.
+
+   Everything here is size: columns, gaps, icon, type and
+   padding. No rule changes the axis, so the line, the sweep and
+   the dot flow all keep the horizontal geometry the base sets.
    ============================================================ */
 
 @media (max-width: 699px) {
   .how {
-    --how-gap: 0.55rem;
-    --how-row: calc(
-      (100% - (var(--how-cols) - 1) * var(--how-gap)) / var(--how-cols)
-    );
-  }
-
-  .how {
+    /* Five columns across ~350px of usable width leaves ~64px a card. The gap
+       is what the dots travelling behind the cards are seen through, so it
+       keeps enough width to show one rather than collapsing to a hairline. */
+    --how-gap: 0.45rem;
     min-height: 0;
   }
 
   .how__track {
-    max-width: 26rem;
-  }
-
-  .how__steps {
-    grid-template-columns: minmax(0, 1fr);
-    grid-auto-rows: 1fr;
+    /* Fills the shell rather than the 46rem desktop cap, so the five columns
+       get every pixel available. */
+    max-width: none;
+    margin-top: clamp(1rem, 3vh, 1.5rem);
   }
 
   .how__step {
-    grid-template-columns: 2.5rem minmax(0, 1fr);
-    justify-items: start;
-    align-items: center;
-    gap: 0 0.65rem;
-    min-height: 3.4rem;
-    padding: 0.6rem 0.85rem;
+    gap: 0.1rem;
+    min-height: 4rem;
+    padding: 0.6rem 0.2rem 0.5rem;
+    border-radius: 9px;
   }
 
   .how__icon {
-    grid-row: span 2;
-    margin-bottom: 0;
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .how__index {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
   }
 
   .how__label {
-    text-align: left;
+    font-size: 0.58rem;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    /* "Strategy" is the longest of the five and has to hold one line in a
+       ~66px card. */
+    hyphens: none;
   }
 
-  /* Vertical, and through the icon centre: 0.85rem of padding plus half of
-     the 1.4rem icon, rounded to the icon column's middle. */
+  /* The connector sits on the icon centre: this padding-top plus half the
+     icon. Both shrink together, so the line follows. */
   .how__line {
-    left: 1.55rem;
-    right: auto;
-    top: calc(var(--how-row) / 2);
-    bottom: calc(var(--how-row) / 2);
-    width: 2px;
-    height: auto;
+    top: 1.125rem;
   }
 
-  .how__line-fill {
-    background: linear-gradient(180deg, var(--blue), var(--cyan));
-    transform: scaleY(0);
-    transform-origin: top center;
+  /* Centred on the same icon centre the line sits on: this padding-top plus
+     half the shrunken icon. */
+  .how__flow {
+    top: calc(1.125rem - 3.5px);
+  }
+
+  /* The particles keep their own animation and timing; only the dot itself
+     scales to suit the narrower gaps between the compact cards. */
+  .how__flow > span {
+    width: 4px;
+    height: 4px;
   }
 
   .how__marker i {
-    top: 0;
-    left: 50%;
-  }
-
-  .how__step.is-active {
-    transform: translateX(3px);
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
   }
 }
+
 
 /* ============================================================
    Reduced motion — the run reads as complete, and holds still.
@@ -290,10 +400,18 @@
   .how__step.is-done {
     transform: none;
   }
+
+  .how__line-fill {
+    animation: none;
+    opacity: 0;
+  }
+
+  .how__flow {
+    animation: none;
+  }
 }
 
 @media (min-width: 1024px) {
-
   /* ============================================================
      HOW WE WORK - LARGE FULL DESKTOP COMPOSITION
      ============================================================ */
@@ -401,6 +519,7 @@
 
   .how__line {
     height: 2px;
+    top: 2.05rem;
   }
 
   /* ---------- Moving marker ---------- */

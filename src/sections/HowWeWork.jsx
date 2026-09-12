@@ -62,10 +62,14 @@ export default function HowWeWork() {
 
     const steps = gsap.utils.toArray(".how__step", root);
     const marker = root.querySelector(".how__marker");
-    const fill = root.querySelector(".how__line-fill");
-    if (!steps.length || !marker || !fill) return undefined;
+    if (!steps.length || !marker) return undefined;
 
     const last = steps.length - 1;
+
+    /* The reference advances a stage every 1.5s and lights exactly one card at
+       a time — a spotlight that travels, not a progress bar that fills in
+       behind itself. Measured off the live site. */
+    const STEP = 1.5;
 
     // Classes are toggled imperatively rather than rendered: useReveal adds
     // `is-in` to these same cards with classList.add(), and a React-owned
@@ -73,7 +77,8 @@ export default function HowWeWork() {
     const light = (index) =>
       steps.forEach((step, i) => {
         step.classList.toggle("is-active", i === index);
-        step.classList.toggle("is-done", i < index);
+        // No accumulating trail: the reference clears the stage it leaves.
+        step.classList.remove("is-done");
       });
 
     const ctx = gsap.context(() => {
@@ -81,78 +86,85 @@ export default function HowWeWork() {
 
       mm.add(
         {
-          wide: "(min-width: 700px) and (prefers-reduced-motion: no-preference)",
-          narrow: "(max-width: 699px) and (prefers-reduced-motion: no-preference)",
+          motion: "(prefers-reduced-motion: no-preference)",
           reduced: "(prefers-reduced-motion: reduce)",
         },
         (context) => {
-          const { wide, reduced } = context.conditions;
+          const { reduced } = context.conditions;
 
           if (reduced) {
-            // The run is already complete: every stage reads as done, and
-            // nothing moves.
-            gsap.set(fill, { scaleX: 1, scaleY: 1 });
-            gsap.set(marker, { xPercent: 100, yPercent: 0 });
-            steps.forEach((step) => step.classList.add("is-done"));
+            // Nothing moves: the first stage simply reads as the current one.
+            gsap.set(marker, { xPercent: 0, yPercent: 0, opacity: 1 });
+            light(0);
             return undefined;
           }
 
           // The marker is a wrapper spanning the whole line, so a percentage
-          // translate lands exactly on a stage on either axis — no pixel maths
-          // to redo on resize.
-          const axis = wide ? "xPercent" : "yPercent";
-          const scaleAxis = wide ? "scaleX" : "scaleY";
+          // translate lands exactly on a stage — no pixel maths to redo on
+          // resize. The run is horizontal at every width now, so the axis no
+          // longer switches with the breakpoint.
+          const axis = "xPercent";
 
-          gsap.set(marker, { xPercent: 0, yPercent: 0 });
-          gsap.set(fill, { scaleX: wide ? 0 : 1, scaleY: wide ? 1 : 0 });
+          gsap.set(marker, { xPercent: 0, yPercent: 0, opacity: 1 });
           light(0);
 
-          const tl = gsap.timeline({
-            repeat: -1,
-            repeatDelay: 0.9,
-            paused: true,
-            onRepeat: () => light(0),
-          });
-
-          tl.to({}, { duration: 0.9 });
+          const tl = gsap.timeline({ repeat: -1, paused: true });
 
           for (let i = 1; i <= last; i += 1) {
-            const progress = i / last;
-            tl.to(marker, {
-              [axis]: progress * 100,
-              duration: 0.75,
-              ease: "power2.inOut",
-            })
-              .to(
-                fill,
-                { [scaleAxis]: progress, duration: 0.75, ease: "power2.inOut" },
-                "<",
-              )
-              .call(light, [i], ">-0.14")
-              .to({}, { duration: 0.9 });
+            const at = (i - 1) * STEP;
+
+            tl.call(light, [i], at + STEP * 0.62).to(
+              marker,
+              {
+                [axis]: (i / last) * 100,
+                duration: STEP * 0.62,
+                ease: "power2.inOut",
+              },
+              at + STEP * 0.38,
+            );
           }
 
-          // Rewind quietly so the loop does not snap back.
-          tl.to(marker, { [axis]: 0, duration: 0.55, ease: "power2.inOut" }).to(
-            fill,
-            { [scaleAxis]: 0, duration: 0.55, ease: "power2.inOut" },
-            "<",
-          );
+          /* The loop closes the way the reference's does: the last stage holds
+             its beat, then the marker fades out, returns to the start while it
+             is invisible and fades back in. The old rewind slid it all the way
+             back down the line, which read as the animation restarting rather
+             than continuing. */
+          const tail = last * STEP;
 
-          // Only runs while it is being looked at.
+          tl.to(marker, { opacity: 0, duration: 0.28, ease: "power2.in" }, tail)
+            .set(marker, { [axis]: 0 })
+            .call(light, [0])
+            .to(marker, { opacity: 1, duration: 0.28, ease: "power2.out" })
+            .to({}, { duration: STEP * 0.5 });
+
+          // Only runs while it is being looked at. The class gates the CSS
+          // sweep on the connector line at the same time.
           const trigger = ScrollTrigger.create({
             trigger: root,
             start: "top 82%",
             end: "bottom 18%",
-            onEnter: () => tl.play(),
-            onEnterBack: () => tl.play(),
-            onLeave: () => tl.pause(),
-            onLeaveBack: () => tl.pause(),
+            onEnter: () => {
+              root.classList.add("is-running");
+              tl.play();
+            },
+            onEnterBack: () => {
+              root.classList.add("is-running");
+              tl.play();
+            },
+            onLeave: () => {
+              root.classList.remove("is-running");
+              tl.pause();
+            },
+            onLeaveBack: () => {
+              root.classList.remove("is-running");
+              tl.pause();
+            },
           });
 
           return () => {
             trigger.kill();
             tl.kill();
+            root.classList.remove("is-running");
           };
         },
       );
@@ -180,6 +192,21 @@ export default function HowWeWork() {
             </span>
           </div>
 
+          {/* The travelling signal. A sibling rather than a child of
+              .how__line because that element is clipped to the 2px hairline,
+              which would flatten the dots into slivers. */}
+          <div className="how__flow" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
           <ol className="how__steps">
             {stages.map((stage, i) => (
               <li

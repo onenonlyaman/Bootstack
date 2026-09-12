@@ -448,3 +448,17 @@
     width: 100%;
   }
 }
+
+/* ============================================================
+   MOBILE / TABLET — TEXT CONTRAST
+
+   The contact icons sat at 0.45 alpha, ~2.80:1 against the
+   footer's cyan-deep ground. The link and blurb colours already
+   clear AA there and are left alone.
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .foot__ico {
+    color: rgba(8, 22, 31, 0.64);
+  }
+}

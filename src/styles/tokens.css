@@ -95,3 +95,32 @@
     --band-y: 3rem;
   }
 }
+
+/* ============================================================
+   MOBILE / TABLET — TEXT CONTRAST
+
+   Measured at 390px against every Bootstack ground. The faint
+   tier resolved to 2.45–2.74:1 and the CTA's local faint tier to
+   ~2.3:1, all well under the 4.5:1 AA minimum for body-size
+   text. That is what made labels, indices, captions and the
+   Explore actions hard to read on a phone.
+
+   Alpha only. No colour is introduced, no size, weight, spacing
+   or layout changes, and the soft-over-faint hierarchy is kept —
+   both tiers simply move into legible range. Yellow is the
+   darkest ground to sit on, so the CTA needs the most.
+
+   Scoped below the 1024px desktop breakpoint, so desktop keeps
+   exactly the values it has today.
+
+     α on white / yellow:
+       0.42 -> 2.74 / 2.45     (was)
+       0.68 -> 6.40 / 4.71     (now)
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  :root {
+    --fg-soft: rgba(8, 22, 31, 0.74);
+    --fg-faint: rgba(8, 22, 31, 0.68);
+  }
+}

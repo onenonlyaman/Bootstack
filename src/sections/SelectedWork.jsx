@@ -1,7 +1,6 @@
-import SectionMarker from '../components/SectionMarker.jsx';
-import WorkVisual from '../components/WorkVisual.jsx';
-import { work } from '../data/work';
-import './SelectedWork.css';
+import WorkVisual from "../components/WorkVisual.jsx";
+import { work } from "../data/work";
+import "./SelectedWork.css";
 
 /**
  * Section 06 — Selected Work.
@@ -20,17 +19,26 @@ export default function SelectedWork() {
   return (
     <section id="work" className="work band" data-bg="white">
       <div className="shell">
-        <SectionMarker index="06" title="Selected Work" />
-
         <div className="work__head">
-          <h2 className="display display--xxl section-gradient-heading" data-reveal>
-            Selected
-            <br />
-            <span className="work__head-accent">Work</span>
+          <span className="work__eyebrow mono" data-reveal>
+            Featured Work
+          </span>
+
+          <h2
+            className="work__heading display section-gradient-heading"
+            data-reveal
+            style={{ "--reveal-delay": "60ms" }}
+          >
+            Selected Work.
           </h2>
-          <p className="body" data-reveal style={{ '--reveal-delay': '80ms' }}>
-            Bootstack is just getting started. Every project on this page will be a real,
-            measurable growth story written up only once the numbers exist.
+
+          <p
+            className="work__description"
+            data-reveal
+            style={{ "--reveal-delay": "120ms" }}
+          >
+            Bootstack is just getting started. Every project here will be a
+            real, measurable growth story.
           </p>
         </div>
 
@@ -40,7 +48,7 @@ export default function SelectedWork() {
               key={item.id}
               className={`work__card work__card--${item.tone}`}
               data-reveal
-              style={{ '--reveal-delay': `${i * 90}ms` }}
+              style={{ "--reveal-delay": `${i * 90}ms` }}
             >
               <div className="work__art">
                 <WorkVisual art={item.art} />
@@ -64,7 +72,9 @@ export default function SelectedWork() {
                 </ul>
 
                 <div className="work__outcome">
-                  <span className="work__value display">{item.outcome.value}</span>
+                  <span className="work__value display">
+                    {item.outcome.value}
+                  </span>
                   <span className="work__label">{item.outcome.label}</span>
                 </div>
               </div>

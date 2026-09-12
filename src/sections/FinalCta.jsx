@@ -33,18 +33,6 @@ export default function FinalCta() {
           stagger: 0.1,
           scrollTrigger: { trigger: ".cta__heading", start: "top 82%" },
         });
-
-        // The oversized wordmark drifts across the closing frame.
-        gsap.to(".cta__ghost", {
-          xPercent: -14,
-          ease: "none",
-          scrollTrigger: {
-            trigger: rootRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
       });
     }, rootRef);
 
@@ -53,10 +41,6 @@ export default function FinalCta() {
 
   return (
     <section ref={rootRef} id="contact" className="cta band" data-bg="yellow">
-      <span className="cta__ghost display" aria-hidden="true">
-        BOOTSTACK BOOTSTACK
-      </span>
-
       <div className="shell cta__inner">
         <p className="cta__eyebrow mono" data-reveal>
           Start your project
@@ -101,23 +85,6 @@ export default function FinalCta() {
             </MagneticButton>
           </div>
         </div>
-
-        <ul className="cta__details">
-          <li data-reveal>
-            <span className="mono">Email</span>
-            <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          </li>
-          <li data-reveal style={{ "--reveal-delay": "60ms" }}>
-            <span className="mono">Phone</span>
-            <a href={`tel:${contact.phone.replace(/\s+/g, "")}`}>
-              {contact.phone}
-            </a>
-          </li>
-          <li data-reveal style={{ "--reveal-delay": "120ms" }}>
-            <span className="mono">Studio</span>
-            <span>{contact.location}</span>
-          </li>
-        </ul>
       </div>
 
       {formOpen && (

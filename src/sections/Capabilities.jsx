@@ -106,12 +106,6 @@ export default function Capabilities() {
               Everything a business needs to be seen, believed
               and bought kept under one roof.
             </h2>
-
-            <p className="cap__lede body" data-reveal>
-              Five disciplines, one team. Each one carries its own services, and
-              the same people run all of them so the brand, the build and
-              the campaign are never three different conversations.
-            </p>
           </div>
 
           </div>
@@ -192,7 +186,8 @@ export default function Capabilities() {
 
 
                 {/* ------------------------------------------------
-                    EXPANDED PANEL
+                    DESCRIPTION
+                    Clamped at rest, opened in full on hover/focus.
                     ------------------------------------------------ */}
 
                 <span className="cap__panel">
@@ -201,22 +196,6 @@ export default function Capabilities() {
 
                     <span className="cap__blurb">
                       {item.blurb}
-                    </span>
-
-
-                    <span className="cap__items">
-
-                      {item.items.map((sub) => (
-                        <span
-                          className="cap__item"
-                          key={sub}
-                        >
-                          <span className="mono">
-                            {sub}
-                          </span>
-                        </span>
-                      ))}
-
                     </span>
 
                   </span>

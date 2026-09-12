@@ -5,27 +5,21 @@
 /* ---------- Head ---------- */
 
 .work__head {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: var(--s-3);
-  align-items: end;
   margin-bottom: clamp(2rem, 5vh, 3.25rem);
 }
 
 .work__head h2 {
-  text-transform: uppercase;
-  letter-spacing: -0.032em;
-  /* The shared section-heading step, so 06 does not out-scale 03, 05 and 07.
-     Set here rather than by swapping the class, which would also change the
-     line-height the accent line depends on. */
-  font-size: var(--t-xl);
-  line-height: 1.02;
-}
-
-.work__head-accent {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--blue);
-  padding-left: 8%;
-  display: inline-block;
+  text-transform: none;
+  letter-spacing: -0.035em;
+  font-size: clamp(3rem, 5vw, 4rem);
+  line-height: 1;
+  text-align: center;
+  margin: 0;
 }
 
 .work__head .body {
@@ -99,9 +93,15 @@
   letter-spacing: -0.03em;
 }
 
-.work__card--yellow .work__client { color: var(--navy); }
-.work__card--cyan .work__client { color: var(--blue); }
-.work__card--blue .work__client { color: var(--navy); }
+.work__card--yellow .work__client {
+  color: var(--navy);
+}
+.work__card--cyan .work__client {
+  color: var(--blue);
+}
+.work__card--blue .work__client {
+  color: var(--navy);
+}
 
 .work__summary {
   max-width: 46ch;
@@ -173,4 +173,52 @@
   .work__card:hover {
     transform: none;
   }
+}
+
+/* ============================================================
+   SELECTED WORK INTRO
+   ============================================================ */
+
+.work__head {
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Featured Work */
+.work__eyebrow {
+  display: block;
+  margin: 0 auto 1.5rem;
+  color: var(--blue);
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Selected Work. */
+.work__heading {
+  width: max-content;
+  max-width: none;
+  margin: 0 auto;
+  white-space: nowrap;
+  font-size: clamp(3rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-align: center;
+}
+
+/* Description */
+.work__description {
+  max-width: 900px;
+  margin: 1.75rem auto 0;
+  color: var(--fg-soft);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  text-align: center;
 }

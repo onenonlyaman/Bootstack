@@ -66,3 +66,19 @@
 
   .why__item:nth-child(even) { padding-left: clamp(1rem, 4vw, 4rem); }
 }
+
+/* ============================================================
+   MOBILE / TABLET — TEXT CONTRAST
+
+   The stage numerals are drawn as a 1px outline with no fill.
+   That reads at desktop size, but at the mobile step size the
+   stroke thins out until the numbers are hard to make out. A
+   slightly heavier stroke keeps the outlined treatment exactly
+   as designed and simply makes it hold together.
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .why__num {
+    -webkit-text-stroke-width: 1.4px;
+  }
+}

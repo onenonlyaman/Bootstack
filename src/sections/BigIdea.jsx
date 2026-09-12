@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "../lib/motion";
-import Marquee from "../components/Marquee.jsx";
 import SectionMarker from "../components/SectionMarker.jsx";
 import "./BigIdea.css";
 
@@ -119,20 +118,8 @@ export default function BigIdea() {
 
   return (
     <section ref={rootRef} id="idea" className="idea band" data-bg="mist">
-      <div className="idea__seam">
-        <Marquee items={["Brand", "System", "Growth"]} size="lg" speed={30} />
-      </div>
-
       <div className="shell">
         <SectionMarker index="02" title="What We Build" />
-
-        <div className="idea__intro">
-          <p className="idea__intro-description">
-            We combine technology, creativity and marketing to build digital
-            <br />
-            systems that move businesses forward.
-          </p>
-        </div>
 
         <div className="idea__grid">
           <h2 className="idea__statement display display--xxl">

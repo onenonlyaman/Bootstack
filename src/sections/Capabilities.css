@@ -17,40 +17,60 @@
    so `30ch` here was squeezing a 41px heading into ~200px and wrapping it to
    eight or ten lines. A length says what it means at any size. */
 .cap__head h2 {
-  max-width: 30rem;
+  max-width: 55rem;
+  margin-inline: auto;
+  text-align: center;
   letter-spacing: -0.035em;
 }
+
 .cap__head .body {
   color: var(--fg-faint);
 }
 
-/* ---- Rows ---- */
+/* ============================================================
+   SERVICE CARDS
+
+   The eight services as a card grid. Structure, copy, links and
+   the hover/open mechanic are unchanged — only the presentation
+   moves from full-width rows to cards.
+
+   Each card keeps its own identity colour in `--tone`, which
+   drives the wipe, the border, the index and the Explore link.
+   ============================================================ */
 
 .cap__list {
-  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.85rem, 1.5vw, 1.5rem);
+  margin-top: clamp(1.75rem, 4vh, 2.75rem);
 }
 
 .cap__row {
   position: relative;
-  border-bottom: 1px solid var(--rule);
-  --tone: var(--cyan-deep);
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgba(64, 168, 196, 0.22);
+  background-image: none;
+  background-color: var(--white);
+  box-shadow:
+    0 12px 30px rgba(35, 87, 132, 0.08),
+    0 4px 10px rgba(64, 168, 196, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    transform 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+
+  /* One column, so the card still reserves what its open description needs.
+     The steps at 640px and up override this. */
+  min-height: 12.5rem;
+
+  --tone: var(--cyan);
 }
 
-/* The card itself. One link, laid out as the row used to be. */
-.cap__link {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  color: inherit;
-  cursor: pointer;
-}
-
-.cap__link > .cap__panel {
-  grid-column: 1 / -1;
-}
-
+/* The identity colour per service. `blue` now resolves to the brand blue
+   rather than the near-white cyan-deep, so the three identities read apart
+   from one another as a tint, a border and an accent. */
 .cap__row--yellow {
   --tone: var(--yellow);
 }
@@ -58,15 +78,33 @@
   --tone: var(--cyan);
 }
 .cap__row--blue {
-  --tone: var(--cyan-deep);
+  --tone: var(--blue);
 }
 
-/* Colour wipes up behind the row as it opens. */
+/* Lift, and take the service's own colour on the edge.
+
+   Scoped through .cap__list so the selector outweighs base.css's
+   `[data-reveal].is-in { transform: none }` — these cards carry data-reveal,
+   and base.css is imported last, so an equal-specificity rule here loses the
+   transform and the card never lifts. */
+.cap__list .cap__row:hover,
+.cap__list .cap__row.is-open {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--tone) 55%, transparent);
+  box-shadow:
+    0 20px 45px rgba(35, 87, 132, 0.12),
+    0 0 25px color-mix(in srgb, var(--tone) 18%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* The existing wipe, kept as it was — same scaleY, same origin, same 0.6s
+   ease-out. Only the strength changes: a solid fill would bury the card's own
+   copy, so the tone comes in as a wash the text still reads over. */
 .cap__row::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--tone);
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
   transform: scaleY(0);
   transform-origin: bottom center;
   transition: transform 0.6s var(--ease-out);
@@ -77,22 +115,37 @@
   transform: scaleY(1);
 }
 
-.cap__trigger {
+/* One link filling the card, so the whole surface is the target, with Explore
+   held on the floor by the auto margin. */
+.cap__link {
   position: relative;
   z-index: 1;
-  width: 100%;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: clamp(1.25rem, 1.8vw, 1.6rem) clamp(1.25rem, 1.8vw, 1.75rem);
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Explore sits before the panel in the markup, which put it above the blurb
+   once the blurb started reading at rest. `order` puts the card back in
+   reading order without touching the DOM or the link that wraps it. */
+.cap__trigger {
+  order: 1;
   display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: clamp(0.9rem, 2.5vw, 2.5rem);
-  width: 100%;
-  padding-block: clamp(0.95rem, 1.8vw, 1.45rem);
+  gap: 0.4rem;
   text-align: left;
   color: inherit;
-  transition:
-    color 0.4s var(--ease-out),
-    padding 0.5s var(--ease-out);
+  transition: color 0.4s var(--ease-out);
+}
+
+.cap__panel {
+  order: 2;
+}
+
+.cap__explore {
+  order: 3;
 }
 
 .cap__index {
@@ -100,25 +153,26 @@
   transition: color 0.4s var(--ease-out);
 }
 
+.cap__row:hover .cap__index,
+.cap__row.is-open .cap__index {
+  color: color-mix(in srgb, var(--tone) 80%, var(--ink));
+}
+
 /* The service title. Self-contained type so it does not depend on the .display
    class also being present, and one identical treatment for all eight — a long
-   name wraps to two lines rather than being set smaller. The transform
-   transition is the row's existing hover slide and stays untouched.
+   name wraps to two lines rather than being set smaller.
 
-   Medium: at this scale even "Marketing Automation" holds one line on a laptop,
-   so the index reads as a scannable list instead of eight billboards. */
+   At rest the title carries the same blue-to-cyan ramp as the section
+   headings. The gradient stays painted underneath at all times and only the
+   fill colour changes, which is what lets the swap to ink animate — a
+   background-image cannot be transitioned, a colour can. */
 .cap__title {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(1.3rem, 2.3vw, 2rem);
-  line-height: 1.04;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  font-size: clamp(1.15rem, 1.45vw, 1.5rem);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
 
-  /* At rest the title carries the same blue-to-cyan ramp as the section
-     headings. The gradient stays painted underneath at all times and only the
-     fill colour changes, which is what lets the swap to ink animate — a
-     background-image cannot be transitioned, a colour can. */
   background-image: var(--gradient-heading);
   -webkit-background-clip: text;
   background-clip: text;
@@ -126,7 +180,6 @@
   -webkit-text-fill-color: transparent;
 
   transition:
-    transform 0.6s var(--ease-out),
     -webkit-text-fill-color 0.4s var(--ease-out),
     color 0.4s var(--ease-out);
 }
@@ -149,130 +202,78 @@
 }
 
 .cap__verb {
-  display: none;
+  display: block;
   color: var(--fg-soft);
-  font-size: var(--t-md);
-  transition:
-    color 0.4s var(--ease-out),
-    opacity 0.4s var(--ease-out);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  transition: color 0.4s var(--ease-out);
 }
 
-/* ---- Open state ---- */
-
-.cap__row.is-open .cap__trigger {
-  color: var(--ink);
-}
-.cap__row.is-open .cap__index {
-  color: rgba(8, 22, 31, 0.55);
-}
 .cap__row.is-open .cap__verb {
   color: rgba(8, 22, 31, 0.72);
 }
 
-/* ---- Panel ---- */
+/* ---- Description ----
+   Two lines at rest, the whole thing on hover or focus. max-height rather than
+   -webkit-line-clamp because line-clamp cannot be transitioned, and the card
+   already reserves the room the open state needs — so the description grows
+   into space that is there either way and the row never resizes. */
 
 .cap__panel {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.6s var(--ease-out);
-}
-
-.cap__row.is-open .cap__panel {
-  grid-template-rows: 1fr;
 }
 
 .cap__panel-inner {
-  overflow: hidden;
   display: grid;
-  gap: var(--s-2);
-  opacity: 0;
-  transition: opacity 0.45s var(--ease-out) 0.05s;
-}
-
-.cap__row.is-open .cap__panel-inner {
-  opacity: 1;
 }
 
 .cap__blurb {
-  max-width: 48ch;
-  color: rgba(8, 22, 31, 0.78);
-  font-size: var(--t-md);
-}
-
-.cap__items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding-bottom: clamp(1.4rem, 3vw, 2.4rem);
-}
-
-.cap__item {
   display: block;
+  padding-top: 0.7rem;
+  color: rgba(8, 22, 31, 0.78);
+  font-size: 0.88rem;
+  line-height: 1.5;
+
+  /* padding + two lines */
+  max-height: calc(0.7rem + 3em);
+  overflow: hidden;
+  transition: max-height 0.55s var(--ease-out);
 }
 
-.cap__items span.mono {
-  display: inline-block;
-  padding: 0.55em 1em;
-  border: 1px solid rgba(8, 22, 31, 0.28);
-  border-radius: 999px;
-  color: rgba(8, 22, 31, 0.85);
-}
-
-@media (min-width: 900px) {
-  .cap__trigger {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  .cap__verb {
-    display: block;
-  }
-
-  .cap__row:not(.is-open):hover .cap__title {
-    transform: translateX(12px);
-  }
-
-  .cap__row.is-open .cap__trigger {
-    padding-inline: clamp(1rem, 2vw, 2rem);
-  }
-
-  .cap__row.is-open .cap__panel-inner {
-    padding-inline: clamp(1rem, 2vw, 2rem);
-  }
-}
-
-@media (max-width: 899px) {
-  .cap__row.is-open .cap__trigger,
-  .cap__row.is-open .cap__panel-inner {
-    padding-inline: 1rem;
-  }
+.cap__row.is-open .cap__blurb {
+  /* Past the tallest description at any card width, so every card opens fully;
+     max-height only caps, so a shorter one still sits at its own height. */
+  max-height: calc(0.7rem + 12em);
 }
 
 /* ---- Explore ----
-   One action per card, in the slot the + used to occupy. It rides the row's
-   existing hover and open states rather than introducing its own interaction. */
+   One action per card, held at the foot of it. It rides the card's existing
+   hover and open states rather than introducing its own interaction. */
 
 .cap__explore {
   position: relative;
   z-index: 1;
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
   white-space: nowrap;
   color: var(--fg-faint);
-  transition:
-    color 0.4s var(--ease-out),
-    padding 0.5s var(--ease-out);
+  transition: color 0.4s var(--ease-out);
 }
 
 .cap__explore span:last-child {
   transition: transform 0.4s var(--ease-out);
 }
 
+/* The service's own colour is what the action takes on hover. */
 .cap__row:hover .cap__explore,
 .cap__row.is-open .cap__explore {
-  color: var(--ink);
+  color: color-mix(in srgb, var(--tone) 82%, var(--ink));
 }
 
 .cap__row:hover .cap__explore span:last-child,
@@ -280,38 +281,68 @@
   transform: translateX(5px);
 }
 
-/* Match the inset the trigger takes when the row opens. */
-.cap__row.is-open .cap__explore {
-  padding-right: clamp(1rem, 2vw, 2rem);
+/* ---- Responsive ----
+   Each card reserves the height its open state needs, so revealing the panel
+   on hover never resizes the row underneath the pointer. Below 640px the cards
+   are one per row and free to size to their own content. */
+
+@media (min-width: 640px) {
+  .cap__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cap__row {
+    min-height: 14rem;
+  }
 }
 
-@media (max-width: 899px) {
-  .cap__row.is-open .cap__explore {
-    padding-right: 1rem;
+@media (min-width: 1024px) {
+  .cap__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Sized to the tallest description in its open state, so the copy grows into
+     room the card already holds and no card can resize the row under the
+     pointer. Columns widen as the viewport does, so the copy needs fewer lines
+     and the reserve steps down with it — otherwise a wide screen carries slack
+     it never uses. Measured at each step. */
+  .cap__row {
+    min-height: 17.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .cap__row {
+    min-height: 15.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .cap__row {
+    min-height: 13.75rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cap__row,
   .cap__explore,
-  .cap__explore span:last-child {
+  .cap__explore span:last-child,
+  .cap__blurb {
     transition: none;
   }
+
+  .cap__list .cap__row:hover,
+  .cap__list .cap__row.is-open {
+    transform: none;
+  }
 }
 
-/* Panels open on hover or focus. Touch devices have neither, so their preview
-   stays open rather than being locked behind a tap the card now consumes. */
+/* Touch has neither hover nor focus, so the description reads in full there
+   rather than being locked behind a tap the card already consumes. */
 @media (hover: none) {
-  .cap__panel {
-    grid-template-rows: 1fr;
+  .cap__blurb {
+    max-height: calc(0.7rem + 12em);
   }
-  .cap__panel-inner {
-    opacity: 1;
-  }
-}
-
-/* The blurb was a <p>; as a span it still needs to be a block. */
-.cap__blurb {
-  display: block;
 }
 
 /* ============================================================
@@ -580,14 +611,16 @@
      tall empty half on the left — the heading is three lines and the stack is
      five rows, so those columns can never balance. */
   .cap__head {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(2rem, 4vw, 4rem);
-    align-items: end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .cap__head h2 {
-    max-width: 34rem;
+    max-width: 55rem;
+    margin: 0 auto;
+    text-align: center;
   }
 
   .cap__lede {
@@ -614,16 +647,6 @@
 
   .cap__pillar-rail i {
     transform: scaleY(1);
-  }
-}
-
-/* ============================================================
-   MOBILE: HIDE SERVICE DETAIL PILLS
-   ============================================================ */
-
-@media (max-width: 767px) {
-  .cap__items {
-    display: none;
   }
 }
 
@@ -715,4 +738,42 @@
 /* Slightly stronger line when the row is open */
 .cap__row.is-open .cap__trigger::before {
   width: 3px;
+}
+
+/* ============================================================
+   SECTION 03 MARKER
+   Center only this section's marker and remove its rule
+   ============================================================ */
+
+.cap > .shell > .marker {
+  justify-content: center;
+  border-bottom: none;
+}
+
+.cap > .shell > .marker .marker__spacer {
+  display: none;
+}
+/* ============================================================
+   MOBILE / TABLET — TEXT CONTRAST
+
+   This section sets its own, fainter tiers than the page default
+   (0.36 / 0.62). At 0.36 the Explore action and the card indices
+   measured 2.31:1 against the white ground. Alpha only.
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  .cap {
+    --fg-soft: rgba(8, 22, 31, 0.74);
+    --fg-faint: rgba(8, 22, 31, 0.68);
+  }
+
+  /* The open/hovered card gives Explore its service colour. On a phone the
+     first card is open by default and `hover: none` keeps cards open, so a
+     yellow-toned service put yellow text on a near-white card — 2.79:1. More
+     ink in the mix keeps the identity reading while making it legible; the
+     tone still drives it, so each service stays distinguishable. */
+  .cap__row:hover .cap__explore,
+  .cap__row.is-open .cap__explore {
+    color: color-mix(in srgb, var(--tone) 45%, var(--ink));
+  }
 }

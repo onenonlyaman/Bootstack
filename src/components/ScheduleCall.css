@@ -91,7 +91,7 @@ body.has-modal {
 .sc__title {
   margin: 0.5rem 0 0;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: clamp(1.3rem, 2vw, 1.7rem);
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -148,7 +148,7 @@ body.has-modal {
 }
 
 .sc__label {
-  font-weight: 600;
+  font-weight: var(--w-head);
   font-size: 0.95rem;
   color: var(--navy);
 }
@@ -233,7 +233,7 @@ body.has-modal {
   background: var(--blue);
   color: var(--white);
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: 1.05rem;
   letter-spacing: -0.01em;
   cursor: pointer;

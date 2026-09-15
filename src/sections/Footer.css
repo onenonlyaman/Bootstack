@@ -1,149 +1,383 @@
 /* ============================================================
-   Footer — five columns on the site's soft cyan ground.
-   Existing tokens only. Structure is unchanged; this is the
-   colour treatment the footer carried before the redesign.
+   FOOTER — three columns on the site's light ground
+   [ brand + socials ]  [ contact / resources ]  [ quick links ]
+
+   Brand palette only: deep blue type and marks, cyan for lines
+   and icons, orange kept to single accents (the label squares,
+   one lit node, the travelling signal), mist and white grounds.
+   The system appears the way it does elsewhere on the site —
+   a rule with a port, a patch of board grid, a trace network —
+   and all of it stays faint.
    ============================================================ */
 
 .foot {
-  position: relative;
-  padding-block: clamp(2.75rem, 7vh, 4.25rem) clamp(1.25rem, 3vh, 1.75rem);
-  background: var(--cyan-deep);
-  color: var(--ink);
+  --foot-ink: rgba(8, 22, 31, 0.74);
+  --rule: rgba(26, 66, 95, 0.16);
 
-  /* Local rules and heading colour, so nothing global has to change. */
-  --rule: rgba(26, 66, 95, 0.2);
-  --foot-head: var(--navy);
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 3vh, 1.75rem);
+  /* Starts on exactly the mist above it, so the top edge draws no seam; the
+     light gathers lower down, away from that edge. */
+  background:
+    radial-gradient(45% 55% at 88% 70%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%),
+    linear-gradient(180deg, #eef6f7 0%, #e7f3f6 100%);
+  color: var(--ink);
 }
 
-/* ---------- The five columns ---------- */
+/* ---------- Backdrop ---------- */
+
+.foot__backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.foot__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(42% 50% at 88% 68%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(42% 50% at 88% 68%, #000 0%, transparent 100%);
+}
+
+/* Desktop: in the open corner under the quick links, clear of every column. */
+.foot__net {
+  position: absolute;
+  right: -1.5rem;
+  bottom: 3.25rem;
+  width: min(30rem, 36vw);
+  height: auto;
+  opacity: 0.55;
+}
+
+.foot__trace {
+  fill: none;
+  stroke: rgba(64, 168, 196, 0.55);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.foot__trace--soft {
+  stroke: rgba(64, 168, 196, 0.25);
+  stroke-dasharray: 3 5;
+}
+
+.foot__node {
+  fill: #eef6f7;
+  stroke: rgba(35, 87, 132, 0.45);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.foot__node--lit {
+  fill: var(--yellow);
+  stroke: var(--yellow);
+}
+
+.foot__shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Opening rule: a port, and a signal that runs along it ---------- */
+
+.foot__rule {
+  position: relative;
+  display: block;
+  height: 9px;
+  margin-bottom: clamp(2.5rem, 6vh, 3.75rem);
+  overflow: hidden;
+}
+
+.foot__rule::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(35, 87, 132, 0.35), rgba(64, 168, 196, 0.45) 55%, rgba(35, 87, 132, 0.1));
+}
+
+.foot__rule::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--blue);
+  background: #ffffff;
+}
+
+/* A full-width strip whose leading edge is the orange signal. It slides the
+   length of the rule (transform only), then pauses before the next pass. */
+.foot__rule i {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent calc(100% - 72px), rgba(247, 170, 0, 0.9) 100%);
+  transform: translateX(-100%);
+  animation: foot-signal 9s var(--ease-in-out) infinite;
+}
+
+@keyframes foot-signal {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  62%,
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}
+
+/* ---------- Columns ---------- */
 
 .foot__cols {
   display: grid;
-  gap: clamp(2rem, 4vw, 3.25rem);
-  padding-bottom: clamp(2rem, 5vh, 3rem);
-  /* Headings line up across every column. */
-  align-items: start;
+  gap: 2.5rem;
+  padding-bottom: clamp(2.5rem, 6vh, 3.75rem);
+}
+
+.foot__mid {
+  display: grid;
+  gap: 2.25rem;
+  align-content: start;
+}
+
+.foot__group {
+  min-width: 0;
 }
 
 /* ---------- 1 · Brand ---------- */
 
 .foot__brandcol {
   display: grid;
-  gap: var(--s-2);
+  gap: 1.1rem;
   align-content: start;
+  justify-items: start;
 }
 
 .foot__brand {
-  justify-self: start;
+  display: inline-flex;
+  margin-left: -2px;
 }
 
 .foot__blurb {
-  max-width: 26ch;
-  font-size: var(--t-sm);
-  line-height: 1.6;
-  color: rgba(8, 22, 31, 0.68);
+  max-width: 22rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--foot-ink);
 }
 
 .foot__social {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 0.35rem;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
 }
 
 .foot__social a {
   display: grid;
   place-items: center;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(35, 87, 132, 0.16);
   border-radius: 50%;
-  background: rgba(26, 66, 95, 0.1);
+  background: #ffffff;
+  box-shadow: 0 10px 22px -16px rgba(35, 87, 132, 0.55);
   color: var(--blue);
   transition:
     background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out),
     color 0.3s var(--ease-out),
     transform 0.3s var(--ease-out);
 }
 
 .foot__social svg {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.15rem;
+  height: 1.15rem;
 }
 
 .foot__social a:hover {
+  border-color: var(--blue);
   background: var(--blue);
-  color: var(--white);
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* ---------- 2–5 · Link columns ---------- */
+/* ---------- Column labels: the brand's orange square, then the name ---------- */
 
 .foot__label {
-  margin: 0 0 var(--s-2);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
-  color: var(--foot-head);
-}
-
-.foot__col ul {
-  display: grid;
-  gap: 0.7rem;
-}
-
-.foot__col a,
-.foot__soon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: var(--t-sm);
-  line-height: 1.4;
-  color: rgba(8, 22, 31, 0.72);
-  transition: color 0.3s var(--ease-out);
-}
-
-.foot__col a:hover {
+  gap: 0.6rem;
+  margin: 0 0 0.9rem;
   color: var(--blue);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: var(--w-head);
+  letter-spacing: -0.005em;
 }
 
-/* A resource with no page yet. Present, but plainly not a link. */
-.foot__soon {
-  color: rgba(8, 22, 31, 0.72);
-  cursor: default;
+.foot__label::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--yellow);
 }
+
+/* ---------- 2 · Contact ---------- */
 
 .foot__contact {
   font-style: normal;
 }
 
-.foot__ico {
-  width: 1.05rem;
-  height: 1.05rem;
-  flex: none;
-  color: rgba(8, 22, 31, 0.45);
+.foot__contact-list {
+  display: grid;
+  gap: 0.2rem;
 }
 
-/* The same enquiry form the service pages open. */
+.foot__contact-list a,
+.foot__place {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 2.75rem;
+  color: var(--ink);
+  font-size: clamp(1rem, 1.15vw, 1.1rem);
+  line-height: 1.35;
+  transition: color 0.3s var(--ease-out);
+}
+
+.foot__contact-list a:hover {
+  color: var(--blue);
+}
+
+.foot__ico {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgba(35, 87, 132, 0.14);
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--cyan);
+}
+
+.foot__ico svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 .foot__book {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: var(--s-3);
-  font-family: var(--font-body);
-  font-size: var(--t-sm);
-  font-weight: 600;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  margin-top: 1rem;
+  padding: 0 1.3rem;
+  border: 1px solid rgba(35, 87, 132, 0.3);
+  border-radius: 999px;
+  background: #ffffff;
   color: var(--blue);
-  cursor: pointer;
-  transition: color 0.3s var(--ease-out);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: var(--w-head);
+  transition:
+    background-color 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out);
 }
 
 .foot__book span {
   transition: transform 0.35s var(--ease-out);
 }
 
+.foot__book:hover {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #ffffff;
+}
+
 .foot__book:hover span {
   transform: translateX(4px);
+}
+
+/* ---------- Link lists (resources, quick links) ---------- */
+
+.foot__links {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  column-gap: 2.75rem;
+}
+
+.foot__links a,
+.foot__links button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  color: var(--foot-ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  text-align: left;
+  transition: color 0.3s var(--ease-out);
+}
+
+/* A short cyan trace draws in ahead of the link on hover. */
+.foot__links a::before,
+.foot__links button::before {
+  content: "";
+  flex: none;
+  width: 0;
+  height: 1px;
+  margin-right: 0;
+  background: var(--cyan);
+  transition:
+    width 0.35s var(--ease-out),
+    margin-right 0.35s var(--ease-out);
+}
+
+.foot__links a:hover,
+.foot__links button:hover {
+  color: var(--blue);
+}
+
+.foot__links a:hover::before,
+.foot__links button:hover::before {
+  width: 0.85rem;
+  margin-right: 0.55rem;
+}
+
+/* ---------- 3 · Quick links: set in capitals, like the nav ---------- */
+
+.foot__links--caps {
+  grid-template-columns: max-content;
+}
+
+.foot__links--caps a {
+  color: var(--ink);
+  font-size: 0.84rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 /* ---------- Base row ---------- */
@@ -151,314 +385,139 @@
 .foot__base {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
   text-align: center;
 }
 
 .foot__base p {
   margin: 0;
-  text-align: center;
-}
-
-.foot__top-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: rgba(8, 22, 31, 0.7);
-  transition: color 0.3s var(--ease-out);
-}
-
-.foot__top-link:hover {
-  color: var(--blue);
-}
-
-.foot__top-link span {
-  transition: transform 0.4s var(--ease-out);
-}
-
-.foot__top-link:hover span {
-  transform: translateY(-4px);
+  color: var(--fg-soft);
 }
 
 /* ============================================================
-   Responsive. Mobile is the base: one column, brand first.
+   DESKTOP — the three columns
    ============================================================ */
 
-/* Tablet — brand spans the row, the four link columns pair up. */
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   .foot__cols {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.35fr) minmax(0, 0.65fr);
+    column-gap: clamp(2.5rem, 6vw, 7rem);
+    align-items: start;
+  }
+
+  /* The quick links close the row at the right edge. */
+  .foot__quick {
+    justify-self: end;
+  }
+}
+
+/* ============================================================
+   TABLET — brand across the top, the two link columns beneath
+   ============================================================ */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .foot__cols {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    column-gap: 3rem;
+    row-gap: 2.75rem;
   }
 
   .foot__brandcol {
     grid-column: 1 / -1;
   }
-}
 
-@media (min-width: 900px) {
-  .foot__cols {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* Desktop — the five columns of the reference, brand widest so the
-   description wraps naturally rather than being squeezed. */
-@media (min-width: 1100px) {
-  .foot__cols {
-    grid-template-columns:
-      minmax(0, 1.35fr)
-      minmax(0, 0.85fr)
-      minmax(0, 1.05fr)
-      minmax(0, 0.95fr)
-      minmax(0, 1fr);
+  /* The open ground here is beside the brand row, near the top. */
+  .foot__net {
+    top: 4.5rem;
+    bottom: auto;
+    width: min(28rem, 52vw);
   }
 
-  .foot__brandcol {
-    grid-column: auto;
-    padding-right: var(--s-3);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .foot__social a,
-  .foot__col a,
-  .foot__book,
-  .foot__book span,
-  .foot__top-link,
-  .foot__top-link span {
-    transition: none;
-  }
-}
-
-/* Cookie Settings sits with the resource links and matches them exactly; it is
-   a button because it opens a panel rather than going anywhere. */
-.foot__cookies {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-family: var(--font-body);
-  font-size: var(--t-sm);
-  line-height: 1.4;
-  color: rgba(8, 22, 31, 0.72);
-  cursor: pointer;
-  transition: color 0.3s var(--ease-out);
-}
-
-.foot__cookies:hover {
-  color: var(--blue);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .foot__cookies {
-    transition: none;
+  .foot__grid {
+    -webkit-mask-image: radial-gradient(40% 30% at 85% 22%, #000 0%, transparent 100%);
+    mask-image: radial-gradient(40% 30% at 85% 22%, #000 0%, transparent 100%);
   }
 }
 
 /* ============================================================
-   MOBILE FOOTER
-   Reference structure:
-   Logo
-   Description
-   Social icons
-   ┌───────────────┬───────────────┐
-   │ Quick Links   │ Services      │
-   ├───────────────┼───────────────┤
-   │ Resources     │ Contact Us    │
-   └───────────────┴───────────────┘
-   Copyright centered below
-
-   IMPORTANT:
-   Mobile only. Desktop is untouched.
+   PHONES — one column, in order: brand and socials, contact,
+   resources, quick links. Each group opens on a hairline.
    ============================================================ */
 
-@media (max-width: 899px) {
-  /* Footer container */
-  .foot {
-    overflow: hidden;
+@media (max-width: 639px) {
+  /* A small patch above the logo, off to the side of the rule's port. */
+  .foot__net {
+    top: 0;
+    right: -5rem;
+    bottom: auto;
+    width: 16rem;
+    opacity: 0.4;
   }
 
-  .foot > .shell {
-    width: 100%;
+  .foot__grid {
+    -webkit-mask-image: radial-gradient(60% 18% at 90% 8%, #000 0%, transparent 100%);
+    mask-image: radial-gradient(60% 18% at 90% 8%, #000 0%, transparent 100%);
   }
 
-  /* ------------------------------------------------------------
-     BRAND
-     ------------------------------------------------------------ */
+  .foot__cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-bottom: 0.75rem;
+  }
 
   .foot__brandcol {
-    width: 100%;
-  }
-
-  .foot__brand {
-    display: inline-flex;
-    align-items: center;
+    justify-items: center;
+    padding-bottom: 2.25rem;
+    text-align: center;
   }
 
   .foot__blurb {
-    max-width: 30ch;
+    max-width: 19rem;
   }
-
-  /* ------------------------------------------------------------
-     SOCIAL ICONS
-     ------------------------------------------------------------ */
 
   .foot__social {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-
-  /* ------------------------------------------------------------
-     MAIN FOOTER LINKS
-
-     Brand stays full width.
-
-     The four remaining columns become a 2 × 2 grid:
-
-       Quick Links     Services
-       Resources       Contact Us
-     ------------------------------------------------------------ */
-
-  .foot__cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 1.5rem;
-    row-gap: 2rem;
-  }
-
-  /* Brand spans the complete first row */
-  .foot__brandcol {
-    grid-column: 1 / -1;
-  }
-
-  /* Quick Links */
-  .foot__cols > .foot__col:nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  /* Services */
-  .foot__cols > .foot__col:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  /* Resources */
-  .foot__cols > .foot__col:nth-child(4) {
-    grid-column: 1;
-    grid-row: 3;
-  }
-
-  /* Contact */
-  .foot__cols > .foot__contact {
-    grid-column: 2;
-    grid-row: 3;
-  }
-
-  /* ------------------------------------------------------------
-     FOOTER LISTS
-     ------------------------------------------------------------ */
-
-  .foot__col ul {
-    margin: 0;
-    padding: 0;
-  }
-
-  .foot__col li {
-    margin: 0;
-  }
-
-  /* ------------------------------------------------------------
-     CONTACT
-     ------------------------------------------------------------ */
-
-  .foot__contact {
-    min-width: 0;
-  }
-
-  .foot__contact a {
-    min-width: 0;
-  }
-
-  .foot__ico {
-    flex: none;
-  }
-
-  .foot__book {
-    white-space: nowrap;
-  }
-
-  /* ------------------------------------------------------------
-     COPYRIGHT
-     ------------------------------------------------------------ */
-
-  .foot__base {
-    display: flex;
     justify-content: center;
-    align-items: center;
-    width: 100%;
-    text-align: center;
+  }
+
+  .foot__mid {
+    gap: 0;
+  }
+
+  .foot__group {
+    padding-block: 1.6rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .foot__links,
+  .foot__links--caps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.25rem;
   }
 
   .foot__base p {
-    margin: 0;
-    text-align: center;
+    font-size: 0.66rem;
   }
 }
 
 /* ============================================================
-   MOBILE FOOTER
-   Center only the brand intro area.
-   Desktop remains completely unchanged.
+   REDUCED MOTION — no travelling signal, no hover motion
    ============================================================ */
 
-@media (max-width: 899px) {
-  /* --------------------------------
-     BOOTSTACK LOGO + DESCRIPTION
-     -------------------------------- */
-
-  .foot__brandcol {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+@media (prefers-reduced-motion: reduce) {
+  .foot__rule i {
+    animation: none;
+    opacity: 0;
   }
 
-  .foot__brand {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .foot__blurb {
-    text-align: center;
-    max-width: 18rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* --------------------------------
-     SOCIAL ICONS
-     -------------------------------- */
-
-  .foot__social {
-    justify-content: center;
-    width: 100%;
-  }
-}
-
-/* ============================================================
-   MOBILE / TABLET — TEXT CONTRAST
-
-   The contact icons sat at 0.45 alpha, ~2.80:1 against the
-   footer's cyan-deep ground. The link and blurb colours already
-   clear AA there and are left alone.
-   ============================================================ */
-
-@media (max-width: 1023px) {
-  .foot__ico {
-    color: rgba(8, 22, 31, 0.64);
+  .foot__social a,
+  .foot__contact-list a,
+  .foot__book,
+  .foot__book span,
+  .foot__links a,
+  .foot__links button,
+  .foot__links a::before,
+  .foot__links button::before {
+    transition: none;
   }
 }

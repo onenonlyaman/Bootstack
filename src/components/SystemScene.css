@@ -1,0 +1,274 @@
+/* ============================================================
+   THE BOOTSTACK SYSTEM — materials
+   Geometry comes from SystemScene.jsx. A light, engineered
+   material: white surfaces, cyan-tinted shade faces and deep
+   blue linework, with the core's cap as the one deep-blue mass.
+   Cyan carries the pathways; orange is kept for signals, LEDs
+   and the "ready" state. No blur filters: light is carried by
+   line weight and opacity, which stays cheap to repaint.
+   ============================================================ */
+
+.ss {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.ss__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---- Board ---- */
+
+.ss-grid {
+  fill: none;
+  stroke: rgba(35, 87, 132, 0.09);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-sockets rect {
+  fill: none;
+  stroke: rgba(35, 87, 132, 0.34);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-trace-base {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-trace-lit {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-port {
+  fill: #ffffff;
+  stroke: #235784;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-signal {
+  fill: none;
+  stroke: #f7aa00;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-sweep {
+  fill: none;
+  stroke: #f7aa00;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- Solids ---- */
+
+.ss-side {
+  stroke: rgba(35, 87, 132, 0.22);
+  stroke-width: 1;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-side--r {
+  fill: #b9dce6;
+}
+
+.ss-side--f {
+  fill: #dceef2;
+}
+
+/* The core's cap tier is the deep-blue accent; its shade faces go deeper still. */
+.ss-core .ss-tier:last-child .ss-side--r {
+  fill: #1a425f;
+}
+
+.ss-core .ss-tier:last-child .ss-side--f {
+  fill: #235784;
+}
+
+.ss-face {
+  stroke: rgba(35, 87, 132, 0.4);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-detail {
+  fill: none;
+  stroke: rgba(35, 87, 132, 0.24);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-core .ss-tier:last-child .ss-detail {
+  stroke: rgba(238, 246, 247, 0.35);
+}
+
+.ss-detail--bars {
+  stroke: rgba(64, 168, 196, 0.55);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.ss-tether {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-led {
+  fill: rgba(64, 168, 196, 0.45);
+}
+
+/* ---- Core window ---- */
+
+.ss-aperture {
+  stroke: rgba(238, 246, 247, 0.7);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Dashes are measured in the ring's own units, so no non-scaling stroke here:
+   the offset has to share the dash array's coordinate space. */
+.ss-ring {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 2.4;
+}
+
+.ss-b {
+  fill: #235784;
+  font-family: var(--font-display);
+  font-weight: var(--w-head);
+  font-size: 60px;
+  letter-spacing: -0.02em;
+}
+
+.ss-b-dot {
+  fill: #f7aa00;
+}
+
+/* ---- Handover line: the system's signal leaving for the next chapter ---- */
+
+.ss-tail {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.ss-tail-head {
+  fill: #f7aa00;
+}
+
+/* ---- Module labels (HTML, so they keep the site's type) ---- */
+
+.ss__labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ss__label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.8rem 0.45rem 0.6rem;
+  border: 1px solid rgba(35, 87, 132, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 8px 20px -12px rgba(35, 87, 132, 0.35);
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    border-color 0.35s var(--ease-out),
+    color 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out);
+}
+
+.ss__label-num {
+  color: var(--cyan);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  transition: color 0.35s var(--ease-out);
+}
+
+.ss__label-name {
+  font-family: var(--font-body);
+  font-size: clamp(0.78rem, 0.85vw, 0.88rem);
+  font-weight: var(--w-head);
+  letter-spacing: -0.005em;
+}
+
+/* Orange stays in the edge: as type on white it would not read. */
+.ss__label:hover,
+.ss__label[data-active="true"] {
+  border-color: var(--yellow);
+  box-shadow:
+    0 0 0 3px rgba(247, 170, 0, 0.16),
+    0 10px 22px -12px rgba(35, 87, 132, 0.4);
+  color: var(--blue);
+}
+
+.ss__label:hover .ss__label-num,
+.ss__label[data-active="true"] .ss__label-num {
+  color: var(--blue);
+}
+
+.ss__label:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* ---- Compact system (phones and tablets) ----
+   Five full names would crowd a portrait frame, so each module carries its
+   number as a round, finger-sized chip; the panel under the scene names the
+   active one. The name stays in the button for screen readers. */
+
+.ss--system.ss--compact .ss__label {
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.35rem;
+}
+
+.ss--system.ss--compact .ss__label-num {
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+}
+
+.ss--system.ss--compact .ss__label-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -14,7 +14,8 @@ export const brand = {
 export const nav = [
   { label: "Home", href: "/#top" },
   { label: "Services", href: "/#capabilities" },
-  { label: "Work", href: "/#work" },
+  // Featured Work is off the homepage for now, so there is no #work to land on.
+  // Restore this with the section: { label: "Work", href: "/#work" },
   { label: "About", href: "/#about" },
 ];
 
@@ -44,9 +45,22 @@ export const socials = [
 ];
 
 /**
+ * Footer quick links: the homepage's own chapters. Root-relative, like `nav`,
+ * so they work from a service page too.
+ */
+export const footerQuickLinks = [
+  { label: "Home", to: "/#top" },
+  { label: "About", to: "/#about" },
+  { label: "Services", to: "/#capabilities" },
+  { label: "Contact", to: "/#contact" },
+];
+
+/**
  * Footer service list. The label is the marketing name; `to` is the real route
  * it opens, so the footer never has to hardcode a path. Every slug below exists
  * in data/serviceExperiences.js.
+ *
+ * Not in the current three-column footer; kept for when a service list returns.
  */
 export const footerServices = [
   { label: "Performance Marketing", to: "/services/performance-marketing" },
@@ -69,8 +83,13 @@ export const footerServices = [
  * navigating, so Footer.jsx renders it as a button.
  */
 export const footerResources = [
-  { label: "Success Stories", to: "/#work" },
+  { label: "What We Build", to: "/#idea" },
+  { label: "Our Process", to: "/#process" },
   { label: "FAQs", to: "/#faq" },
-  { label: "Privacy Policy", to: "/privacy-policy" },
-  { label: "Terms & Conditions", to: "/terms-and-conditions" },
+  // Pointed at the Featured Work section, which is off the homepage for now.
+  // Restore with it: { label: "Success Stories", to: "/#work" },
+  // No page exists for these yet (there is no route, so the link opened a blank
+  // page). Restore each once its page is built:
+  // { label: "Privacy Policy", to: "/privacy-policy" },
+  // { label: "Terms & Conditions", to: "/terms-and-conditions" },
 ];

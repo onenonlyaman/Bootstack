@@ -1,453 +1,602 @@
+/* ============================================================
+   SECTION 03 — ABOUT BOOTSTACK
+   Stands on #EEF6F7, the ground Section 02 ends on. The section
+   is transparent: BackgroundStage paints the mist (both 02 and
+   03 declare it) and eases it to white as Section 04 arrives, so
+   neither edge shows a seam.
+
+   Hierarchy: marker → founder image → the founder's line as the
+   heading → attribution → story → the Consult-to-Growth path.
+   The system stays, quietly: the signal line, the B chip on the
+   rule and a patch of board grid beside it.
+   ============================================================ */
+
 .about {
-  color: var(--ink);
+  --core-x: calc(var(--gutter) + 1.6rem);
+  --rule-y: 8rem;
+  --rule-origin: 0px;
+
+  position: relative;
   overflow: hidden;
-
-  /* Chapter-local band padding. The global 15vh top *and* bottom is most of the
-     empty ground in this section; the coda already carries plenty of height, so
-     About does not need the full page band stacked on top of it. Scoped here so
-     every other section keeps the page rhythm untouched. */
-  --band-y: clamp(3.5rem, 8vh, 6.5rem);
+  padding-block: clamp(4.5rem, 11vh, 7.5rem) clamp(2.5rem, 6vh, 4.5rem);
+  color: var(--ink);
 }
 
-/* The chapter runs on one vertical rhythm so the movements read as continuous
-   prose rather than as stacked blocks. The marker keeps its rule but hands its
-   own trailing margin over to that rhythm. */
 .about__inner {
+  position: relative;
+  z-index: 2;
   display: grid;
-  gap: clamp(1.5rem, 3vh, 2.5rem);
+  gap: clamp(1.75rem, 4.5vh, 3.25rem);
 }
 
-.about__inner > .marker {
-  margin-bottom: 0;
+/* ---- The incoming signal ---- */
+
+.about__entry {
+  --p: 1;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: var(--core-x);
+  width: 1px;
+  height: var(--rule-y);
+  background: rgba(35, 87, 132, 0.1);
 }
 
-/* ---- Two columns: the argument left, the founder right ---- */
+.about__entry-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--cyan), var(--blue));
+  transform-origin: top center;
+  transform: scaleY(var(--p));
+}
+
+.about__entry-head {
+  position: absolute;
+  left: -3px;
+  top: calc(var(--p) * 100%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--yellow);
+  transform: translateY(-50%);
+}
+
+/* The core, arrived: the B chip sitting on the section rule. */
+.about__chip {
+  position: absolute;
+  z-index: 3;
+  top: var(--rule-y);
+  left: var(--core-x);
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid rgba(35, 87, 132, 0.28);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(35, 87, 132, 0.08);
+  transform: translate(-50%, -50%);
+  transition:
+    border-color 0.5s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
+}
+
+.about__chip b {
+  color: var(--blue);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: var(--w-head);
+  line-height: 1;
+}
+
+.about__chip i {
+  position: absolute;
+  left: 0.72rem;
+  bottom: 0.72rem;
+  width: 0.24rem;
+  height: 0.24rem;
+  background: var(--yellow);
+}
+
+.about__chip[data-lit="true"] {
+  border-color: var(--cyan);
+  box-shadow:
+    0 0 0 5px rgba(64, 168, 196, 0.14),
+    0 12px 28px rgba(35, 87, 132, 0.12);
+}
+
+/* A patch of the Section 02 board beside the chip, faded at its edges, in the
+   open ground to the right of the marker rather than behind the heading. */
+.about__grid {
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--rule-y) - 11rem);
+  left: calc(var(--core-x) + 1.5rem);
+  width: 26rem;
+  height: 13rem;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  pointer-events: none;
+}
+
+.about__node {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(35, 87, 132, 0.45);
+  background: #eef6f7;
+  transform: translate(-50%, -50%);
+  transition:
+    background-color 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
+}
+
+/* On grid intersections (40px), all above the rule line. */
+.about__node:nth-child(1) { left: 120px; top: 80px; }
+.about__node:nth-child(2) { left: 200px; top: 40px; }
+.about__node:nth-child(3) { left: 280px; top: 120px; }
+.about__node:nth-child(4) { left: 160px; top: 160px; }
+
+.about__node[data-lit="true"] {
+  border-color: var(--cyan);
+  background: var(--cyan);
+  box-shadow: 0 0 0 4px rgba(64, 168, 196, 0.16);
+}
+
+.about__node--accent[data-lit="true"] {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(247, 170, 0, 0.18);
+}
+
+/* ---- Marker: 03 / About Bootstack, on its rule ---- */
+
+.about__marker {
+  display: grid;
+  gap: 1rem;
+}
+
+.about__marker-label {
+  margin: 0;
+  overflow: hidden;
+  color: var(--fg-soft);
+}
+
+.about__marker-label > span {
+  display: inline-block;
+}
+
+.about__marker-label b {
+  color: var(--blue);
+  font-weight: var(--w-body);
+}
+
+.about__rule {
+  position: relative;
+  display: block;
+  height: 1px;
+  background: var(--rule);
+}
+
+.about__rule-lit {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--blue), var(--cyan) 55%, var(--blue));
+  transform-origin: var(--rule-origin) 50%;
+}
+
+/* ---- Founder image ---- */
 
 .about__main {
   display: grid;
-  gap: clamp(2rem, 4vw, 3.25rem);
+  gap: clamp(1.75rem, 4vh, 2.75rem);
   align-items: start;
 }
 
-.about__col {
-  display: grid;
-  gap: clamp(1.25rem, 2.5vh, 1.75rem);
-  align-content: start;
-}
-
-/* Editorial weight without swallowing the viewport: one step down from the
-   section statements elsewhere on the page. */
-.about__statement {
-  max-width: 20ch;
-  letter-spacing: -0.035em;
-}
-
-.about__copy {
-  display: grid;
-  gap: var(--s-3);
-  max-width: 58ch;
-}
-
-.about__copy .lead {
-  color: var(--ink);
-}
-
-/* ---- Founder column ---- */
-
-.about__founder {
-  display: grid;
-  gap: var(--s-2);
-  align-content: start;
-}
-
-/* Portrait frame. Square corners and a hairline, the same rule language the
-   markers and the ledger already use — no new card style. */
-.about__portrait {
+.about__visual-space {
+  position: relative;
   width: 100%;
-  max-width: 30rem;
-  aspect-ratio: 4 / 4.4;
-  border: 1px solid var(--rule);
-  background: color-mix(in srgb, var(--blue) 5%, transparent);
+  min-height: clamp(360px, 48vh, 560px);
+  margin: 0;
   overflow: hidden;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow:
+    0 30px 60px -44px rgba(35, 87, 132, 0.45),
+    inset 0 0 0 1px rgba(35, 87, 132, 0.12);
 }
 
-.about__portrait img {
+.about__visual-media {
+  position: absolute;
+  inset: 0;
+}
+
+.about__visual-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* The founder's line, directly under the portrait. Both children are spans, so
-   without this they sat on one line — this is what was rendering broken. */
-.about__founder-main {
+/* Until the photograph lands: the Bootstack system mark on a board ground, so
+   the reserved frame reads as designed rather than empty. */
+.about__visual-placeholder {
+  position: absolute;
+  inset: 0;
   display: grid;
-  gap: 0.25rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--rule);
+  place-items: center;
+  background:
+    radial-gradient(60% 55% at 50% 45%, #ffffff 0%, rgba(255, 255, 255, 0) 75%),
+    linear-gradient(160deg, #eef6f7 0%, #dceef2 100%);
 }
 
-/* ---- Shared attribution type ---- */
+.about__visual-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 20%, transparent 100%);
+}
 
-.about__meta {
+.about__visual-mark {
+  position: relative;
   display: grid;
-  gap: 0.15rem;
-  margin-top: var(--s-3);
+  place-items: center;
+  width: clamp(5.5rem, 9vw, 7.5rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  border-radius: 22%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 12px rgba(64, 168, 196, 0.08),
+    0 24px 50px -24px rgba(35, 87, 132, 0.45);
+}
+
+.about__visual-mark b {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 4.4vw, 3.6rem);
+  font-weight: var(--w-head);
+  line-height: 1;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.about__visual-mark i {
+  position: absolute;
+  left: 27%;
+  bottom: 27%;
+  width: 9%;
+  height: 9%;
+  background: var(--yellow);
+}
+
+/* Registration corners: engineering marks, not decoration. */
+.about__visual-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(35, 87, 132, 0.4);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.about__visual-corner--tl {
+  top: 16px;
+  left: 16px;
+  border-width: 1px 0 0 1px;
+}
+
+.about__visual-corner--br {
+  right: 16px;
+  bottom: 16px;
+  border-width: 0 1px 1px 0;
+  border-color: var(--yellow);
+}
+
+/* ---- The heading: the founder's line ---- */
+
+.about__content {
+  display: grid;
+  gap: clamp(1.1rem, 2.6vh, 1.6rem);
+  align-content: start;
+  min-width: 0;
+}
+
+/* A medium editorial statement: still the section's lead, never the screen.
+   Sizes per breakpoint below stay within ~2.5rem–4.5rem on desktop. */
+.about__title {
+  /* Scroll-driven reveal (see About.jsx). 1 = every line fully shown, which is
+     also the state with no JavaScript at all. */
+  --reveal: 1;
+  margin: 0;
+  font-size: clamp(1.9rem, 1.1rem + 3.4vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.about__title-line {
+  display: block;
+  overflow: hidden;
+  /* Room for the caps' overshoot, so the mask never nicks a letter. */
+  padding-bottom: 0.07em;
+  margin-bottom: -0.07em;
+}
+
+/* Each line rises out of its mask in turn: line i starts once the reveal has
+   passed i × 0.24 of its run, and is fully up by the end of the run. */
+.about__title-line > span {
+  transform: translateY(calc(clamp(0, 1 - (var(--reveal) * 1.72 - var(--i, 0) * 0.24), 1) * 108%));
+  display: inline-block;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.about__title-line:last-child > span {
+  background-image: linear-gradient(95deg, var(--blue) 0%, var(--cyan) 100%);
+}
+
+/* The quotation marks are the heading's orange accent. */
+.about__qmark {
+  color: var(--yellow);
+  -webkit-text-fill-color: var(--yellow);
+}
+
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .about__title-line > span {
+    color: var(--blue);
+  }
+}
+
+/* ---- Attribution ---- */
+
+.about__byline {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.9rem;
+  row-gap: 0.2rem;
+  align-items: center;
+  margin: 0;
+}
+
+/* A short cyan rule leads into the name, the way a signature would. */
+.about__byline::before {
+  content: "";
+  grid-row: 1 / span 2;
+  width: 2.25rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue));
 }
 
 .about__name {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: var(--w-head);
+  line-height: 1.2;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  color: var(--ink);
 }
 
 .about__role {
+  grid-column: 2;
   color: var(--blue);
 }
-.about__where {
-  color: var(--fg-faint);
-}
 
-/* ---- On the record: bracketed by two full-measure rules, so it reads as a
-   pull-out inside the chapter rather than a card sitting on top of it. ---- */
+/* ---- The story ---- */
 
-.about__record {
+.about__copy {
   display: grid;
-  gap: clamp(1rem, 2.5vh, 1.5rem);
-  padding-block: clamp(1.1rem, 2.5vh, 1.75rem);
-  border-top: none;
-  border-bottom: none;
-}
-
-.about__record-label {
-  color: var(--fg-faint);
-}
-
-.about__record-pair {
-  display: grid;
-  gap: clamp(1.75rem, 4vw, 3.5rem);
-}
-
-/* Leadership and City. Both children are spans, so this has to stack them; the
-   rule above each is the same hairline the founder's line uses, which is how
-   these records read before. */
-.about__position {
-  display: grid;
-  gap: 0.25rem;
-  margin: 0;
-  padding-top: 0.75rem;
+  gap: 1rem;
+  max-width: 40rem;
+  margin-top: clamp(0.25rem, 1.5vh, 0.9rem);
+  padding-top: clamp(1.1rem, 2.5vh, 1.5rem);
   border-top: 1px solid var(--rule);
 }
 
-.about__position-text {
-  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
-  line-height: 1.55;
-  color: rgba(8, 22, 31, 0.86);
-  max-width: 42ch;
+.about__copy p {
+  color: var(--fg-soft);
+  font-size: clamp(1rem, 1.15vw, 1.12rem);
+  line-height: 1.66;
+  text-wrap: pretty;
+}
+
+.about__copy .about__lead {
+  color: var(--ink);
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  line-height: 1.45;
   letter-spacing: -0.015em;
-
-  font-style: italic;
-  transform: skewX(-5deg);
-  transform-origin: left center;
-}
-
-.about__position .about__meta {
-  margin-top: var(--s-2);
-}
-
-/* ---- The founder's line, and the four stages ---- */
-
-.about__note {
-  margin: 0;
-  padding-top: clamp(1rem, 2.5vh, 1.5rem);
-  border-top: 1px solid var(--rule);
 }
 
 .about__thanks {
-  margin: 0;
-  max-width: 40ch;
-  font-size: clamp(1.02rem, 1.25vw, 1.18rem);
-  line-height: 1.55;
-  color: rgba(8, 22, 31, 0.86);
-  /* Declared twice before; the later rule won and carried no font-style, so the
-     quote lost the italic it is meant to have. */
+  margin: 0.35rem 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--yellow);
+  max-width: 34rem;
+  color: rgba(8, 22, 31, 0.78);
+  font-size: clamp(0.98rem, 1.1vw, 1.08rem);
   font-style: italic;
+  line-height: 1.55;
+}
+
+/* ---- The path: Consult → Solution → Execution → Growth ---- */
+
+.about__path {
+  position: relative;
+  padding-top: clamp(1.5rem, 3.5vh, 2.25rem);
+  border-top: 1px solid var(--rule);
+}
+
+/* Node centre to node centre: four equal columns, a node at each column start. */
+.about__path-line {
+  position: absolute;
+  top: calc(clamp(1.5rem, 3.5vh, 2.25rem) + 5px);
+  left: 5px;
+  width: 75%;
+  height: 1px;
+  background: rgba(35, 87, 132, 0.16);
+}
+
+.about__path-lit {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--blue) 70%, var(--yellow));
+  transform-origin: left center;
 }
 
 .about__stages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .about__stage {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5em 1em;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--white) 70%, transparent);
-  color: var(--blue);
-  font-size: 0.85rem;
-  font-weight: 600;
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+}
+
+.about__stage-node {
+  width: 11px;
+  height: 11px;
+  margin-bottom: 0.45rem;
+  border: 1px solid rgba(35, 87, 132, 0.4);
+  background: #ffffff;
+  transition:
+    background-color 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
+}
+
+.about__stage[data-lit="true"] .about__stage-node {
+  border-color: var(--cyan);
+  background: var(--cyan);
+  box-shadow: 0 0 0 4px rgba(64, 168, 196, 0.16);
+}
+
+.about__stage:last-child[data-lit="true"] .about__stage-node {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(247, 170, 0, 0.2);
 }
 
 .about__stage-num {
   color: var(--fg-faint);
 }
 
-@media (min-width: 900px) {
-  .about__record-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.about__stage-name {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.7vw, 1.6rem);
+  font-weight: var(--w-head);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-variation-settings: "wdth" 92;
 }
 
-@media (min-width: 1024px) {
-  /* ============================================================
-     DESKTOP ABOUT LAYOUT
-
-     LEFT  = Image + Aayush
-     RIGHT = All About content in ONE vertical column
-     ============================================================ */
-
-  /* Two equal columns. The 0.78/1.22 split gave the copy a 752px cell it only
-     ever filled to 523px, which is where the dead ground on the right came
-     from. Even columns put the portrait and the argument on the same measure. */
-  .about__main {
-    display: grid;
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    column-gap: clamp(2.5rem, 4.4vw, 4rem);
-
-    align-items: start;
-  }
-
-  /* ============================================================
-     LEFT COLUMN
-     ============================================================ */
-
-  .about__founder {
-    grid-column: 1;
-    grid-row: 1;
-
-    display: grid;
-    grid-template-columns: 1fr;
-
-    align-content: start;
-
-    position: static;
-  }
-
-  /* Fills its half and squares off, so the image column reads level with the
-     copy column instead of stopping short of it.
-
-     The copy column runs a roughly constant height while the grid columns keep
-     widening, so past ~1440px a true square would overshoot it — 200px lower
-     at 1680. The cap holds the frame level with the copy from 1280 up. */
-  .about__portrait {
-    width: 100%;
-    max-width: none;
-    aspect-ratio: 1 / 1;
-    max-height: 36rem;
-  }
-
-  .about__founder-main {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.25rem;
-
-    margin-top: 0;
-    padding-top: 0.75rem;
-
-    border-top: 1px solid var(--rule);
-  }
-
-  /* ============================================================
-     RIGHT COLUMN
-
-     IMPORTANT:
-     Everything stays in ONE column.
-     ============================================================ */
-
-  .about__col {
-    grid-column: 2;
-    grid-row: 1;
-
-    display: grid;
-
-    /* FORCE ONE COLUMN */
-    grid-template-columns: minmax(0, 1fr);
-
-    gap: clamp(1.25rem, 2.5vh, 1.75rem);
-
-    align-content: start;
-    min-width: 0;
-  }
-
-  /* ============================================================
-     HEADING
-     ============================================================ */
-
-  /* The measures below were set for a narrower column and are what actually
-     held the content off the right edge. The heading now runs the full column;
-     the prose keeps a readable cap that the column reaches at this width and
-     only exceeds on a very wide screen. */
-  .about__statement {
-    grid-column: 1;
-
-    max-width: none;
-
-    margin: 0;
-
-    letter-spacing: -0.035em;
-  }
-
-  /* ============================================================
-     COPY
-
-     Lead + body must stay underneath the heading,
-     NOT beside it.
-     ============================================================ */
-
-  .about__copy {
-    grid-column: 1;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-
-    gap: var(--s-3);
-
-    max-width: 40rem;
-  }
-
-  .about__copy .lead {
-    grid-column: 1;
-  }
-
-  .about__copy .body {
-    grid-column: 1;
-  }
-
-  /* ============================================================
-     THANK YOU
-     ============================================================ */
-
-  .about__note {
-    grid-column: 1;
-
-    margin: 0;
-
-    padding-top: clamp(1rem, 2.5vh, 1.5rem);
-
-    border-top: 1px solid var(--rule);
-  }
-
-  .about__thanks {
-    margin: 0;
-
-    max-width: 40rem;
-
-    font-size: clamp(1.02rem, 1.25vw, 1.18rem);
-
-    line-height: 1.55;
-
-    font-style: italic;
-  }
-
-  /* ============================================================
-     STAGES
-     ============================================================ */
-
-  .about__stages {
-    grid-column: 1;
-
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 0.5rem;
-
-    margin: 0;
-    padding: 0;
-  }
-
-  /* ============================================================
-     LEADERSHIP + CITY
-
-     They stay UNDER the stages on desktop.
-     ============================================================ */
-
-  .about__record {
-    grid-column: 1;
-
-    display: grid;
-
-    grid-template-columns: minmax(0, 1fr);
-
-    gap: 0;
-
-    width: 100%;
-
-    padding-block: 0;
-
-    margin-top: 0;
-
-    border-top: none;
-    border-bottom: none;
-  }
-
-  .about__position {
-    display: grid;
-
-    grid-template-columns: 1fr;
-
-    gap: 0.25rem;
-
-    margin: 0;
-
-    padding-top: 0.75rem;
-
-    padding-bottom: 0.75rem;
-
-    padding-left: 0;
-
-    border-left: none;
-
-    border-top: 1px solid var(--rule);
-  }
-
-  .about__position:first-child {
-    margin-top: 0.5rem;
-  }
-}
 /* ============================================================
-   MOBILE — @media (max-width: 899px)
-
-   Two duplicate blocks used to sit here, both re-ordering
-   .about__main with flex `order`, and one of them styling
-   .about__ledger — a class no longer in the markup.
-
-   Neither was doing anything: below 1024px .about__main has no
-   grid-template-columns, so it is already a single column that
-   renders in DOM order, and the DOM order is already the order
-   this section needs —
-
-     portrait -> Aayush -> heading -> paragraphs -> quote
-     -> stages -> Leadership -> City
-
-   The grid placements that build the desktop composition are
-   scoped to min-width:1024px, so they never reach this width.
-   Only the portrait needs a mobile rule of its own.
+   DESKTOP — image left, the founder's line and story right
    ============================================================ */
 
-@media (max-width: 899px) {
-  /* Full-bleed within the column rather than the 30rem desktop frame, and a
-     shallower crop so the empty placeholder does not take most of the screen
-     before the copy starts. */
-  .about__portrait {
-    max-width: none;
-    aspect-ratio: 4 / 3.4;
+@media (min-width: 1024px) {
+  .about__main {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(2.5rem, 5vw, 5.5rem);
+  }
+
+  .about__visual-space {
+    aspect-ratio: 4 / 5;
+    min-height: clamp(420px, 55vh, 650px);
+    max-height: 700px;
+  }
+
+  .about__content {
+    padding-top: clamp(0.25rem, 2vh, 1.25rem);
+  }
+
+  .about__title {
+    font-size: clamp(2.5rem, 1.1rem + 1.9vw, 4.5rem);
+  }
+}
+
+/* ============================================================
+   TABLET — same order, lighter detail
+   ============================================================ */
+
+@media (max-width: 1023px) {
+  /* The label clears the chip, which sits on the rule under the bus spine. */
+  .about__marker-label {
+    padding-left: 3.4rem;
+  }
+
+  .about__grid {
+    top: calc(var(--rule-y) - 7rem);
+    left: auto;
+    right: -5rem;
+    width: 20rem;
+    height: 14rem;
+    opacity: 0.7;
+  }
+
+  .about__node:nth-child(4) {
+    display: none;
+  }
+
+  .about__visual-space {
+    aspect-ratio: 16 / 11;
+    min-height: 0;
+  }
+
+  .about__title {
+    font-size: clamp(2.2rem, 1.2rem + 2.4vw, 2.8rem);
+  }
+}
+
+/* ============================================================
+   MOBILE — stacked, still bold
+   ============================================================ */
+
+@media (max-width: 639px) {
+  .about {
+    padding-block: 4.25rem 3.25rem;
+  }
+
+  .about__inner {
+    gap: 1.5rem;
+  }
+
+  .about__grid {
+    display: none;
+  }
+
+  .about__visual-space {
+    aspect-ratio: 4 / 4.2;
+    border-radius: 18px;
+  }
+
+  .about__title {
+    font-size: clamp(1.9rem, 1.1rem + 3.4vw, 2.3rem);
+    line-height: 1.08;
+  }
+
+  .about__stage-name {
+    font-size: clamp(0.92rem, 4.2vw, 1.1rem);
+  }
+
+  .about__stage-num {
+    font-size: 0.62rem;
   }
 }

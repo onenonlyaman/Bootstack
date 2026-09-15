@@ -425,7 +425,7 @@ export default function ServiceExperience() {
                       says something true about the work; none are blank. */}
                   <div className="sx__frame-body">
                     {service.hero.readouts.map((readout) => (
-                      <div className="sx__tile" key={readout.label}>
+                      <div className="sx__tile" key={`${readout.value}-${readout.label}`}>
                         <span className="sx__tile-value display">
                           {readout.value}
                         </span>

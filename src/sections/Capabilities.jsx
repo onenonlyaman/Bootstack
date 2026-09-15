@@ -83,7 +83,7 @@ export default function Capabilities() {
             ====================================================== */}
 
         <SectionMarker
-          index="03"
+          index="04"
           title="What Bootstack does"
         />
 

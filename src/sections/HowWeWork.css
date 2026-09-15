@@ -1,254 +1,735 @@
 /* ============================================================
-   Our process — the five stages as one connected run.
-   Existing tokens only: blue, cyan, mist, white, ink, yellow.
+   SECTION 06 — OUR PROCESS: HOW WE WORK
+   The ground is unchanged: the section is transparent and
+   BackgroundStage paints its mist. One build system on a white
+   board: deep blue type, cyan pathways, orange only on the
+   stage the build is currently on.
    ============================================================ */
 
 .how {
+  position: relative;
   color: var(--ink);
-
-  /* No reserved screenful. A heading and a five-card run are ~340px tall; any
-     viewport-derived floor turns the remainder into empty ground, which is
-     what made this chapter read as a hole in the page. The band padding gives
-     it all the air it needs. */
-  display: grid;
-  align-content: center;
-
-  --band-y: clamp(2.5rem, 6vh, 4rem);
-
-  /* The five columns and the gap between them. The line's endpoints are
-     derived from these, so it always lands on the first and last card centre
-     however wide the track is. */
-  --how-cols: 5;
-  --how-gap: clamp(0.5rem, 1.4vw, 1.1rem);
-  --how-col: calc(
-    (100% - (var(--how-cols) - 1) * var(--how-gap)) / var(--how-cols)
-  );
 }
 
-.how__inner {
+/* ---- Head ---- */
+
+.how__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: clamp(0.9rem, 2vh, 1.25rem);
+  border-bottom: 1px solid var(--rule);
+}
+
+.how__head-copy {
   display: grid;
-  justify-items: center;
-  gap: clamp(0.4rem, 1.2vh, 0.75rem);
+  gap: 0.6rem;
 }
 
 .how__eyebrow {
+  margin: 0;
+  color: var(--fg-soft);
+}
+
+.how__eyebrow b {
   color: var(--blue);
-  opacity: 0.72;
+  font-weight: var(--w-body);
 }
 
 .how__title {
-  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
-  line-height: 1.1;
+  margin: 0;
+  font-size: clamp(1.9rem, 2.8vw, 2.8rem);
+  line-height: 1.05;
   letter-spacing: -0.03em;
-  color: var(--blue);
-  text-align: center;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .how__stop {
+  color: var(--yellow);
+  -webkit-text-fill-color: var(--yellow);
+}
+
+/* The step counter: a one-line window over a rolling column of numbers. */
+.how__count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--fg-faint);
+}
+
+.how__count-window {
+  display: inline-block;
+  height: 1.25em;
+  overflow: hidden;
+  color: var(--blue);
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+
+.how__count-track {
+  display: block;
+}
+
+.how__count-track > span {
+  display: block;
+  height: 1.25em;
+}
+
+/* ============================================================
+   DESKTOP — one pinned build system
+   ============================================================ */
+
+.how--pinned {
+  height: 100vh;
+  padding-block: 0;
+}
+
+.how--pinned .how__frame {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(1rem, 2.6vh, 1.75rem);
+  height: 100%;
+  padding-block: clamp(5.25rem, 11vh, 7rem) clamp(1.5rem, 4vh, 2.5rem);
+}
+
+/* ---- The board ---- */
+
+.how__board {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  height: min(100%, 36rem);
+  min-height: 24rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(55% 60% at 70% 60%, #ffffff 0%, rgba(255, 255, 255, 0) 75%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.85) 0%, rgba(238, 246, 247, 0.6) 100%);
+  box-shadow:
+    0 40px 80px -60px rgba(35, 87, 132, 0.45),
+    inset 0 0 0 1px rgba(35, 87, 132, 0.1);
+}
+
+.how__board-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(rgba(35, 87, 132, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 87, 132, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(75% 80% at 60% 55%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(75% 80% at 60% 55%, #000 30%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ---- Pathway ---- */
+
+.how__paths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.how__path-base {
+  fill: none;
+  stroke: rgba(35, 87, 132, 0.2);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 6;
+  stroke-linejoin: round;
+}
+
+.how__path-lit {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.how__signal-glow {
+  fill: rgba(247, 170, 0, 0.18);
+}
+
+.how__signal-dot {
+  fill: var(--yellow);
+}
+
+/* ---- Readout: the active stage, in the board's open upper-left corner ---- */
+
+.how__readout {
+  position: absolute;
+  top: clamp(1.5rem, 4.5%, 2.5rem);
+  left: clamp(1.5rem, 3.5%, 2.75rem);
+  width: min(38%, 30rem);
+  height: 44%;
+  z-index: 2;
+}
+
+.how__panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: clamp(0.4rem, 1.1vh, 0.65rem);
+  will-change: transform, opacity;
+}
+
+.how__panel + .how__panel {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.how__panel-step {
+  margin: 0;
   color: var(--cyan);
 }
 
-/* ---------- The track ---------- */
+.how__panel-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.9vw, 2.9rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
+  padding-bottom: 0.04em;
+}
+
+.how__panel-line {
+  color: var(--ink);
+  font-size: clamp(1.02rem, 1.25vw, 1.2rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.how__panel-body {
+  color: var(--fg-soft);
+  font-size: clamp(0.9rem, 1vw, 1rem);
+  line-height: 1.58;
+}
+
+.how__panel-next {
+  margin-top: 0.15rem;
+  color: var(--blue);
+}
+
+.how__panel-next span {
+  color: var(--yellow);
+}
+
+/* ---- Modules: every stage, present at once ---- */
+
+.how__modules {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A zero-size anchor at the node; the node and the card hang off it. */
+.how__module {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.how__node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(35, 87, 132, 0.45);
+  border-radius: 4px;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+  transition:
+    width 0.45s var(--ease-out),
+    height 0.45s var(--ease-out),
+    background-color 0.45s var(--ease-out),
+    border-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
+}
+
+.how__module-card {
+  position: absolute;
+  top: 1.35rem;
+  left: 0.9rem;
+  display: grid;
+  gap: 0.3rem;
+  width: clamp(9.5rem, 12.5vw, 12rem);
+  padding: 0.8rem 0.95rem 0.9rem;
+  border: 1px solid rgba(35, 87, 132, 0.14);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px -24px rgba(35, 87, 132, 0.45);
+  transform-origin: 0 0;
+  will-change: transform, opacity;
+  transition:
+    border-color 0.45s var(--ease-out),
+    box-shadow 0.45s var(--ease-out);
+}
+
+.how__module-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.how__module-index {
+  color: var(--fg-faint);
+  transition: color 0.45s var(--ease-out);
+}
+
+.how__module-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  stroke: rgba(35, 87, 132, 0.55);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.45s var(--ease-out);
+}
+
+.how__module-title {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  font-weight: var(--w-head);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  transition: color 0.45s var(--ease-out);
+}
+
+/* The stage's line opens only while it is the active stage. */
+.how__module-line {
+  display: grid;
+  grid-template-rows: 0fr;
+  max-height: 0;
+  overflow: hidden;
+  color: var(--fg-soft);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  opacity: 0;
+  transition:
+    max-height 0.5s var(--ease-out),
+    opacity 0.4s var(--ease-out);
+}
+
+/* Passed: the stage the build has already cleared. */
+.how__module[data-state="done"] .how__node {
+  border-color: var(--cyan);
+  background: var(--cyan);
+}
+
+.how__module[data-state="done"] .how__module-icon {
+  stroke: var(--cyan);
+}
+
+/* Active: lifted, cyan-edged, orange node, its line open. */
+.how__module[data-state="active"] .how__node {
+  width: 18px;
+  height: 18px;
+  border-color: var(--yellow);
+  background: var(--yellow);
+  box-shadow:
+    0 0 0 6px rgba(247, 170, 0, 0.18),
+    0 0 0 14px rgba(64, 168, 196, 0.1);
+}
+
+.how__module[data-state="active"] .how__module-card {
+  border-color: rgba(64, 168, 196, 0.7);
+  box-shadow:
+    0 0 0 5px rgba(64, 168, 196, 0.12),
+    0 24px 44px -26px rgba(35, 87, 132, 0.55);
+}
+
+.how__module[data-state="active"] .how__module-index {
+  color: var(--cyan);
+}
+
+.how__module[data-state="active"] .how__module-icon {
+  stroke: var(--blue);
+}
+
+.how__module[data-state="active"] .how__module-title {
+  color: var(--blue);
+}
+
+.how__module[data-state="active"] .how__module-line {
+  max-height: 4.5rem;
+  opacity: 1;
+}
+
+/* Short laptop screens: the same board, tighter. */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .how--pinned .how__frame {
+    padding-top: 4.75rem;
+  }
+
+  .how__title {
+    font-size: clamp(1.6rem, 2.3vw, 2.2rem);
+  }
+
+  .how__panel-title {
+    font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+  }
+
+  .how__panel-body {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .how__module-card {
+    padding: 0.65rem 0.8rem 0.75rem;
+  }
+}
+
+/* ============================================================
+   PHONES AND TABLETS — the same build system, compact
+   One pinned frame: the head, then the board. The board carries
+   the rising pathway as a strip across its top — every stage a
+   node with its label, the signal travelling between them — and
+   the readout for the active stage beneath it.
+   ============================================================ */
+
+.how--compact {
+  height: 100vh;
+  height: 100svh;
+  padding-block: 0;
+}
+
+.how--compact .how__frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: clamp(0.85rem, 2.2vh, 1.25rem);
+  height: 100%;
+  /* The top clears the fixed nav bar once pinned. */
+  padding-block: 5.25rem max(1rem, env(safe-area-inset-bottom));
+}
+
+.how--compact .how__head {
+  flex-wrap: wrap;
+  row-gap: 0.4rem;
+}
+
+.how--compact .how__title {
+  font-size: clamp(1.45rem, 7.2vw, 2.6rem);
+}
+
+/* The counter keeps "Step 01 / 05" on one line; if the title needs the room,
+   the counter drops beneath it instead. */
+.how--compact .how__count {
+  flex: none;
+  white-space: nowrap;
+}
+
+.how--compact .how__count-window {
+  font-size: 1.15rem;
+}
+
+/* The board fills the frame (to a point, on tall tablets); the pathway strip
+   takes whatever the readout leaves. */
+.how__board--compact {
+  display: grid;
+  grid-template-rows: minmax(11rem, 1fr) auto;
+  align-self: center;
+  height: min(100%, 46rem);
+  min-height: 0;
+  padding: 0.35rem clamp(1rem, 4.5vw, 2rem) clamp(1.1rem, 3vh, 1.6rem);
+  border-radius: 22px;
+}
+
+/* ---- The pathway strip ---- */
 
 .how__track {
   position: relative;
+  z-index: 1;
+  align-self: center;
   width: 100%;
-  /* Five cards of ~135px plus their gaps. Keeps the run compact rather than
-     stretching it across the full shell. */
-  max-width: 46rem;
-  margin-top: clamp(1.25rem, 3vh, 2.25rem);
+  height: 100%;
+  max-height: 20rem;
 }
 
-.how__steps {
+.how__board--compact .how__node {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.how__board--compact .how__module[data-state="active"] .how__node {
+  width: 16px;
+  height: 16px;
+  box-shadow:
+    0 0 0 5px rgba(247, 170, 0, 0.18),
+    0 0 0 11px rgba(64, 168, 196, 0.1);
+}
+
+/* The label: a small white plate, centred under (or over) its node — far
+   enough off the node that the pathway's step never runs beneath it. */
+.how__board--compact .how__module-card {
+  top: calc(var(--step, 1rem) + 0.55rem);
+  left: 0;
+  justify-items: center;
+  gap: 0.05rem;
+  width: max-content;
+  padding: 0.3rem 0.6rem 0.35rem;
+  border-radius: 10px;
+  text-align: center;
+  translate: -50% 0;
+  transform-origin: 50% 0;
+  box-shadow: 0 10px 22px -18px rgba(35, 87, 132, 0.5);
+}
+
+.how__board--compact .how__module[data-side="above"] .how__module-card {
+  top: auto;
+  bottom: calc(var(--step, 1rem) + 0.55rem);
+  transform-origin: 50% 100%;
+}
+
+.how__board--compact .how__module-index {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+}
+
+.how__board--compact .how__module-title {
+  font-size: clamp(0.72rem, 3.1vw, 0.95rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.how__board--compact .how__module[data-state="active"] .how__module-card {
+  box-shadow:
+    0 0 0 4px rgba(64, 168, 196, 0.12),
+    0 16px 30px -20px rgba(35, 87, 132, 0.55);
+}
+
+/* ---- The readout, beneath the strip ---- */
+
+.how__board--compact .how__readout {
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: 2;
   display: grid;
-  grid-template-columns: repeat(var(--how-cols), minmax(0, 1fr));
-  gap: var(--how-gap);
+  width: auto;
+  max-width: 40rem;
+  height: auto;
+  padding-top: 0.95rem;
+  border-top: 1px solid rgba(35, 87, 132, 0.1);
 }
 
-/* ---------- The flow line ----------
-   Runs behind the cards, from the centre of the first to the centre of the
-   last. Both ends are half a column in, so it never pokes out past the run. */
+/* Every panel shares the one cell, so the readout is as tall as the longest
+   stage and the strip above it never moves. */
+.how__board--compact .how__panel {
+  position: relative;
+  inset: auto;
+  grid-area: 1 / 1;
+  gap: 0.4rem;
+}
 
-.how__line {
+.how__board--compact .how__panel-title {
+  font-size: clamp(1.45rem, 6.2vw, 2.2rem);
+}
+
+.how__board--compact .how__panel-line {
+  font-size: clamp(0.95rem, 3.9vw, 1.1rem);
+  line-height: 1.42;
+}
+
+.how__board--compact .how__panel-body {
+  font-size: clamp(0.86rem, 3.5vw, 0.98rem);
+  line-height: 1.55;
+}
+
+/* Tablets: the frame has more height than the board needs, so the board takes
+   its own height — a taller pathway, the readout beneath — and sits centred
+   rather than stretching into empty ground. */
+@media (min-width: 640px) {
+  .how__board--compact {
+    grid-template-rows: auto auto;
+    height: auto;
+  }
+
+  .how__track {
+    height: clamp(15rem, 32vh, 22rem);
+    max-height: none;
+  }
+}
+
+/* Short phones: the frame tightens so the whole board still fits. */
+@media (max-height: 740px) {
+  .how--compact .how__frame {
+    padding-top: 4.6rem;
+    gap: 0.75rem;
+  }
+
+  .how__board--compact .how__readout {
+    padding-top: 0.75rem;
+  }
+
+  .how__board--compact .how__panel {
+    gap: 0.3rem;
+  }
+
+  .how__board--compact .how__panel-next {
+    display: none;
+  }
+
+  .how__board--compact .how__panel-body {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION, OR A SCREEN TOO SHORT FOR THE COMPACT FRAME
+   — the vertical pathway
+   ============================================================ */
+
+.how--journey {
+  padding-block: var(--band-y);
+}
+
+.how__journey {
+  position: relative;
+  margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  padding-left: 2.25rem;
+}
+
+.how__journey-line {
+  --p: 1;
   position: absolute;
-  left: calc(var(--how-col) / 2);
-  right: calc(var(--how-col) / 2);
-  /* Dead on the icon centre: .how__step's 0.85rem padding-top + half its
-     1.4rem icon. */
-  top: 1.55rem;
-  height: 2px;
+  top: 1.6rem;
+  bottom: 1.6rem;
+  left: 0.55rem;
+  width: 1px;
   background: rgba(35, 87, 132, 0.16);
-  /* Clips the sweeping segment at both ends of the run. */
-  overflow: hidden;
-  z-index: 0;
 }
 
-/* ---------- The travelling signal ----------
-   Small dots running the connector from one stage toward the next.
-
-   One tiled radial-gradient rather than a set of elements: the tile repeats
-   forever, so there is no first or last dot, and shifting the pattern by
-   exactly one tile width returns it to an identical frame. The loop is
-   therefore seamless by construction — nothing resets, jumps or restarts, and
-   the spacing between dots is always the tile.
-
-   Geometry mirrors .how__line so the dots sit on the wire; it is a sibling of
-   that element because .how__line is clipped to its own 2px height, which
-   would flatten a round dot into a sliver. */
-
-.how__flow {
-  position: absolute;
-  left: calc(var(--how-col) / 2);
-  right: calc(var(--how-col) / 2);
-  top: calc(2.05rem - 2.5px);
-  height: 9px;
-
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ---------- Individual moving particles ---------- */
-
-.how__flow > span {
-  position: absolute;
-  top: 50%;
-  left: -5px;
-
-  width: 5px;
-  height: 5px;
-
-  border-radius: 50%;
-  background: var(--yellow);
-
-  transform: translateY(-50%);
-  opacity: 0;
-
-  animation: how-particle 4s linear infinite;
-}
-
-.how__flow > span:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.how__flow > span:nth-child(2) {
-  animation-delay: -0.5s;
-}
-
-.how__flow > span:nth-child(3) {
-  animation-delay: -1s;
-}
-
-.how__flow > span:nth-child(4) {
-  animation-delay: -1.5s;
-}
-
-.how__flow > span:nth-child(5) {
-  animation-delay: -2s;
-}
-
-.how__flow > span:nth-child(6) {
-  animation-delay: -2.5s;
-}
-
-.how__flow > span:nth-child(7) {
-  animation-delay: -3s;
-}
-
-.how__flow > span:nth-child(8) {
-  animation-delay: -3.5s;
-}
-
-.how__flow > span:nth-child(9) {
-  animation-delay: -4s;
-}
-
-.how__flow > span:nth-child(10) {
-  animation-delay: -4.5s;
-}
-
-.how.is-running .how__flow {
-  animation-play-state: running;
-}
-
-@keyframes how-particle {
-  0% {
-    left: -5px;
-    opacity: 0;
-  }
-
-  8% {
-    opacity: 1;
-  }
-
-  92% {
-    opacity: 1;
-  }
-
-  100% {
-    left: calc(100% + 5px);
-    opacity: 0;
-  }
-}
-
-/* A wrapper spanning the whole line: translating it by a percentage lands the
-   dot exactly on a stage, and stays correct when the track is resized. */
-.how__marker {
+.how__journey-fill {
   position: absolute;
   inset: 0;
-  height: 100%;
-  pointer-events: none;
-  will-change: transform;
+  background: linear-gradient(180deg, var(--cyan), var(--blue));
+  transform-origin: top center;
+  transform: scaleY(var(--p));
 }
 
-.how__marker i {
+/* The signal at the head of the lit pathway. */
+.how__journey-signal {
   position: absolute;
-  top: 50%;
-  left: 0;
-  width: 11px;
-  height: 11px;
-  margin: -5.5px 0 0 -5.5px;
+  left: -4px;
+  top: calc(var(--p) * 100%);
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow:
-    0 0 0 4px color-mix(in srgb, var(--cyan) 22%, transparent),
-    0 2px 8px -2px rgba(8, 22, 31, 0.35);
+  background: var(--yellow);
+  box-shadow: 0 0 0 5px rgba(247, 170, 0, 0.18);
+  transform: translateY(-50%);
 }
 
-/* ---------- The cards ---------- */
-
-.how__step {
-  position: relative;
-  z-index: 1;
+.how__jsteps {
   display: grid;
-  justify-items: center;
-  align-content: start;
-  gap: 0.15rem;
-  min-height: 4.9rem;
-  /* padding-top + half the icon = the icon's centre, which is where the flow
-     line is pinned. Keep the two in step if either changes. */
-  padding: 0.85rem 0.5rem 0.75rem;
-  border: 1px solid rgba(35, 87, 132, 0.14);
-  border-radius: 12px;
-  background: var(--white);
-  box-shadow: 0 1px 2px rgba(8, 22, 31, 0.04);
+  gap: 0.9rem;
+}
+
+.how__jstep {
+  position: relative;
+}
+
+.how__jnode {
+  position: absolute;
+  top: 1.35rem;
+  left: calc(-2.25rem + 0.55rem - 6px);
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid rgba(35, 87, 132, 0.45);
+  border-radius: 3px;
+  background: #ffffff;
   transition:
+    background-color 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
+}
+
+.how__jcard {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1.05rem 1.2rem 1.15rem;
+  border: 1px solid rgba(35, 87, 132, 0.12);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 16px 34px -28px rgba(35, 87, 132, 0.45);
+  opacity: 0.55;
+  transform: scale(0.97);
+  transform-origin: 0 50%;
+  transition:
+    opacity 0.45s var(--ease-out),
     transform 0.45s var(--ease-out),
     border-color 0.45s var(--ease-out),
     box-shadow 0.45s var(--ease-out);
 }
 
-.how__icon {
-  display: grid;
-  place-items: center;
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-bottom: 0.15rem;
-  color: rgba(35, 87, 132, 0.45);
-  transition: color 0.45s var(--ease-out);
+.how__jstep[data-state="done"] .how__jcard {
+  opacity: 0.8;
 }
 
-.how__icon svg {
+.how__jstep[data-state="done"] .how__jnode {
+  border-color: var(--cyan);
+  background: var(--cyan);
+}
+
+.how__jstep[data-state="active"] .how__jcard {
+  opacity: 1;
+  transform: none;
+  border-color: rgba(64, 168, 196, 0.7);
+  box-shadow:
+    0 0 0 4px rgba(64, 168, 196, 0.12),
+    0 22px 40px -28px rgba(35, 87, 132, 0.55);
+}
+
+.how__jstep[data-state="active"] .how__jnode {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  box-shadow: 0 0 0 5px rgba(247, 170, 0, 0.2);
+}
+
+.how__jmeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.how__jindex {
+  color: var(--cyan);
+}
+
+.how__jicon {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--blue);
+}
+
+.how__jicon svg {
   width: 100%;
   height: 100%;
   stroke: currentColor;
@@ -256,288 +737,43 @@
   stroke-linejoin: round;
 }
 
-.how__index {
-  font-size: 0.62rem;
-  letter-spacing: 0.16em;
-  color: var(--fg-faint);
-  transition: color 0.45s var(--ease-out);
+.how__jtitle {
+  margin: 0;
+  font-size: clamp(1.5rem, 5.4vw, 2.1rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
-.how__label {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: -0.02em;
+.how__jline {
   color: var(--ink);
-  text-align: center;
-  transition: color 0.45s var(--ease-out);
+  font-size: 1.02rem;
+  line-height: 1.4;
 }
 
-/* A stage the marker has already passed keeps a quiet mark of completion. */
-.how__step.is-done {
-  border-color: rgba(35, 87, 132, 0.22);
+.how__jbody {
+  color: var(--fg-soft);
+  font-size: 0.94rem;
+  line-height: 1.58;
 }
 
-.how__step.is-done .how__icon {
-  color: var(--blue);
-}
-
-/* The stage the marker is on. A lift, a firmer edge, a stronger icon — no
-   scaling, nothing flashy. */
-.how__step.is-active {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--cyan) 55%, transparent);
-  box-shadow:
-    0 10px 22px -14px rgba(8, 22, 31, 0.45),
-    0 0 0 1px color-mix(in srgb, var(--cyan) 22%, transparent);
-}
-
-.how__step.is-active .how__icon {
-  color: var(--yellow);
-}
-
-.how__step.is-active .how__index,
-.how__step.is-active .how__label {
-  color: var(--blue);
-}
-
-/* ============================================================
-   NARROW SCREENS
-
-   The run stays horizontal: the same five cards, the same order,
-   the same connector and the same travelling dots behind them —
-   the desktop composition, scaled down to fit a phone rather
-   than turned into a vertical timeline.
-
-   Everything here is size: columns, gaps, icon, type and
-   padding. No rule changes the axis, so the line, the sweep and
-   the dot flow all keep the horizontal geometry the base sets.
-   ============================================================ */
-
-@media (max-width: 699px) {
-  .how {
-    /* Five columns across ~350px of usable width leaves ~64px a card. The gap
-       is what the dots travelling behind the cards are seen through, so it
-       keeps enough width to show one rather than collapsing to a hairline. */
-    --how-gap: 0.45rem;
-    min-height: 0;
+@media (min-width: 640px) {
+  .how__jcard {
+    padding: 1.3rem 1.5rem 1.4rem;
   }
 
-  .how__track {
-    /* Fills the shell rather than the 46rem desktop cap, so the five columns
-       get every pixel available. */
-    max-width: none;
-    margin-top: clamp(1rem, 3vh, 1.5rem);
-  }
-
-  .how__step {
-    gap: 0.1rem;
-    min-height: 4rem;
-    padding: 0.6rem 0.2rem 0.5rem;
-    border-radius: 9px;
-  }
-
-  .how__icon {
-    width: 1.05rem;
-    height: 1.05rem;
-    margin-bottom: 0.1rem;
-  }
-
-  .how__index {
-    font-size: 0.5rem;
-    letter-spacing: 0.1em;
-  }
-
-  .how__label {
-    font-size: 0.58rem;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
-    /* "Strategy" is the longest of the five and has to hold one line in a
-       ~66px card. */
-    hyphens: none;
-  }
-
-  /* The connector sits on the icon centre: this padding-top plus half the
-     icon. Both shrink together, so the line follows. */
-  .how__line {
-    top: 1.125rem;
-  }
-
-  /* Centred on the same icon centre the line sits on: this padding-top plus
-     half the shrunken icon. */
-  .how__flow {
-    top: calc(1.125rem - 3.5px);
-  }
-
-  /* The particles keep their own animation and timing; only the dot itself
-     scales to suit the narrower gaps between the compact cards. */
-  .how__flow > span {
-    width: 4px;
-    height: 4px;
-  }
-
-  .how__marker i {
-    width: 8px;
-    height: 8px;
-    margin: -4px 0 0 -4px;
+  .how__jbody {
+    max-width: 38rem;
   }
 }
-
-
-/* ============================================================
-   Reduced motion — the run reads as complete, and holds still.
-   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .how__step,
-  .how__icon,
-  .how__index,
-  .how__label {
+  .how__jcard,
+  .how__jnode {
     transition: none;
-  }
-
-  .how__step.is-active,
-  .how__step.is-done {
-    transform: none;
-  }
-
-  .how__line-fill {
-    animation: none;
-    opacity: 0;
-  }
-
-  .how__flow {
-    animation: none;
-  }
-}
-
-@media (min-width: 1024px) {
-  /* ============================================================
-     HOW WE WORK - LARGE FULL DESKTOP COMPOSITION
-     ============================================================ */
-
-  section.how.band {
-    width: 100%;
-    /* Was a hard 100svh with zero padding. The run is ~130px of cards under a
-       heading: forcing a whole screen around it is exactly the empty ground
-       this pass exists to remove. */
-    height: auto !important;
-    min-height: 0 !important;
-
-    padding-block: var(--band-y) !important;
-
-    box-sizing: border-box;
-
-    display: grid;
-    align-content: center;
-  }
-
-  .how__inner {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-
-    display: grid;
-    justify-items: center;
-
-    gap: 1rem;
-  }
-
-  /* ---------- Eyebrow ---------- */
-
-  .how__eyebrow {
-    font-size: 0.78rem;
-    letter-spacing: 0.2em;
-  }
-
-  /* ---------- Main heading ---------- */
-
-  .how__title {
-    font-size: clamp(1.9rem, 2.7vw, 2.6rem) !important;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-    margin: 0;
-  }
-
-  /* ---------- Process track ---------- */
-
-  .how__track {
-    width: min(1250px, 92vw);
-    max-width: none;
-
-    margin-top: clamp(2.5rem, 5vh, 4rem);
-  }
-
-  /* ---------- Five columns ---------- */
-
-  .how__steps {
-    width: 100%;
-
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-
-    gap: clamp(1rem, 2vw, 2rem);
-  }
-
-  /* ---------- Cards ---------- */
-
-  .how__step {
-    width: 100%;
-    min-height: 128px;
-    height: auto;
-
-    padding: 1.1rem 1rem;
-
-    border-radius: 16px;
-
-    justify-self: center;
-  }
-
-  /* ---------- Icons ---------- */
-
-  .how__icon {
-    width: 2rem;
-    height: 2rem;
-
-    margin-bottom: 0.45rem;
-  }
-
-  /* ---------- Numbers ---------- */
-
-  .how__index {
-    font-size: 0.8rem;
-    letter-spacing: 0.2em;
-  }
-
-  /* ---------- Card titles ---------- */
-
-  .how__label {
-    font-size: clamp(0.95rem, 1.05vw, 1.1rem);
-  }
-
-  /* ---------- Connecting line ---------- */
-
-  .how__line {
-    height: 2px;
-    top: 2.05rem;
-  }
-
-  /* ---------- Moving marker ---------- */
-
-  .how__marker i {
-    width: 14px;
-    height: 14px;
-
-    margin: -7px 0 0 -7px;
-  }
-}
-
-@media (min-width: 1024px) {
-  section.how.band {
-    align-content: start;
-  }
-
-  .how__inner {
-    padding-top: clamp(0.5rem, 1.5vh, 1rem);
   }
 }

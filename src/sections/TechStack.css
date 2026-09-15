@@ -70,7 +70,7 @@
 
 .tech__layer-label {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: clamp(1.02rem, 1.25vw, 1.18rem);
   line-height: 1.2;
   letter-spacing: -0.02em;

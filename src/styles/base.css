@@ -19,7 +19,7 @@ body {
   color: var(--fg);
   font-family: var(--font-body);
   font-size: var(--t-md);
-  font-weight: 400;
+  font-weight: var(--w-body);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -121,7 +121,7 @@ video {
    tight. Every step below is tuned to its own size. */
 .display {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   line-height: 1;
   letter-spacing: -0.03em;
   font-variation-settings: "wdth" 92;
@@ -162,7 +162,7 @@ video {
   font-size: var(--t-xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: var(--w-body);
 }
 
 .accent {

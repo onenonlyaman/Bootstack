@@ -1,46 +1,18 @@
+/* A light, composed ground: white at the top settling into brand mist, with a
+   soft cyan light where the system stands. The bottom colour (#eef6f7) is also
+   the colour of the core's window — the camera dives through that window and
+   Section 02 opens on the same ground. */
 .hero {
   position: relative;
   overflow: hidden;
   width: 100%;
   height: 100vh;
   min-height: 100vh;
-  color: #ffffff;
-  background: #eef6f7;
-}
-
-.hero__video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.hero__video-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  /* The old wash thinned to 8% through the middle, so whichever frame the loop
-     happened to be on decided whether the headline was readable. The reference
-     runs a much deeper plate, weighted to the left where the copy sits. */
+  color: var(--ink);
   background:
-    linear-gradient(
-      100deg,
-      rgba(5, 20, 30, 0.82) 0%,
-      rgba(5, 20, 30, 0.62) 38%,
-      rgba(5, 20, 30, 0.24) 68%,
-      rgba(5, 20, 30, 0.14) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(5, 20, 30, 0.5) 0%,
-      rgba(5, 20, 30, 0.26) 32%,
-      rgba(5, 20, 30, 0.26) 62%,
-      rgba(5, 20, 30, 0.5) 100%
-    );
-  pointer-events: none;
+    radial-gradient(44% 56% at 72% 54%, rgba(64, 168, 196, 0.16) 0%, rgba(64, 168, 196, 0) 72%),
+    radial-gradient(60% 50% at 8% 0%, rgba(220, 238, 242, 0.9) 0%, rgba(220, 238, 242, 0) 70%),
+    linear-gradient(180deg, #ffffff 0%, #eef6f7 100%);
 }
 
 .hero__inner {
@@ -104,23 +76,40 @@
 .hero__line {
   display: block;
   overflow: hidden;
+  /* Room below the mask for Poppins' descenders (the g and y of "Technology"),
+     which reach past a 1.04 line box; the negative margin keeps the spacing. */
+  padding-bottom: 0.22em;
+  margin-bottom: -0.22em;
 }
 
-/* White for most of the line, resolving into the brand's light cyan on the
-   closing word. The dark navy stop the ramp used to end on turned the last word
-   almost unreadable against the footage. */
+/* The site's heading ramp — deep Bootstack blue into cyan — laid across the
+   whole headline the way .section-gradient-heading lays it across a section
+   heading. Each line is a block as wide as the heading, so the two lines share
+   one sweep rather than each running its own. The ramp stays on the lines (not
+   the h1) because the lines are what the arrival animation moves. */
 .hero__line > span {
+  display: block;
+  /* A clipped background only paints inside the box, and a block's box is its
+     line height; the g and y of "Technology" hang below that. The padding takes
+     the box down past them, and the margin gives the space back. */
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
   color: transparent;
-  background: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    #ffffff 62%,
-    #eaf8fb 76%,
-    #a5dcea 90%,
-    #8ed4e4 100%
-  );
+  background: var(--gradient-heading);
   -webkit-background-clip: text;
   background-clip: text;
+}
+
+/* The one orange mark in the headline: its closing full stop. */
+.hero__line .hero__stop {
+  color: var(--yellow);
+  -webkit-text-fill-color: var(--yellow);
+}
+
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .hero__line > span {
+    color: var(--blue);
+  }
 }
 
 /* The staggered indents are gone: every line starts on the shell's left edge,
@@ -144,7 +133,7 @@
 
 .hero__support .lead {
   margin-top: 0.8rem;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(8, 22, 31, 0.72);
   font-size: clamp(1.02rem, 1.3vw, 1.2rem);
   line-height: 1.62;
 }
@@ -165,7 +154,7 @@
   padding: 1.15em 2.15em;
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.1vw, 1.08rem);
-  font-weight: 600;
+  font-weight: var(--w-head);
   letter-spacing: 0;
   text-transform: none;
 }
@@ -181,10 +170,12 @@
   color: #ffffff;
 }
 
+/* White pill with a hairline, so it still reads as a button on the light ground. */
 .hero__ctas .mag--ghost {
-  border-color: #ffffff;
+  border-color: rgba(35, 87, 132, 0.22);
   background: #ffffff;
   color: var(--blue);
+  box-shadow: 0 10px 24px -18px rgba(35, 87, 132, 0.45);
 }
 
 /* Yellow hover for both hero buttons */
@@ -201,82 +192,85 @@
   transform: translateY(-2px);
 }
 
-/* ---- Scroll cue ----
-   A ringed dot over a mono label, held in the bottom-right corner of the
-   opening screen. `margin-top: auto` inside the flex column is what pins it to
-   the floor without taking the content block out of the normal flow. */
+/* The labels are set in capitals ("START BUILDING"); a touch of tracking keeps
+   the body face open at that setting. */
+.hero__ctas .mag__text {
+  letter-spacing: 0.045em;
+}
 
-.hero__scroll {
-  position: absolute;
-  right: 0;
-  bottom: 2rem;
+/* The arrow glyph carried in the label text ("START BUILDING →"). */
+.hero__cta-glyph {
+  display: inline-block;
+  margin-left: 0.6em;
+  transition: transform 0.45s var(--ease-out);
+}
 
-  display: grid;
-  justify-items: end;
+.hero__ctas .mag:hover .hero__cta-glyph {
+  transform: translateX(3px);
+}
 
-  gap: clamp(0.85rem, 2vh, 1.4rem);
+.hero__ctas .mag--ghost:hover .hero__cta-glyph {
+  transform: translateY(3px);
+}
 
-  margin: 0;
-  padding: 0;
+/* ---- The Bootstack system ----
+   Desktop: a full-bleed stage behind the copy, so the camera has the whole
+   screen to dive into. Below 1024px the stage joins the flow under the actions
+   (see the tablet and mobile blocks). */
 
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__stage {
+  position: relative;
+  z-index: 1;
   pointer-events: none;
 }
 
-.hero__scroll-dot {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  margin-right: clamp(1.5rem, 5vw, 6rem);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-}
-
-.hero__scroll-dot i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cyan);
-  animation: hero-cue-pulse 2.4s var(--ease-in-out) infinite;
-}
-
-@keyframes hero-cue-pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
+@media (min-width: 1024px) {
+  .hero__content {
+    max-width: 58%;
   }
-  50% {
-    opacity: 0.4;
-    transform: scale(0.68);
+
+  .hero__stage {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
   }
 }
 
-.hero__scroll-label {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.hero__scroll-label::after {
-  content: "";
-  width: 1px;
-  height: 1.6em;
-  background: rgba(255, 255, 255, 0.32);
-}
-
-/* A phone has no room to spare below the value points, and the gesture needs
-   no explaining there. */
-@media (max-width: 600px) {
-  .hero__scroll {
-    display: none;
+/* Below desktop the stage is a flex child of the centred column; without this
+   it has no content width of its own and collapses to nothing. */
+@media (max-width: 1023px) {
+  .hero__stage {
+    align-self: stretch;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .hero__scroll-dot i {
-    animation: none;
+/* Tablet: the hero is exactly as tall as its content, with the stage under the
+   actions — no screen-height floor leaving a band of empty ground below it. */
+@media (min-width: 601px) and (max-width: 1023px) {
+  .hero {
+    height: auto;
+    min-height: 0;
+  }
+
+  .hero__inner {
+    min-height: 0;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding-block: 8.5rem 1.5rem;
+  }
+
+  .hero__stage {
+    height: clamp(420px, 62vw, 600px);
+    margin-top: 1.5rem;
   }
 }
 
@@ -348,30 +342,6 @@
 }
 
 @media (min-width: 601px) {
-  .hero__values {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2.75rem;
-    color: #ffffff;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-
-  .hero__values span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    white-space: nowrap;
-  }
-
-  .hero__values b {
-    color: #f7aa00;
-    font-size: 1.15rem;
-    line-height: 1;
-    font-weight: 700;
-  }
-
   .hero__ledger {
     display: grid;
   }
@@ -394,6 +364,30 @@
    step above it, and stays a single source of truth for the headline size. */
 .hero__type.display--mega {
   font-size: clamp(2.5rem, 5.6vw, 5rem);
+}
+
+/* ---- Two set lines ----
+   "Technology That Builds" / "Tomorrow's Brands." — the break is the markup's,
+   and from tablet up neither line may wrap. The heading takes the width of its
+   longer line, so the shared gradient ends where the type does. */
+@media (min-width: 601px) {
+  .hero__type {
+    width: max-content;
+    max-width: none;
+  }
+
+  .hero__line {
+    white-space: nowrap;
+  }
+}
+
+/* Desktop: the long line runs 11.1em in Poppins SemiBold, so the size follows
+   the copy column — about 64px at 1440px wide, 74px at most — keeping both
+   lines clear of the system beside them. */
+@media (min-width: 1024px) {
+  .hero__type.display--mega {
+    font-size: clamp(2.6rem, calc(4.85vw - 0.375rem), 4.625rem);
+  }
 }
 
 /* ============================================================
@@ -446,7 +440,7 @@
   color: var(--blue);
 
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: var(--w-head);
   letter-spacing: 0.14em;
 }
 
@@ -546,7 +540,7 @@
 
   font-family: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: var(--w-head);
 
   text-align: left;
 
@@ -709,27 +703,22 @@
      HEADING
      ----------------------------- */
 
-  /* .display sets text-wrap: balance, which evens the lines out and produced
-     "Technology / That Builds". `wrap` is the reset (`normal` is not a valid
-     text-wrap value).
-
-     The measure is in `em`, so it tracks the font-size instead of fighting it.
-     Measured at this weight and tracking, the three phrases run 5.98em,
-     8.36em and 7.28em wide, so a 7em column is the one width that fits
-     "Technology That" and "Tomorrow's" while breaking "Builds" and "Brands."
-     onto their own lines — the reference wrap, and it holds from 320px right
-     up to the 600px edge of this breakpoint without a per-width override. */
+  /* Three lines on a phone: "Technology / That Builds / Tomorrow's Brands."
+     "Tomorrow's Brands." runs 9.46em in Poppins SemiBold, so 9.2vw keeps it on
+     one line down to 320px; the first line wraps, and `balance` splits it
+     evenly rather than leaving "Builds" alone. Wider phones (about 520px up)
+     fit both set lines whole. */
   .hero__type,
   .hero__type.display--mega {
     width: 100%;
-    max-width: 7em;
+    max-width: none;
 
     margin: 0;
 
-    font-size: clamp(2.6rem, 13.5vw, 3.4rem);
-    line-height: 1;
+    font-size: clamp(1.75rem, 9.2vw, 2.6rem);
+    line-height: 1.06;
     letter-spacing: -0.035em;
-    text-wrap: wrap;
+    text-wrap: balance;
   }
 
   /* -----------------------------
@@ -792,49 +781,29 @@
 
     font-family: var(--font-body);
     font-size: 0.92rem;
-    font-weight: 600;
+    font-weight: var(--w-head);
 
     letter-spacing: 0;
     text-transform: none;
   }
 
   /* -----------------------------
-     TRUST POINTS
+     THE BOOTSTACK SYSTEM
      ----------------------------- */
 
-  /* Below 601px this had no display of its own and fell back to block, so the
-     three items ran together as inline text and the gap did nothing. The
-     measure is what holds the reference's two-up-then-one wrap steady from
-     375px through 414px, where all three would otherwise fit on one row. */
-  /* Two items then one is the natural wrap at this size once the row is free
-     to use the full column, so no forced measure is needed to get there. */
-  .hero__values {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-
-    width: 100%;
-
-    margin-top: 24px;
-    gap: 10px 22px;
-
-    color: #ffffff;
-    font-size: 0.8rem;
-    font-weight: 600;
+  /* The hero grows to hold the system under the actions instead of clipping it
+     at one screen; the core showing at the fold is the cue to keep going. */
+  .hero {
+    height: auto;
+    min-height: 100svh;
   }
 
-  .hero__values span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-
-    white-space: nowrap;
+  .hero__inner {
+    padding-bottom: 1.25rem;
   }
 
-  .hero__values b {
-    color: #f7aa00;
-    font-size: 0.9rem;
-    line-height: 1;
-    font-weight: 700;
+  .hero__stage {
+    height: clamp(300px, 92vw, 400px);
+    margin: 18px -20px 0;
   }
 }

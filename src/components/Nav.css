@@ -144,7 +144,7 @@
 
   color: #253746;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: var(--w-body);
 
   text-decoration: none;
 
@@ -163,10 +163,11 @@
   display: block;
   height: 1.3em;
   overflow: hidden;
-  color: #40a8c4;
+  /* Deep blue with no shadow: the page now opens on a light ground, where the
+     old cyan-with-dark-shadow setting (made for the video hero) smudged. */
+  color: var(--blue);
   opacity: 1;
-  font-weight: 600;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  font-weight: var(--w-head);
   transition: opacity 0.3s var(--ease-out);
 }
 
@@ -180,7 +181,6 @@
   inset: 0;
   transform: translateY(100%);
   color: #f7aa00;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
 }
 
 .nav__link:hover {
@@ -215,9 +215,8 @@
   padding: 0.7em 1.35em;
   border: 1.5px solid #40a8c4;
   border-radius: 999px;
-  color: #40a8c4;
-  font-weight: 600;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+  color: var(--blue);
+  font-weight: var(--w-head);
   box-shadow: 0 0 16px rgba(64, 168, 196, 0.2);
   transition:
     background-color 0.35s var(--ease-out),
@@ -388,12 +387,13 @@
   }
 }
 
+/* Deep blue: the hero now stands on a light ground, where white bars vanish. */
 @media (max-width: 1023px) {
   .nav__toggle {
-    color: #ffffff;
+    color: var(--blue);
   }
 
   .nav__toggle i {
-    background: #ffffff;
+    background: var(--blue);
   }
 }

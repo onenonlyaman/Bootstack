@@ -19,7 +19,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   letter-spacing: -0.02em;
   font-variation-settings: 'wdth' 86;
   white-space: nowrap;
@@ -45,7 +45,7 @@
   font-size: var(--t-xs);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: var(--w-body);
 }
 
 .marquee--outline .marquee__item {

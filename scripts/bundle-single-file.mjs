@@ -21,9 +21,9 @@ if (!css || !js) {
   throw new Error('No built assets found — run `npm run build` first.');
 }
 
+// Same font request as index.html.
 const fonts =
-  'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800' +
-  '&family=Inter+Tight:ital,wght@0,300..700;1,400&family=JetBrains+Mono:wght@400;500&display=swap';
+  'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,400&display=swap';
 
 const html = `<title>Bootstack</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">

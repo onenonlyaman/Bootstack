@@ -29,7 +29,7 @@
   font-size: clamp(1.4rem, 2.4vw, 2.1rem);
   line-height: 1.06;
   letter-spacing: -0.035em;
-  font-weight: 500;
+  font-weight: var(--w-body);
   text-wrap: balance;
 }
 
@@ -41,7 +41,7 @@
 
 .voices__name {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: 1.05rem;
   letter-spacing: -0.02em;
 }

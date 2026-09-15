@@ -40,7 +40,7 @@ All colour, type, spacing and easing are CSS custom properties in
 | `--mist` | `#EEF6F7` | light grounds, text on dark |
 | `--ink` | `#08161F` | the deep ground (derived, for contrast) |
 
-Type: Bricolage Grotesque (display), Inter Tight (body), JetBrains Mono (labels).
+Type: Poppins throughout — SemiBold 600 for headlines, Regular 400 for body and labels.
 
 ## How the scroll story works
 

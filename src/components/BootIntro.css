@@ -1,0 +1,234 @@
+/* ============================================================
+   BOOT INTRO — Bootstack is booting
+   Opens on a deep blue ground for contrast, then daylight spreads
+   out from the core into brand mist, the colour the Hero stands
+   on, before the page is revealed beneath it.
+   ============================================================ */
+
+.boot {
+  --light: -20; /* daylight radius, scrubbed from nothing to past the corners */
+  --stage: min(68vmin, 26rem);
+
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: grid;
+  place-items: center;
+  cursor: progress;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---- Ground ---- */
+
+.boot__ground,
+.boot__dark,
+.boot__light {
+  position: absolute;
+  inset: 0;
+}
+
+.boot__dark {
+  background:
+    radial-gradient(55% 55% at 50% 46%, #15395a 0%, rgba(21, 57, 90, 0) 70%),
+    linear-gradient(180deg, #0b1f2e 0%, #0a1b27 100%);
+}
+
+/* Spreads from the core rather than cross-fading: navy to mist through a flat
+   fade passes through grey; a growing circle never does. */
+.boot__light {
+  background:
+    radial-gradient(50% 50% at 50% 46%, #ffffff 0%, rgba(255, 255, 255, 0) 75%),
+    #eef6f7;
+  -webkit-mask-image: radial-gradient(
+    circle farthest-corner at 50% 46%,
+    #000 calc(var(--light) * 1%),
+    transparent calc(var(--light) * 1% + 18%)
+  );
+  mask-image: radial-gradient(
+    circle farthest-corner at 50% 46%,
+    #000 calc(var(--light) * 1%),
+    transparent calc(var(--light) * 1% + 18%)
+  );
+}
+
+/* ---- Stage ---- */
+
+.boot__stage {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: var(--stage);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.boot__stage-net {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.boot__line {
+  stroke: rgba(64, 168, 196, 0.75);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+}
+
+.boot__node {
+  fill: #0a1b27;
+  stroke: #40a8c4;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.boot__node--accent {
+  fill: #f7aa00;
+  stroke: #f7aa00;
+}
+
+.boot__dot {
+  fill: #40a8c4;
+}
+
+.boot__pulse {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---- The core ---- */
+
+/* Sits exactly over the network's core square (140–260 of 400 = 30%). The
+   margins centre it, leaving GSAP's x/y/scale free for the flight. */
+.boot__core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 30%;
+  aspect-ratio: 1;
+  margin-left: -15%;
+  margin-top: -15%;
+  will-change: transform, opacity;
+}
+
+.boot__core-inner,
+.boot__core-inner svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.boot__core-inner {
+  will-change: transform;
+}
+
+.boot__chip-edge {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+}
+
+/* A short orange segment running once around the core. */
+.boot__signal {
+  --p: 0;
+  fill: none;
+  stroke: #f7aa00;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 0.14 0.86;
+  stroke-dashoffset: calc(var(--p) * -1);
+}
+
+.boot__window {
+  fill: #eef6f7;
+}
+
+.boot__b-fill {
+  fill: #235784;
+}
+
+.boot__b-stroke {
+  fill: none;
+  stroke: #40a8c4;
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-linejoin: round;
+}
+
+.boot__b-dot {
+  fill: #f7aa00;
+}
+
+/* ---- Caption ---- */
+
+.boot__caption {
+  position: absolute;
+  left: 50%;
+  top: calc(46% + var(--stage) / 2 + clamp(0.5rem, 2vh, 1.5rem));
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  width: min(18rem, 80vw);
+  transform: translateX(-50%);
+}
+
+.boot__word {
+  color: #eef6f7;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  font-weight: var(--w-head);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: color 0.4s var(--ease-out);
+}
+
+.boot__status {
+  color: #40a8c4;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: var(--w-body);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transition: color 0.4s var(--ease-out);
+}
+
+.boot__meter {
+  position: relative;
+  display: block;
+  width: 7.5rem;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(64, 168, 196, 0.25);
+}
+
+.boot__meter i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #40a8c4, #f7aa00);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Online: the caption re-sets for the daylight that has reached it. */
+.boot[data-online="true"] .boot__word {
+  color: #235784;
+}
+
+.boot[data-online="true"] .boot__status {
+  color: #235784;
+}
+
+.boot[data-online="true"] .boot__meter {
+  background: rgba(35, 87, 132, 0.16);
+}
+
+@media (max-width: 639px) {
+  .boot {
+    --stage: min(78vmin, 20rem);
+  }
+}

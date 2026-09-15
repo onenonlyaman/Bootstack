@@ -1,227 +1,661 @@
-.idea {
+/* ============================================================
+   SECTION 02 — INSIDE THE SYSTEM
+   Opens on #EEF6F7, the colour of the core's window the Hero
+   dives through, so the two screens read as one camera move —
+   and ends on the same mist About stands on. Light ground, deep
+   blue type, cyan system detail, orange micro-accents.
+   ============================================================ */
+
+.sys {
   position: relative;
+  overflow: hidden;
   color: var(--ink);
+  background:
+    radial-gradient(48% 58% at 72% 50%, #ffffff 0%, rgba(255, 255, 255, 0) 72%),
+    #eef6f7;
 }
 
-.idea__grid {
+.sys__shell {
+  position: relative;
+  z-index: 2;
+}
+
+.sys__copy {
   display: grid;
-  gap: 2rem;
-  align-items: start;
+  gap: clamp(0.9rem, 2.2vh, 1.4rem);
+  justify-items: start;
 }
 
-.idea__statement {
+/* The whole statement carries the heading ramp every chapter shares — one
+   sweep of deep blue into cyan, no black. The closing word's span keeps no
+   background of its own, so the ramp runs through it unbroken. */
+.sys__title {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.9vw, 2.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
   text-transform: none;
-  letter-spacing: -0.04em;
-  font-size: clamp(1.75rem, 3.2vw, 2.8rem) !important;
-  line-height: 1.16 !important;
+  color: transparent;
+  background-image: var(--gradient-heading);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
-.idea__line {
-  display: block;
+.sys__title span {
+  color: inherit;
 }
 
-/* The line currently driving the right-hand panel. */
-.idea__line.is-active {
-  color: var(--blue);
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .sys__title {
+    color: var(--blue);
+  }
 }
 
-/* Reserve the panel's height so swapping copy never nudges the layers below. */
-.idea__service {
-  min-height: 8.5em;
+.sys__lead {
+  max-width: 34rem;
+  color: rgba(8, 22, 31, 0.7);
+  font-size: clamp(0.98rem, 1.15vw, 1.1rem);
+  line-height: 1.62;
+  text-wrap: pretty;
 }
 
-.idea__service-title {
-  display: block;
-  margin-bottom: 0.6rem;
-  color: var(--blue);
+/* ============================================================
+   DESKTOP — the pinned system
+   ============================================================ */
+
+.sys--scene {
+  height: 100vh;
+  padding-block: 0;
 }
 
-.idea__word {
-  display: inline-block;
-  /* An inline-block eats its own trailing space, which is why the words ran
-     together as "ERPSolutions". */
-  margin-right: 0.22em;
+.sys__scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
-.idea__aside {
+.sys--scene .sys__shell {
+  height: 100%;
+  padding-top: clamp(5.25rem, 12vh, 7.5rem);
+  pointer-events: none;
+}
+
+.sys--scene .sys__shell a,
+.sys--scene .sys__shell button {
+  pointer-events: auto;
+}
+
+.sys--scene .sys__copy {
+  max-width: min(31rem, 38vw);
+}
+
+/* ---- Capability panel ---- */
+
+.sys__panel {
   display: grid;
-  gap: var(--s-3);
-  max-width: 52ch;
-}
-
-.idea__aside .body {
-  color: var(--fg-soft);
-  font-size: clamp(1rem, 1.25vw, 1.15rem);
-  line-height: 1.65;
-}
-
-/* ---- Assembling stack ---- */
-
-.idea__stack {
-  display: grid;
-  gap: 0.55rem;
-  margin-top: var(--s-3);
-  padding-top: var(--s-3);
+  gap: 1rem;
+  width: 100%;
+  margin-top: clamp(0.2rem, 1vh, 0.8rem);
+  padding-top: clamp(0.9rem, 2vh, 1.3rem);
   border-top: 1px solid var(--rule);
 }
 
-.idea__layer {
+.sys__index {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.sys__index-item {
+  min-width: 2.6rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid rgba(35, 87, 132, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: rgba(8, 22, 31, 0.6);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  transition:
+    border-color 0.3s var(--ease-out),
+    color 0.3s var(--ease-out),
+    background-color 0.3s var(--ease-out);
+}
+
+/* Orange is unreadable as type on a light ground; it stays in the outline. */
+.sys__index-item:hover,
+.sys__index-item[data-active="true"] {
+  border-color: var(--yellow);
+  background: rgba(247, 170, 0, 0.1);
+  color: var(--blue);
+}
+
+.sys__detail {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  /* Reserve the tallest description so swapping capability never moves the layout. */
+  min-height: 9.5rem;
+}
+
+.sys__detail-meta {
+  color: var(--cyan);
+}
+
+.sys__detail-title {
+  margin: 0;
+  color: var(--blue);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+  font-weight: var(--w-head);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-variation-settings: "wdth" 92;
+}
+
+.sys__detail-body {
+  max-width: 30rem;
+  color: rgba(8, 22, 31, 0.7);
+  font-size: clamp(0.92rem, 1vw, 1rem);
+  line-height: 1.58;
+}
+
+.sys__detail-link {
+  justify-self: start;
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--yellow);
+  color: var(--blue);
+}
+
+.sys__detail-link span {
+  transition: transform 0.35s var(--ease-out);
+}
+
+.sys__detail-link:hover span {
+  transform: translateX(4px);
+}
+
+/* ---- Phase readout: the Hero's instrument, continued ---- */
+
+.sys__hud {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
+  display: grid;
+  gap: 0.7rem;
+  width: 20rem;
+  pointer-events: none;
+}
+
+.sys__hud-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sys__hud-label {
+  color: var(--fg-faint);
+}
+
+.sys__hud-state {
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.sys__hud-state[data-phase="6"]::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.55rem;
+  border-radius: 50%;
+  background: var(--yellow);
+  vertical-align: 0.1em;
+}
+
+.sys__hud-track {
+  position: relative;
+  display: block;
+  height: 1px;
+  background: rgba(35, 87, 132, 0.16);
+  overflow: hidden;
+}
+
+.sys__hud-track i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--yellow));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* Short laptop screens: the same column, tighter, so the pinned frame fits. */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .sys--scene .sys__shell {
+    padding-top: 4.75rem;
+  }
+
+  .sys--scene .marker {
+    margin-bottom: 1rem;
+  }
+
+  .sys__title {
+    font-size: clamp(1.7rem, 2.5vw, 2.3rem);
+  }
+
+  .sys__lead {
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .sys__detail {
+    min-height: 8.25rem;
+  }
+
+  .sys__detail-body {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+/* ============================================================
+   PHONES AND TABLETS — the pinned portrait system
+   The desktop scene, recomposed for a tall frame: the copy leads,
+   then one screen holds the phase readout, the system and the
+   panel for the capability it is showing. Scroll builds the
+   system and then walks the panel through each capability.
+   ============================================================ */
+
+.sys--stage {
+  padding-block: var(--band-y) 0;
+  background:
+    radial-gradient(60% 40% at 80% 10%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
+    #eef6f7;
+}
+
+.sys--stage .sys__copy {
+  max-width: 40rem;
+}
+
+.sysm {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  /* The top padding clears the fixed nav bar once pinned; before that it would
+     open a wide gap under the copy, so the frame tucks up into it. */
+  margin-top: -2.25rem;
+  padding-top: 5.25rem;
+  padding-bottom: max(1.1rem, env(safe-area-inset-bottom));
+  /* No ground of its own: the section's mist shows through, pinned or not. */
+}
+
+/* The desktop readout, set in the flow above the system instead of in a corner. */
+.sysm .sys__hud {
+  position: static;
+  width: 100%;
+  gap: 0.55rem;
+}
+
+.sysm .sys__hud-row {
+  align-items: baseline;
+}
+
+.sysm__scene {
+  min-height: 0;
+}
+
+.sysm .sys__panel {
+  max-width: 40rem;
+  margin-top: 0;
+  gap: 0.75rem;
+  padding-top: 0.85rem;
+}
+
+.sysm .sys__index {
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+/* Finger-sized, where the desktop pills are pointer-sized. */
+.sysm .sys__index-item {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.sysm__details {
+  display: grid;
+}
+
+.sysm__detail {
+  grid-area: 1 / 1;
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 10px, 0);
+  transition:
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out),
+    visibility 0s linear 0.45s;
+}
+
+.sysm__detail[data-active="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out),
+    visibility 0s;
+}
+
+.sysm .sys__detail-body {
+  max-width: 36rem;
+}
+
+/* The signal runs on under the frame into About's line, which starts at the
+   same x (the gutter plus 1.6rem). */
+.sysm__after .sysbus__handoff {
+  height: 4.5rem;
+}
+
+/* Short phones: the readout gives up its meter and the panel tightens, so the
+   system keeps enough of the frame to read. */
+@media (max-height: 740px) {
+  .sysm {
+    padding-top: 4.75rem;
+  }
+
+  .sysm .sys__hud-track {
+    display: none;
+  }
+
+  .sysm .sys__panel {
+    gap: 0.6rem;
+    padding-top: 0.7rem;
+  }
+
+  .sysm .sys__index-item {
+    min-height: 2.5rem;
+  }
+
+  .sysm .sys__detail-title {
+    font-size: 1.1rem;
+  }
+
+  .sysm .sys__detail-body {
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+}
+
+/* Without motion nothing pins: the frame is simply as tall as its content. */
+@media (prefers-reduced-motion: reduce) {
+  .sysm {
+    height: auto;
+  }
+
+  .sysm__scene {
+    height: min(70vw, 26rem);
+  }
+}
+
+/* ============================================================
+   SHORT LANDSCAPE SCREENS — the system bus
+   The core at the top, a spine running down, and each existing
+   capability docking onto it. Every name and description reads
+   in full; the scroll fills the spine and connects the modules.
+   ============================================================ */
+
+.sys--bus {
+  padding-block: var(--band-y) 0;
+  background:
+    radial-gradient(60% 40% at 80% 10%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
+    #eef6f7;
+}
+
+.sys--bus .sys__copy {
+  max-width: 40rem;
+}
+
+.sysbus {
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.sysbus__core {
   display: flex;
   align-items: center;
   gap: 0.9rem;
 }
 
-.idea__layer span {
-  display: block;
-  width: var(--w);
-  height: 10px;
-  transform: scaleX(0);
-  transform-origin: left center;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
+/* The same B chip About carries on its rule. */
+.sysbus__chip {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid rgba(35, 87, 132, 0.3);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 5px rgba(64, 168, 196, 0.12),
+    0 10px 24px -14px rgba(35, 87, 132, 0.4);
 }
 
-.idea__layer:nth-child(4) span {
-  background: linear-gradient(90deg, var(--cyan), var(--yellow));
+.sysbus__chip b {
+  color: var(--blue);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: var(--w-head);
+  line-height: 1;
 }
-.idea__layer:nth-child(5) span {
+
+.sysbus__chip i {
+  position: absolute;
+  left: 0.95rem;
+  bottom: 0.95rem;
+  width: 0.28rem;
+  height: 0.28rem;
   background: var(--yellow);
 }
 
-.idea__layer em {
-  font-style: normal;
-  color: var(--fg-soft);
-  white-space: nowrap;
+.sysbus__status {
+  color: var(--blue);
+  transition: color 0.4s var(--ease-out);
 }
 
-@media (min-width: 1024px) {
-  .idea__grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  }
-
-  .idea__aside {
-    padding-top: 0;
-  }
-}
-
-/* ---- Section 02 lines are links to their service page ----
- *
- * Nothing here touches .idea__word opacity: that is owned by the scrubbed GSAP
- * reveal, which writes an inline style. The hover state uses colour + a small
- * translate on an inner wrapper instead, so the two never fight.
- * At rest the section renders exactly as it did before.
- */
-
-.idea__line {
-  display: block;
-  position: relative;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.idea__line-inner {
-  position: relative;
+.sysbus[data-connected="true"] .sysbus__status::before {
+  content: "";
   display: inline-block;
-  transition:
-    transform 0.55s var(--ease-out),
-    color 0.4s var(--ease-out);
-
-  /* One name, one line. */
-  white-space: nowrap;
-
-  /* The ramp is sized to this line, not the viewport, so every name - short or
-     long - runs the full blue-to-cyan sweep. It also has to be the element the
-     scrubbed reveal fades: see the note in BigIdea.jsx. */
-  opacity: 0.14;
-  background-image: var(--gradient-heading);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.55rem;
+  border-radius: 50%;
+  background: var(--yellow);
+  vertical-align: 0.1em;
 }
 
-/* The Explore tag would inherit the transparent fill and vanish. */
-.idea__line-inner .idea__explore {
-  -webkit-text-fill-color: var(--blue);
+.sysbus__body {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-left: 1.6rem;
 }
 
-/* Active and hovered go solid: a gradient cannot show a colour change. */
-.idea__line.is-active .idea__line-inner,
-.idea__line.is-hovered .idea__line-inner {
-  -webkit-text-fill-color: var(--blue);
-}
-
-@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
-  .idea__line-inner {
-    color: var(--ink);
-    -webkit-text-fill-color: currentColor;
-  }
-}
-
-.idea__line.is-hovered {
-  color: var(--blue);
-}
-
-.idea__line.is-hovered .idea__line-inner {
-  transform: translateX(clamp(6px, 0.7vw, 16px));
-}
-
-/* The "Explore" tag sits outside the flow, so showing it never reflows the type. */
-.idea__explore {
+/* The spine starts under the chip's centre and runs on into the hand-over. */
+.sysbus__spine {
   position: absolute;
-  left: 100%;
-  top: 50%;
-  margin-left: 0.5em;
-  padding: 0.35em 0.75em;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  font-size: clamp(0.6rem, 0.8vw, 0.78rem);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--blue);
-  opacity: 0;
-  transform: translate(-6px, -50%);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: rgba(35, 87, 132, 0.16);
+}
+
+.sysbus__spine-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--cyan), var(--blue));
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+.sysbus__modules {
+  display: grid;
+  gap: 0.85rem;
+  padding-top: 1.1rem;
+}
+
+.sysbus__module {
+  position: relative;
+}
+
+.sysbus__branch {
+  position: absolute;
+  top: 1.45rem;
+  left: -1.6rem;
+  width: 1.6rem;
+  height: 1px;
+  background: var(--cyan);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* A module, not a card: a white plate with a port on the edge it docks by. */
+.sysbus__card {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem 1.1rem 1rem;
+  border: 1px solid rgba(35, 87, 132, 0.14);
+  border-radius: 4px 14px 14px 4px;
+  background: #ffffff;
+  box-shadow: 0 14px 30px -24px rgba(35, 87, 132, 0.45);
+  color: inherit;
+  transition: border-color 0.4s var(--ease-out);
+}
+
+.sysbus__card::before {
+  content: "";
+  position: absolute;
+  top: calc(1.45rem - 4px);
+  left: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--cyan);
+  background: #ffffff;
+}
+
+.sysbus__module[data-lit="true"] .sysbus__card {
+  border-color: rgba(64, 168, 196, 0.55);
+}
+
+.sysbus__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--cyan);
+}
+
+.sysbus__led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(64, 168, 196, 0.35);
   transition:
-    opacity 0.4s var(--ease-out),
-    transform 0.4s var(--ease-out);
-  pointer-events: none;
+    background-color 0.4s var(--ease-out),
+    box-shadow 0.4s var(--ease-out);
 }
 
-.idea__line.is-hovered .idea__explore {
-  opacity: 1;
-  transform: translate(0, -50%);
+.sysbus__module[data-lit="true"] .sysbus__led {
+  background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(247, 170, 0, 0.18);
 }
 
-.idea__line:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 6px;
+.sysbus__title {
+  color: var(--blue);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: var(--w-head);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-variation-settings: "wdth" 92;
 }
 
-/* No hover to give: surface the tag on whichever line the scroll has made active. */
-@media (hover: none) {
-  .idea__line.is-active .idea__explore {
-    opacity: 1;
-    transform: translate(0, -50%);
+.sysbus__text {
+  color: rgba(8, 22, 31, 0.7);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.sysbus__explore {
+  margin-top: 0.25rem;
+  color: var(--blue);
+}
+
+.sysbus__explore span {
+  color: var(--yellow);
+}
+
+.sysbus__handoff {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 6rem;
+  margin-left: 1.6rem;
+  background: rgba(35, 87, 132, 0.16);
+}
+
+.sysbus__handoff-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--blue), var(--cyan));
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .sysbus__modules {
+    gap: 1rem;
+  }
+
+  .sysbus__card {
+    padding: 1.15rem 1.4rem 1.2rem;
+  }
+
+  .sysbus__title {
+    font-size: 1.35rem;
+  }
+
+  .sysbus__text {
+    max-width: 36rem;
+    font-size: 0.98rem;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .idea__line-inner,
-  .idea__explore {
-    transition: none;
-  }
-  .idea__line.is-hovered .idea__line-inner {
-    transform: none;
-  }
-}
-@media (max-width: 899px) {
-  .idea__grid {
-    gap: 2rem;
+@media (max-width: 639px) {
+  .sys__title {
+    font-size: clamp(1.75rem, 8.2vw, 2.3rem);
   }
 
-  .idea__service {
-    min-height: 7em;
+  .sys__lead {
+    font-size: 0.95rem;
+    line-height: 1.58;
   }
 
+  .sysbus__body {
+    margin-left: 1.6rem;
+    padding-left: 1.1rem;
+  }
+
+  .sysbus__branch {
+    left: -1.1rem;
+    width: 1.1rem;
+  }
 }

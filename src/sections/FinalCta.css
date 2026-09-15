@@ -117,7 +117,7 @@
 .cta__details li > span:last-child {
   font-family: var(--font-display);
   font-size: clamp(1rem, 1.2vw, 1.15rem);
-  font-weight: 600;
+  font-weight: var(--w-head);
   letter-spacing: -0.02em;
 }
 
@@ -194,7 +194,7 @@
   border-radius: 999px;
   color: var(--ink);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: var(--w-head);
   line-height: 1;
 }
 

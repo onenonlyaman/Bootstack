@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap, prefersReducedMotion } from "../lib/motion";
-import HeroField from "../components/HeroField.jsx";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "../lib/motion";
+import { useIsDesktop } from "../hooks/useMediaQuery";
 import MagneticButton from "../components/MagneticButton.jsx";
-import { brand } from "../data/site";
-import heroVideo from "../assets/hero-background.mp4";
+import SystemScene from "../components/SystemScene.jsx";
 import "./Hero.css";
 
 const LINES = ["Technology That Builds", "Tomorrow's Brands."];
@@ -19,9 +18,11 @@ const CONSULTATION_SERVICES = [
   "Marketing Automation",
 ];
 
-export default function Hero({ ready }) {
+export default function Hero({ ready, introHandoff = false }) {
   const rootRef = useRef(null);
   const [showConsultation, setShowConsultation] = useState(false);
+  const [engine, setEngine] = useState(null);
+  const isDesktop = useIsDesktop();
 
   const handleServiceClick = (serviceName) => {
     const message = `Hello Bootstack Team,
@@ -47,93 +48,144 @@ Thank you.`;
     setShowConsultation(false);
   };
 
+  // ---- Arrival: the copy settles in; the system is simply present ----
   useEffect(() => {
-    if (!ready) return undefined;
+    if (!ready || prefersReducedMotion()) return undefined;
 
     const ctx = gsap.context(() => {
-      if (!prefersReducedMotion()) {
-        const tl = gsap.timeline({ delay: 0.1 });
-
-        tl.from(".hero__eyebrow > *", {
-          yPercent: 130,
-          duration: 0.9,
+      const tl = gsap
+        .timeline({ delay: 0.1 })
+        .from(".hero__line > span", {
+          yPercent: 118,
+          duration: 1.25,
           ease: "expo.out",
-          stagger: 0.06,
+          stagger: 0.09,
         })
-          .from(
-            ".hero__line > span",
-            {
-              yPercent: 118,
-              duration: 1.25,
-              ease: "expo.out",
-              stagger: 0.09,
-            },
-            0.1,
-          )
-          .from(
-            [".hero__support", ".hero__ctas", ".hero__values", ".hero__scroll"],
-            {
-              y: 26,
-              opacity: 0,
-              duration: 1,
-              ease: "power3.out",
-              stagger: 0.08,
-            },
-            0.55,
-          )
-          .from(
-            ".field",
-            {
-              opacity: 0,
-              duration: 1.6,
-              ease: "power2.out",
-            },
-            0,
-          );
+        .from(
+          [".hero__support", ".hero__ctas"],
+          { y: 26, opacity: 0, duration: 1, ease: "power3.out", stagger: 0.08 },
+          0.45,
+        );
+
+      // After the boot intro, its core lands on this one — the system must
+      // already be there to receive it, so it is not faded in again.
+      if (!introHandoff) {
+        tl.from(
+          ".hero__stage",
+          { opacity: 0, duration: 1.6, ease: "power2.out" },
+          0.2,
+        );
       }
-
-      // Departure: the headline lifts and thins out as the next chapter arrives.
-      gsap.to(".hero__type", {
-        yPercent: -18,
-        opacity: 0.06,
-        ease: "none",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.4,
-        },
-      });
-
-      // The cue leaves with the supporting column rather than riding on alone
-      // while everything around it fades.
-      gsap.to([".hero__aside", ".hero__scroll"], {
-        y: -70,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top top",
-          end: "60% top",
-          scrub: 0.4,
-        },
-      });
-
-      gsap.to(".field", {
-        opacity: 0.08,
-        scale: 1.12,
-        ease: "none",
-        scrollTrigger: {
-          trigger: rootRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-        },
-      });
     }, rootRef);
 
     return () => ctx.revert();
-  }, [ready]);
+  }, [ready, introHandoff]);
+
+  // ---- The boot sequence, driven by scroll ----
+  useEffect(() => {
+    if (!engine) return undefined;
+
+    const st = engine.state;
+    const root = rootRef.current;
+
+    // Dormant: present, dim, components suspended around a waiting core.
+    Object.assign(
+      st.cam,
+      isDesktop
+        ? { fx: 0.7, fy: 0.55, elev: 30, yaw: 45, zoom: 0.94, dive: 0 }
+        : { fx: 0.5, fy: 0.46, elev: 30, yaw: 45, zoom: 1, dive: 0 },
+    );
+
+    if (prefersReducedMotion()) {
+      // The finished state, without the journey.
+      Object.assign(st.core, { power: 1, ring: 1, emblem: 1, lift: 0 });
+      Object.assign(st.traces, { draw: 1, lit: 1, base: 0.22 });
+      st.modules.forEach((m) => Object.assign(m, { p: 1, lit: 1 }));
+      Object.assign(st, { ambient: 0, ready: 1 });
+      st.board.glow = 1;
+      engine.render();
+      return undefined;
+    }
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "none" } });
+
+      // INITIALIZING — the core unlocks, its window lights, the B wakes.
+      tl.to(st.core, { lift: 1, duration: 0.8, ease: "power2.out" }, 0.35)
+        .to(st.core, { lift: 0, duration: 0.8, ease: "power2.in" }, 1.1)
+        .to(st.core, { power: 0.6, emblem: 1, duration: 1.45 }, 0.35)
+        .to(st.core, { ring: 1, duration: 1.3, ease: "power1.inOut" }, 0.5)
+        .to(st.board, { glow: 0.5, duration: 1.45 }, 0.35)
+
+        // CONNECTING — pathways form outward from the core; components move in.
+        .to(st.traces, { draw: 1, base: 0.22, duration: 2.4 }, 1.8)
+        .to(
+          st.modules,
+          { p: 0.86, duration: 2.2, stagger: 0.12, ease: "power1.inOut" },
+          2,
+        )
+        .to(st.cam, { zoom: 1.04, elev: 33, duration: 2.7 }, 1.8)
+
+        // POWERING UP — modules dock, signals run, the system brightens.
+        .to(
+          st.modules,
+          { p: 1, duration: 1.4, stagger: 0.1, ease: "power2.inOut" },
+          4.3,
+        )
+        .to(st.modules, { lit: 1, duration: 0.5, stagger: 0.18 }, 5)
+        .to(st.traces, { lit: 1, duration: 1.2 }, 4.6)
+        .to(st, { ambient: 0, duration: 1 }, 4.6)
+        .to(st.flow, { alpha: 1, duration: 0.6 }, 4.6)
+        .to(st.flow, { t: 2.5, duration: 3.4 }, 4.6)
+        .to(st.core, { power: 1, duration: 2 }, 4.8)
+
+        // SYSTEM READY
+        .to(st, { ready: 1, duration: 0.8 }, 7)
+        .to(st.board, { glow: 1, duration: 0.8 }, 7);
+
+      if (isDesktop) {
+        // Enter the system: the copy steps back and the camera dives through the
+        // core's window until it fills the screen — the ground Section 02 opens on.
+        tl.to(
+          ".hero__content",
+          { autoAlpha: 0, y: -60, duration: 1.1, ease: "power1.in" },
+          7.5,
+        )
+          .to(st.flow, { alpha: 0, duration: 1 }, 8.3)
+          .to(st.cam, { yaw: 45, dive: 1, duration: 3, ease: "sine.in" }, 8.3);
+      } else {
+        tl.to({}, { duration: 0.6 });
+      }
+
+      ScrollTrigger.create(
+        isDesktop
+          ? {
+              animation: tl,
+              trigger: root,
+              start: "top top",
+              end: "+=165%",
+              pin: true,
+              scrub: 0.6,
+              anticipatePin: 1,
+            }
+          : {
+              animation: tl,
+              trigger: root,
+              start: "top top",
+              endTrigger: root.querySelector(".hero__stage"),
+              end: "bottom 40%",
+              scrub: 0.6,
+            },
+      );
+    }, rootRef);
+
+    // The pin adds scroll length above every later trigger; re-order and
+    // re-measure so the sections below start where they now are.
+    ScrollTrigger.sort();
+    ScrollTrigger.refresh();
+
+    return () => ctx.revert();
+  }, [engine, isDesktop]);
 
   return (
     <section
@@ -142,35 +194,26 @@ Thank you.`;
       data-bg="mist"
       aria-labelledby="hero-title"
     >
-      <video
-        className="hero__video"
-        src={heroVideo}
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      />
-
-      <div className="hero__video-overlay" aria-hidden="true" />
-
-      <HeroField />
-
       <div className="hero__inner shell">
         {/* ============================================================
             MAIN HERO CONTENT
             ============================================================ */}
         <div className="hero__content">
-          {/* Eyebrow */}
-          <p className="hero__eyebrow mono">
-            <span>{brand.positioning}</span>
-          </p>
-
           {/* Main heading */}
           <h1 id="hero-title" className="hero__type display display--mega">
             {LINES.map((line, i) => (
               <span className={`hero__line hero__line--${i + 1}`} key={line}>
-                <span>{line}</span>
+                {/* The closing full stop carries the headline's orange accent. */}
+                <span>
+                  {line.endsWith(".") ? (
+                    <>
+                      {line.slice(0, -1)}
+                      <span className="hero__stop">.</span>
+                    </>
+                  ) : (
+                    line
+                  )}
+                </span>
               </span>
             ))}
           </h1>
@@ -199,37 +242,24 @@ Thank you.`;
                 Book Consultation Call
               </MagneticButton>
 
-              <MagneticButton href="#capabilities" variant="ghost">
-                Explore Services
+              <MagneticButton href="#idea" variant="ghost">
+                EXPLORE SERVICES
               </MagneticButton>
-            </div>
-
-            {/* Value points */}
-            <div className="hero__values">
-              <span>
-                <b>✓</b> Innovation First
-              </span>
-
-              <span>
-                <b>✓</b> Results Focused
-              </span>
-
-              <span>
-                <b>✓</b> Business Growth
-              </span>
             </div>
           </div>
         </div>
 
         {/* ============================================================
-            SCROLL CUE
+            THE BOOTSTACK SYSTEM
+            Dormant on arrival; the visitor's scroll boots it.
             ============================================================ */}
-        <div className="hero__scroll" aria-hidden="true">
-          <span className="hero__scroll-dot">
-            <i />
-          </span>
-
-          <span className="hero__scroll-label mono">Scroll to explore</span>
+        <div className="hero__stage">
+          <SystemScene
+            variant="hero"
+            compact={!isDesktop}
+            interactive={isDesktop}
+            onEngine={setEngine}
+          />
         </div>
       </div>
 

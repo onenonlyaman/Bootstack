@@ -168,7 +168,7 @@
    background-image cannot be transitioned, a colour can. */
 .cap__title {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: clamp(1.15rem, 1.45vw, 1.5rem);
   line-height: 1.16;
   letter-spacing: -0.025em;
@@ -453,7 +453,7 @@
 
 .cap__pillar-label {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: clamp(1.15rem, 1.7vw, 1.5rem);
   line-height: 1.1;
   letter-spacing: -0.025em;
@@ -505,7 +505,7 @@
   background: var(--white);
   color: var(--navy);
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: var(--w-head);
   line-height: 1.2;
   transition:
     border-color 0.35s var(--ease-out),
@@ -547,7 +547,7 @@
 
 .cap__roof-line {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--w-head);
   font-size: clamp(1.3rem, 2vw, 1.75rem);
   line-height: 1.1;
   letter-spacing: -0.03em;

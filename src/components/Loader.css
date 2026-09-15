@@ -32,7 +32,7 @@
 .loader__word {
   display: block;
   font-size: clamp(1.9rem, 4.6vw, 3.6rem);
-  font-weight: 800;
+  font-weight: var(--w-head);
   letter-spacing: -0.05em;
   line-height: 1;
   font-variation-settings: 'wdth' 88;

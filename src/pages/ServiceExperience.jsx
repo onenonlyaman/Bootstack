@@ -12,6 +12,7 @@ import Nav from "../components/Nav.jsx";
 import Counter from "../components/Counter.jsx";
 import MagneticButton from "../components/MagneticButton.jsx";
 import ScheduleCall from "../components/ScheduleCall.jsx";
+import ServiceSchematic from "../components/ServiceSchematic.jsx";
 import Footer from "../sections/Footer.jsx";
 
 import {
@@ -19,32 +20,27 @@ import {
   serviceExperiences,
   serviceNeighbours,
 } from "../data/serviceExperiences";
+import { capabilities } from "../data/capabilities";
 import { contact } from "../data/site";
 import "./ServiceExperience.css";
 
 /**
- * /services/:slug — one service, told as a chapter sequence.
+ * /services/:slug — the page each Section 04 service opens.
  *
- * The page is a single continuous surface: every chapter is a `.band` carrying
- * a `data-bg`, and BackgroundStage — the same component the homepage mounts —
- * tweens the fixed plane behind them as each chapter takes the viewport
- * midline. Nothing here paints its own rectangle, so scrolling up reverses the
- * colour exactly the way it does on the homepage.
+ * One system for all eight services, read from data/serviceExperiences.js (and,
+ * for the deliverables and the one-line promise, the same record Section 04
+ * shows in data/capabilities.js — read here, never changed):
  *
- * Everything on the page is read from one data object, so all eight services
- * share this component: edit data/serviceExperiences.js and the page follows.
+ *   Hero      the service, what it promises, the two actions — beside the
+ *             service module, a live composition of the work itself.
+ *   Overview  what it is and why it matters, against what is included.
+ *   Impact    where it moves the business: the reasons, and the weighting.
+ *   Process   the consultation stages on one connected track.
+ *   Close     start the project, or move to another service.
+ *
+ * Every chapter is a `.band` with a `data-bg`, so BackgroundStage carries the
+ * ground from one to the next exactly as it does on the homepage.
  */
-
-/** Chapter grounds, in order. Keys must exist in BackgroundStage's GROUNDS. */
-const CHAPTERS = [
-  { id: "open", ground: "mist", label: "Overview" },
-  { id: "what", ground: "white", label: "What it is" },
-  { id: "importance", ground: "cyan", label: "Importance" },
-  { id: "process", ground: "mist", label: "Process" },
-  { id: "why", ground: "white", label: "Why it matters" },
-  { id: "impact", ground: "yellow", label: "Impact" },
-  { id: "close", ground: "cyandeep", label: "Next" },
-];
 
 /** "70%" -> { value: 70, suffix: "%" } so the counter can run and the bar can size. */
 const splitMetric = (raw) => {
@@ -57,11 +53,13 @@ const splitMetric = (raw) => {
   };
 };
 
+const pad = (n) => String(n).padStart(2, "0");
+
 export default function ServiceExperience() {
   const { slug } = useParams();
   const service = serviceExperienceBySlug[slug];
+  const capability = capabilities.find((c) => c.id === slug);
   const rootRef = useRef(null);
-  const [chapter, setChapter] = useState(0);
   const [callOpen, setCallOpen] = useState(false);
 
   const metrics = useMemo(
@@ -71,13 +69,6 @@ export default function ServiceExperience() {
         ...splitMetric(m.value),
       })),
     [service],
-  );
-
-  // Only metrics with real copy earn a place in the hero. The impact chapter
-  // still lists every one — that is where unwritten copy should be visible.
-  const heroChips = useMemo(
-    () => metrics.filter((m) => !/placeholder/i.test(m.label)).slice(0, 2),
-    [metrics],
   );
 
   const { previous, next } = serviceNeighbours(slug);
@@ -90,7 +81,7 @@ export default function ServiceExperience() {
   useEffect(() => {
     window.scrollTo(0, 0);
     // Leave a marker so a Back navigation lands on this service's card in
-    // Section 03 rather than at the top of the homepage. App clears it.
+    // Section 04 rather than at the top of the homepage. App clears it.
     try {
       sessionStorage.setItem("bootstack:from-service", slug);
     } catch {
@@ -107,9 +98,7 @@ export default function ServiceExperience() {
     };
   }, [service]);
 
-  // Layout settles once webfonts land — the same recalculation the homepage
-  // does, so BackgroundStage's start/end points are measured against the real
-  // layout rather than a fallback-font one.
+  // Layout settles once webfonts land; re-measure every trigger against it.
   useEffect(() => {
     if (!service) return undefined;
     const refresh = () => ScrollTrigger.refresh();
@@ -124,172 +113,131 @@ export default function ServiceExperience() {
 
   useEffect(() => {
     if (!service) return undefined;
+    const root = rootRef.current;
 
     const ctx = gsap.context(() => {
-      // Which chapter owns the viewport — drives the rail's active mark. Cheap
-      // enough to run unconditionally: it sets state, it does not animate.
-      CHAPTERS.forEach((c, i) => {
-        const el = rootRef.current?.querySelector(`#chapter-${c.id}`);
-        if (!el) return;
-        ScrollTrigger.create({
-          trigger: el,
-          start: "top 52%",
-          end: "bottom 52%",
-          onEnter: () => setChapter(i),
-          onEnterBack: () => setChapter(i),
-        });
-      });
-
       const mm = gsap.matchMedia();
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // 01 — the masthead title climbs out of its mask on load.
-        gsap.from(".sx__title-line > span", {
-          yPercent: 112,
-          duration: 1.15,
-          ease: "expo.out",
-          stagger: 0.08,
-          delay: 0.1,
-          // The heading paints as gradient text; a transform left behind on a
-          // descendant can drop the parent's clipped background, so the words
-          // settle back to no transform at all. Same motion, clean end state.
-          clearProps: "transform",
-        });
-
-        // 02 — the importance spine draws as the list is read, and each point
-        // lifts as the line reaches it. Motion explaining sequence, not decor.
-        gsap.to(".sx__spine-fill", {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".sx__points",
-            start: "top 72%",
-            end: "bottom 78%",
-            scrub: 0.6,
-          },
-        });
-
-        // The stack on the right rises in lockstep with the spine.
-        gsap.to(".sx__weigh-plate", {
-          scaleX: 1,
-          ease: "none",
-          stagger: 0.5,
-          scrollTrigger: {
-            trigger: ".sx__points",
-            start: "top 72%",
-            end: "bottom 78%",
-            scrub: 0.6,
-          },
-        });
-
-        gsap.from(".sx__weigh-crown", {
-          opacity: 0,
-          y: 10,
-          duration: 0.6,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".sx__weigh", start: "bottom 80%" },
-        });
-
-        gsap.utils.toArray(".sx__point").forEach((point) => {
-          gsap.from(point, {
-            opacity: 0,
-            y: 26,
-            duration: 0.7,
-            ease: "power3.out",
-            scrollTrigger: { trigger: point, start: "top 84%" },
-          });
-        });
-
-        // 03 — the process. The stage that owns the midline lights up, and the
-        // rail fills in step, so the sequence reads as one connected run.
-        gsap.utils.toArray(".sx__stage").forEach((stage) => {
-          ScrollTrigger.create({
-            trigger: stage,
-            start: "top 62%",
-            end: "bottom 62%",
-            onToggle: (self) =>
-              stage.classList.toggle("is-live", self.isActive),
-          });
-        });
-
-        gsap.to(".sx__process-fill", {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".sx__stages",
-            start: "top 70%",
-            end: "bottom 80%",
-            scrub: 0.6,
-          },
-        });
-
-        // 04 — the ratio bar unrolls left to right as the chapter is entered.
-        gsap.from(".sx__bar-seg", {
-          scaleX: 0,
-          transformOrigin: "left center",
-          duration: 1.1,
-          ease: "expo.out",
-          stagger: 0.12,
-          scrollTrigger: { trigger: ".sx__bar", start: "top 82%" },
-        });
-
-        // 05 — the schematic assembles itself once, on load: frames settle in,
-        // then the interface draws its rows. Transform and opacity only.
+        // Hero: the name rises out of its mask, then the promise and actions.
         gsap
-          .timeline({ delay: 0.35 })
-          .from(".sx__frame", {
-            opacity: 0,
-            y: 22,
-            duration: 0.8,
-            ease: "power3.out",
-            stagger: 0.09,
+          .timeline({ delay: 0.1 })
+          .from(".sv-hero__word > span", {
+            yPercent: 112,
+            duration: 1.1,
+            ease: "expo.out",
+            stagger: 0.07,
+            // The title is gradient text; leaving a transform on a word can drop
+            // the clipped background, so the words settle back to none.
+            clearProps: "transform",
           })
           .from(
-            ".sx__frame-bar i",
-            { scale: 0, duration: 0.4, ease: "back.out(2)", stagger: 0.06 },
-            "-=0.45",
-          )
-          .from(
-            ".sx__tile",
+            ".sv-hero__verb, .sv-hero__lead, .sv-hero__actions",
             {
-              scaleX: 0,
-              transformOrigin: "left center",
-              duration: 0.6,
-              ease: "power2.out",
-              stagger: 0.05,
-            },
-            "-=0.4",
-          )
-          .to(
-            ".sx__wire",
-            { strokeDashoffset: 0, duration: 0.8, ease: "power2.out" },
-            "-=0.35",
-          )
-          .from(
-            ".sx__chip",
-            {
-              opacity: 0,
-              y: 16,
-              scale: 0.94,
-              duration: 0.7,
+              y: 18,
+              autoAlpha: 0,
+              duration: 0.8,
               ease: "power3.out",
-              stagger: 0.1,
+              stagger: 0.08,
             },
-            "-=0.45",
+            0.35,
           );
+
+        // Overview: the included list is wired up as it is read.
+        const kit = root.querySelector(".sv-kit__list");
+        const kitItems = gsap.utils.toArray(".sv-kit__item", root);
+        if (kit) {
+          gsap.fromTo(
+            kit,
+            { "--p": 0 },
+            {
+              "--p": 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: kit,
+                start: "top 78%",
+                end: "bottom 62%",
+                scrub: 0.5,
+                onUpdate: (self) => {
+                  kitItems.forEach((item, i) => {
+                    item.classList.toggle(
+                      "is-lit",
+                      self.progress >= (i + 0.35) / kitItems.length,
+                    );
+                  });
+                },
+              },
+            },
+          );
+        }
+
+        // Impact: the weighting unrolls, and the reasons step in.
+        gsap.from(".sv-ratio__seg", {
+          scaleX: 0,
+          transformOrigin: "0 50%",
+          duration: 1.1,
+          ease: "expo.out",
+          stagger: 0.1,
+          scrollTrigger: { trigger: ".sv-ratio", start: "top 85%" },
+        });
+
+        gsap.from(".sv-gain", {
+          y: 14,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: "power3.out",
+          stagger: 0.07,
+          scrollTrigger: { trigger: ".sv-gains", start: "top 82%" },
+        });
+
+        // Process: the track fills with the reader, lighting each stage it
+        // reaches; the latest one is the live stage.
+        const stages = gsap.utils.toArray(".sv-stage", root);
+        const run = root.querySelector(".sv-stages");
+        if (run && stages.length) {
+          gsap.fromTo(
+            run,
+            { "--p": 0 },
+            {
+              "--p": 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: run,
+                start: "top 72%",
+                end: "bottom 58%",
+                scrub: 0.5,
+                onUpdate: (self) => {
+                  const reached = self.progress * (stages.length - 1) + 0.02;
+                  stages.forEach((stage, i) => {
+                    stage.setAttribute(
+                      "data-state",
+                      i > reached
+                        ? "idle"
+                        : i > reached - 1 && i <= reached
+                          ? "live"
+                          : "done",
+                    );
+                  });
+                },
+              },
+            },
+          );
+        }
       });
 
-      // Reduced motion: nothing scrubs, nothing hides. Every stage reads as live
-      // so the process is still legible without movement.
+      // Reduced motion: nothing scrubs and nothing waits to appear.
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set([".sx__spine-fill", ".sx__process-fill"], { scaleY: 1 });
-        gsap.set(".sx__weigh-plate", { scaleX: 1 });
-        gsap.set(".sx__wire", { strokeDashoffset: 0 });
-        gsap.utils
-          .toArray(".sx__stage")
-          .forEach((stage) => stage.classList.add("is-live"));
+        root
+          .querySelectorAll(".sv-kit__list, .sv-stages")
+          .forEach((el) => el.style.setProperty("--p", "1"));
+        root
+          .querySelectorAll(".sv-kit__item")
+          .forEach((el) => el.classList.add("is-lit"));
+        root
+          .querySelectorAll(".sv-stage")
+          .forEach((el) => el.setAttribute("data-state", "done"));
       });
-    }, rootRef);
+    }, root);
 
     return () => ctx.revert();
   }, [service, slug]);
@@ -301,18 +249,21 @@ export default function ServiceExperience() {
         <BackgroundStage />
         <Grain />
         <Nav ready />
-        <main className="sx sx--missing">
-          <section className="band" data-bg="mist">
+        <main className="sv sv--missing">
+          <section className="band sv-missing" data-bg="mist">
             <div className="shell">
-              <p className="mono sx__eyebrow">404</p>
-              <h1 className="display display--xl">
-                That service does not exist.
+              <p className="sv-label mono">Not found</p>
+              <h1 className="sv-missing__title">
+                That service page does not exist.
               </h1>
-              <ul className="sx__missing-links">
+              <p className="sv-missing__lead">
+                Choose one of Bootstack’s services instead:
+              </p>
+              <ul className="sv-missing__links">
                 {serviceExperiences.map((s) => (
                   <li key={s.slug}>
-                    <Link className="mono" to={`/services/${s.slug}`}>
-                      {s.number} — {s.title}
+                    <Link to={`/services/${s.slug}`}>
+                      <span className="mono">{s.number}</span> {s.title}
                     </Link>
                   </li>
                 ))}
@@ -325,7 +276,9 @@ export default function ServiceExperience() {
     );
   }
 
-  const titleLines = service.title.split(" ");
+  const items = capability?.items ?? [];
+  const tone = capability?.tone ?? service.tone ?? "cyan";
+  const phone = `tel:${contact.phone.replace(/\s+/g, "")}`;
 
   return (
     <>
@@ -334,386 +287,270 @@ export default function ServiceExperience() {
       <Grain />
       <Nav ready />
 
-      <main
-        ref={rootRef}
-        className={`sx sx--${service.tone}`}
-        id="top"
-        key={slug}
-      >
-        {/* ---------- 01 · Masthead ----------
-            One viewport, three bands: crumb at the top, title + visual through
-            the middle, the service marker and cue at the foot. The section is
-            sized so the next chapter starts as soon as the hero ends. */}
-        <section id="chapter-open" className="sx__open band" data-bg="mist">
-          <div className="shell sx__open-inner">
-            <p className="sx__crumb mono">
-              <Link to="/#capabilities">What Bootstack does</Link>
-              <span aria-hidden="true">/</span>
-              <span>{service.category}</span>
-            </p>
+      <main ref={rootRef} className={`sv sv--${tone}`} id="top" key={slug}>
+        {/* ---------- Hero ---------- */}
+        <section
+          className="sv-hero band"
+          data-bg="mist"
+          aria-labelledby="sv-title"
+        >
+          <div className="shell sv-hero__inner">
+            <div className="sv-hero__copy">
+              <nav className="sv-crumb mono" aria-label="Breadcrumb">
+                <Link to="/#capabilities">What Bootstack does</Link>
+                <span aria-hidden="true">/</span>
+                <span>{service.category}</span>
+              </nav>
 
-            {/* Marker row sits directly under the navbar, above the title —
-                not on the floor of the hero. */}
-            <div className="sx__open-head">
-              <p className="sx__number mono">
-                <span className="sx__number-value">{service.number}</span>
-                <span>Service</span>
+              <p className="sv-hero__index mono">
+                <span>
+                  Service <b>{service.number}</b> of{" "}
+                  {pad(serviceExperiences.length)}
+                </span>
               </p>
-              <p className="sx__cue mono" aria-hidden="true">
-                Scroll to read
-              </p>
+
+              <h1 id="sv-title" className="sv-hero__title">
+                {service.title.split(" ").map((word, i) => (
+                  <span className="sv-hero__word" key={`${word}-${i}`}>
+                    <span>{word}</span>
+                  </span>
+                ))}
+              </h1>
+
+              {capability?.verb ? (
+                <p className="sv-hero__verb">{capability.verb}</p>
+              ) : null}
+              <p className="sv-hero__lead">{service.description}</p>
+
+              <div className="sv-hero__actions">
+                <MagneticButton
+                  as="button"
+                  type="button"
+                  variant="solid"
+                  onClick={() => setCallOpen(true)}
+                >
+                  Start your project
+                </MagneticButton>
+                <MagneticButton href={phone} variant="ghost">
+                  Book a consultation call
+                </MagneticButton>
+              </div>
             </div>
 
-            <div className="sx__open-main">
-              <div className="sx__open-copy">
-                {/* Fixed scale for every service, so a long name and a short
-                    name carry the same weight. The title wraps; it never
-                    re-sizes itself around its own length. */}
-                <h1 className="sx__title display display--xl section-gradient-heading">
-                  {service.title.split(" ").map((word, i) => (
-                    <span className="sx__title-line" key={`${word}-${i}`}>
-                      <span>{word}</span>
-                    </span>
-                  ))}
-                </h1>
+            <ServiceSchematic service={service} items={items} />
+          </div>
+        </section>
 
-                {service.description && (
-                  <p className="sx__description" data-reveal>
-                    {service.description}
-                  </p>
-                )}
+        {/* ---------- Overview: what it is, why it matters, what is included ---------- */}
+        <section
+          className="sv-brief band"
+          data-bg="white"
+          aria-label="Overview"
+        >
+          <div className="shell sv-brief__grid">
+            <div className="sv-brief__main">
+              <p className="sv-label mono" data-reveal>
+                {service.whatItIs.title}
+              </p>
+              <p className="sv-brief__statement" data-reveal>
+                {service.whatItIs.description}
+              </p>
 
-                <ul className="sx__signals">
-                  {service.hero.signals.map((signal, i) => (
-                    <li
-                      className="sx__signal mono"
-                      key={`${signal}-${i}`}
-                      data-reveal
-                      style={{ "--reveal-delay": `${260 + i * 70}ms` }}
-                    >
-                      {signal}
+              <div className="sv-brief__why" data-reveal>
+                <p className="sv-brief__why-label mono">
+                  {service.whyItMatters.title}
+                </p>
+                <p className="sv-brief__why-text">
+                  {service.whyItMatters.description}
+                </p>
+              </div>
+            </div>
+
+            {items.length ? (
+              <div className="sv-kit" data-reveal>
+                <span className="sv-kit__grid" aria-hidden="true" />
+                <p className="sv-label mono">What’s included</p>
+                <ul className="sv-kit__list">
+                  <span className="sv-kit__trace" aria-hidden="true">
+                    <i />
+                  </span>
+                  {items.map((item) => (
+                    <li className="sv-kit__item" key={item}>
+                      {item}
                     </li>
                   ))}
                 </ul>
               </div>
-
-              {/* The visual system. Structure is shared by all eight services;
-                  every label inside it comes from that service's data, and
-                  `theme` shifts the composition. Decorative, so it is hidden
-                  from assistive tech. */}
-              <div
-                className={`sx__viz sx__viz--${service.hero.theme}`}
-                aria-hidden="true"
-              >
-                <span className="sx__viz-grid" />
-
-                <span className="sx__frame sx__frame--back" />
-                <span className="sx__frame sx__frame--mid" />
-
-                <div className="sx__frame sx__frame--front">
-                  <div className="sx__frame-bar">
-                    <i />
-                    <i />
-                    <i />
-                    <span className="sx__frame-label mono">
-                      {service.hero.label}
-                    </span>
-                    <span className="sx__pulse" />
-                  </div>
-
-                  {/* Readouts, straight from the service's data. Every tile
-                      says something true about the work; none are blank. */}
-                  <div className="sx__frame-body">
-                    {service.hero.readouts.map((readout) => (
-                      <div className="sx__tile" key={`${readout.value}-${readout.label}`}>
-                        <span className="sx__tile-value display">
-                          {readout.value}
-                        </span>
-                        <span className="sx__tile-label mono">
-                          {readout.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <span className="sx__scan" />
-                </div>
-
-                {/* Floating readouts — the service's own impact figures, so the
-                    panels say something true rather than being chrome. A metric
-                    still carrying placeholder copy is skipped rather than shown:
-                    the hero never displays a card with nothing real in it, and
-                    each one appears by itself once the figure is written. */}
-                {heroChips.map((m, i) => (
-                  <div className={`sx__chip sx__chip--${i + 1}`} key={m.label}>
-                    <span className="sx__chip-value display">
-                      {m.value}
-                      {m.suffix}
-                    </span>
-                    <span className="sx__chip-label mono">{m.label}</span>
-                  </div>
-                ))}
-
-                <svg
-                  className="sx__wires"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                >
-                  <path
-                    className="sx__wire"
-                    d="M 18 26 L 78 12"
-                    pathLength="100"
-                  />
-                  <path
-                    className="sx__wire"
-                    d="M 66 74 L 88 88"
-                    pathLength="100"
-                  />
-                </svg>
-              </div>
-            </div>
+            ) : null}
           </div>
         </section>
 
-        {/* ---------- 02 · What it is ---------- */}
-        <section id="chapter-what" className="sx__what band" data-bg="white">
-          <div className="shell sx__what-inner">
-            <p className="sx__label mono" data-reveal>
-              {service.whatItIs.title}
-            </p>
-            <p className="sx__statement display display--xl" data-reveal>
-              {service.whatItIs.description}
-            </p>
-          </div>
-        </section>
-
-        {/* ---------- 03 · Importance ---------- */}
+        {/* ---------- Impact: the reasons, and the weighting ---------- */}
         <section
-          id="chapter-importance"
-          className="sx__importance band"
+          className="sv-impact band"
           data-bg="cyan"
+          aria-label={service.businessImpact.title}
         >
-          <div className="shell sx__importance-grid">
-            <div className="sx__importance-copy">
-              <p className="sx__label mono" data-reveal>
+          <div className="shell sv-impact__grid">
+            <div className="sv-impact__reasons">
+              <p className="sv-label mono" data-reveal>
                 {service.importance.title}
               </p>
-
-              <ol className="sx__points">
-                <span className="sx__spine" aria-hidden="true">
-                  <i className="sx__spine-fill" />
-                </span>
-
-                {service.importance.points.map((point, i) => (
-                  <li className="sx__point" key={point}>
-                    <span className="sx__point-num mono">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="sx__point-text display">{point}</span>
+              <ul className="sv-gains">
+                {service.importance.points.map((point) => (
+                  <li className="sv-gain" key={point}>
+                    <span className="sv-gain__mark" aria-hidden="true" />
+                    <span>{point}</span>
                   </li>
                 ))}
-              </ol>
+              </ul>
             </div>
 
-            {/* The same points, stacked. One plate each, widening as they go
-                up: the reasons compound rather than sitting side by side. It
-                builds on the same scroll range as the spine, so the two halves
-                move together. Decorative - the list beside it is the content. */}
-            <div className="sx__weigh" aria-hidden="true">
-              <span className="sx__weigh-grid" />
+            <div className="sv-weigh" data-reveal>
+              <p className="sv-label mono">{service.businessImpact.title}</p>
+              <p className="sv-weigh__statement">
+                {service.businessImpact.statement}
+              </p>
 
-              <ol className="sx__weigh-stack">
-                {service.importance.points.map((point, i) => (
-                  <li
-                    className="sx__weigh-plate"
-                    key={point}
+              <div
+                className="sv-ratio"
+                role="img"
+                aria-label={metrics
+                  .map((m) => `${m.value}${m.suffix} ${m.label}`)
+                  .join(", ")}
+              >
+                {metrics.map((m, i) => (
+                  <span
+                    className="sv-ratio__seg"
+                    key={m.label}
+                    style={{ flexGrow: m.weight, "--i": i }}
+                    aria-hidden="true"
+                  />
+                ))}
+              </div>
+
+              <dl className="sv-ratio__legend">
+                {metrics.map((m, i) => (
+                  <div
+                    className="sv-ratio__item"
+                    key={m.label}
                     style={{ "--i": i }}
                   >
-                    <span className="sx__weigh-num mono">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </li>
+                    <dt className="sv-ratio__label mono">
+                      <i aria-hidden="true" />
+                      {m.label}
+                    </dt>
+                    <dd className="sv-ratio__value">
+                      <Counter value={m.value} suffix={m.suffix} />
+                    </dd>
+                  </div>
                 ))}
-              </ol>
-
-              <span className="sx__weigh-crown mono">{service.category}</span>
+              </dl>
             </div>
           </div>
         </section>
 
-        {/* ---------- 04 · Consultation process ---------- */}
+        {/* ---------- Process ---------- */}
         <section
-          id="chapter-process"
-          className="sx__process band"
+          className="sv-process band"
           data-bg="mist"
+          aria-labelledby="sv-process-title"
         >
-          <div className="shell sx__process-inner">
-            <div className="sx__process-aside">
-              <p className="sx__label mono" data-reveal>
-                Our Consultation Process
+          <div className="shell">
+            <header className="sv-process__head">
+              <h2
+                id="sv-process-title"
+                className="sv-process__title"
+                data-reveal
+              >
+                Our consultation process
+              </h2>
+              <p className="sv-process__count mono" data-reveal>
+                <b>{pad(service.consultationProcess.length)}</b> stages
               </p>
-              <p className="sx__process-count display" data-reveal>
-                {String(service.consultationProcess.length).padStart(2, "0")}
-                <span className="mono">stages</span>
-              </p>
-            </div>
+            </header>
 
-            <ol className="sx__stages">
-              <span className="sx__process-track" aria-hidden="true">
-                <i className="sx__process-fill" />
+            <ol
+              className="sv-stages"
+              style={{ "--count": service.consultationProcess.length }}
+            >
+              <span className="sv-stages__track" aria-hidden="true">
+                <i className="sv-stages__fill" />
+                <i className="sv-stages__pulse" />
               </span>
 
-              {service.consultationProcess.map((stage) => (
-                <li className="sx__stage" key={stage.number}>
-                  <span className="sx__stage-dot" aria-hidden="true" />
-                  <span className="sx__stage-num mono">{stage.number}</span>
-                  <h3 className="sx__stage-title display">{stage.title}</h3>
-                  <p className="sx__stage-text">{stage.description}</p>
+              {service.consultationProcess.map((stage, i) => (
+                <li
+                  className="sv-stage"
+                  key={stage.number}
+                  data-state={i === 0 ? "live" : "idle"}
+                >
+                  <span className="sv-stage__node" aria-hidden="true" />
+                  <span className="sv-stage__num mono">{stage.number}</span>
+                  <h3 className="sv-stage__title">{stage.title}</h3>
+                  <p className="sv-stage__text">{stage.description}</p>
                 </li>
               ))}
             </ol>
           </div>
         </section>
 
-        {/* ---------- 05 · Why it matters ---------- */}
-        <section id="chapter-why" className="sx__why band" data-bg="white">
-          <div className="shell sx__why-inner">
-            <p className="sx__label mono" data-reveal>
-              {service.whyItMatters.title}
-            </p>
-            <p className="sx__why-text display display--xl" data-reveal>
-              {service.whyItMatters.description}
-            </p>
-          </div>
-        </section>
-
-        {/* ---------- 06 · Business impact ---------- */}
+        {/* ---------- Close ---------- */}
         <section
-          id="chapter-impact"
-          className="sx__impact band"
-          data-bg="yellow"
+          className="sv-close band"
+          data-bg="white"
+          aria-labelledby="sv-close-title"
         >
           <div className="shell">
-            <p className="sx__label mono" data-reveal>
-              {service.businessImpact.title}
-            </p>
-
-            <p className="sx__equation display display--xxl" data-reveal>
-              {service.businessImpact.statement}
-            </p>
-
-            {/* The ratio, drawn to scale rather than listed. */}
-            <div
-              className="sx__bar"
-              role="img"
-              aria-label={metrics
-                .map((m) => `${m.value}${m.suffix} ${m.label}`)
-                .join(", ")}
-            >
-              {metrics.map((m) => (
-                <span
-                  className="sx__bar-seg"
-                  key={m.label}
-                  style={{ flexGrow: m.weight }}
-                  aria-hidden="true"
-                />
-              ))}
+            <div className="sv-close__plate">
+              <span className="sv-close__grid" aria-hidden="true" />
+              <div className="sv-close__copy">
+                <p className="sv-close__label mono">Start your project</p>
+                <h2 id="sv-close-title" className="sv-close__title">
+                  Let’s put {service.title.toLowerCase()} to work for your
+                  business.
+                </h2>
+              </div>
+              <div className="sv-close__actions">
+                <MagneticButton
+                  as="button"
+                  type="button"
+                  variant="solid"
+                  onClick={() => setCallOpen(true)}
+                >
+                  Start your project
+                </MagneticButton>
+                <MagneticButton href={phone} variant="ghost">
+                  Book a consultation call
+                </MagneticButton>
+              </div>
             </div>
 
-            <dl className="sx__metrics">
-              {metrics.map((m, i) => (
-                <div
-                  className="sx__metric"
-                  key={m.label}
-                  style={{
-                    flexGrow: m.weight,
-                    "--reveal-delay": `${i * 90}ms`,
-                  }}
-                  data-reveal
-                >
-                  <dt className="sx__metric-value display">
-                    <Counter value={m.value} suffix={m.suffix} />
-                  </dt>
-                  <dd className="sx__metric-label mono">{m.label}</dd>
-                </div>
-              ))}
-            </dl>
+            <nav className="sv-switch" aria-label="Services">
+              <Link
+                className="sv-switch__step"
+                to={`/services/${previous.slug}`}
+              >
+                <span className="mono">&larr; Previous</span>
+                <span className="sv-switch__name">{previous.title}</span>
+              </Link>
+
+              <div className="sv-switch__middle">
+                <Link className="sv-switch__back mono" to="/#capabilities">
+                  Back to services
+                </Link>
+              </div>
+
+              <Link
+                className="sv-switch__step sv-switch__step--next"
+                to={`/services/${next.slug}`}
+              >
+                <span className="mono">Next &rarr;</span>
+                <span className="sv-switch__name">{next.title}</span>
+              </Link>
+            </nav>
           </div>
         </section>
-
-       {/* ---------- 07 · Close ---------- */}
-<section
-  id="chapter-close"
-  className="sx__close band"
-  data-bg="cyandeep"
->
-  <div className="shell sx__close-inner">
-    <p className="sx__label mono" data-reveal>
-      Start your project
-    </p>
-
-    <h2 className="sx__close-title" data-reveal>
-  Let&rsquo;s put {service.title.toLowerCase()} to work for your
-  business.
-</h2>
-
-    <div
-      className="sx__actions"
-      data-reveal
-      style={{ "--reveal-delay": "80ms" }}
-    >
-      <MagneticButton
-        as="button"
-        type="button"
-        variant="solid"
-        onClick={() => setCallOpen(true)}
-      >
-        Start Your Project
-      </MagneticButton>
-
-      <MagneticButton
-        href={`tel:${contact.phone.replace(/\s+/g, "")}`}
-        variant="ghost"
-      >
-        Book a Consultation Call
-      </MagneticButton>
-    </div>
-
-    <nav className="sx__walk" aria-label="Services">
-      {previous ? (
-        <Link
-          className="sx__walk-link"
-          to={`/services/${previous.slug}`}
-        >
-          <span className="mono">&larr; Previous</span>
-          <span className="sx__walk-name display">
-            {previous.title}
-          </span>
-        </Link>
-      ) : (
-        <span />
-      )}
-
-      <Link className="sx__walk-back mono" to="/#idea">
-        Back to Services
-      </Link>
-
-      {next ? (
-        <Link
-          className="sx__walk-link sx__walk-link--next"
-          to={`/services/${next.slug}`}
-        >
-          <span className="mono">Next &rarr;</span>
-          <span className="sx__walk-name display">
-            {next.title}
-          </span>
-        </Link>
-      ) : (
-        <span />
-      )}
-    </nav>
-  </div>
-</section>
       </main>
 
       <Footer />

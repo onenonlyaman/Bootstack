@@ -1,30 +1,30 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Wordmark from '../components/Wordmark.jsx';
-import ScheduleCall from '../components/ScheduleCall.jsx';
-import { openCookiePreferences } from '../lib/consent';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Wordmark from "../components/Wordmark.jsx";
+import ScheduleCall from "../components/ScheduleCall.jsx";
+import { openCookiePreferences } from "../lib/consent";
 import {
   brand,
   footerQuickLinks,
   footerResources,
   socials,
   contact,
-} from '../data/site';
-import './Footer.css';
+} from "../data/site";
+import "./Footer.css";
 
 const year = new Date().getFullYear();
 
 /** The same WhatsApp chat the nav opens, with the same opening message. */
-const WHATSAPP_URL = `https://wa.me/+${contact.phone.replace(/\D/g, '')}?text=${encodeURIComponent(
-  'Hi Bootstack Team,\n\nI visited your website and would like to discuss my project. Please get in touch with me.',
+const WHATSAPP_URL = `https://wa.me/+${contact.phone.replace(/\D/g, "")}?text=${encodeURIComponent(
+  "Hi Bootstack Team,\n\nI visited your website and would like to discuss my project. Please get in touch with me.",
 )}`;
 
 /** Instagram, LinkedIn and Facebook from data/site.js, then WhatsApp. */
 const FOOTER_SOCIALS = [
-  ...['Instagram', 'LinkedIn', 'Facebook']
+  ...["Instagram", "LinkedIn", "Facebook"]
     .map((label) => socials.find((social) => social.label === label))
     .filter(Boolean),
-  { label: 'WhatsApp', href: WHATSAPP_URL },
+  { label: "WhatsApp", href: WHATSAPP_URL },
 ];
 
 /** Social marks, keyed by label. Outline glyphs on a 24px grid. */
@@ -56,18 +56,18 @@ const SOCIAL_ICONS = {
 };
 
 const ICON_PROPS = {
-  viewBox: '0 0 24 24',
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: '1.6',
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
-  'aria-hidden': 'true',
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "1.6",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
 };
 
 /** In-page chapters are plain anchors; real routes go through the router. */
 function FooterLink({ label, to }) {
-  return to.startsWith('/#') || to.startsWith('#') ? (
+  return to.startsWith("/#") || to.startsWith("#") ? (
     <a href={to}>{label}</a>
   ) : (
     <Link to={to}>{label}</Link>
@@ -97,7 +97,13 @@ export default function Footer() {
           <path className="foot__trace foot__trace--soft" d="M198 144v96" />
           <rect className="foot__node" x="144" y="32" width="8" height="8" />
           <rect className="foot__node" x="296" y="60" width="8" height="8" />
-          <rect className="foot__node foot__node--lit" x="320" y="120" width="8" height="8" />
+          <rect
+            className="foot__node foot__node--lit"
+            x="320"
+            y="120"
+            width="8"
+            height="8"
+          />
           <rect className="foot__node" x="312" y="140" width="8" height="8" />
           <rect className="foot__node" x="194" y="140" width="8" height="8" />
         </svg>
@@ -121,7 +127,10 @@ export default function Footer() {
 
             <p className="foot__blurb">{brand.blurb}</p>
 
-            <ul className="foot__social" aria-label={`${brand.name} on social media`}>
+            <ul
+              className="foot__social"
+              aria-label={`${brand.name} on social media`}
+            >
               {FOOTER_SOCIALS.map((social) => (
                 <li key={social.label}>
                   <a
@@ -155,7 +164,7 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href={`tel:${contact.phone.replace(/\s+/g, '')}`}>
+                  <a href={`tel:${contact.phone.replace(/\s+/g, "")}`}>
                     <span className="foot__ico">
                       <svg {...ICON_PROPS}>
                         <path d="M5 4h3.5l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5L15 13l4 1.5V18a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 3 6.2 2 2 0 0 1 5 4Z" />
@@ -198,9 +207,6 @@ export default function Footer() {
                 ))}
                 <li>
                   {/* Re-opens the consent panel rather than going anywhere. */}
-                  <button type="button" onClick={openCookiePreferences}>
-                    Cookie Settings
-                  </button>
                 </li>
               </ul>
             </nav>

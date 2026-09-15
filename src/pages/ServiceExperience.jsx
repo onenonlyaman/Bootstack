@@ -321,20 +321,6 @@ export default function ServiceExperience() {
                 <p className="sv-hero__verb">{capability.verb}</p>
               ) : null}
               <p className="sv-hero__lead">{service.description}</p>
-
-              <div className="sv-hero__actions">
-                <MagneticButton
-                  as="button"
-                  type="button"
-                  variant="solid"
-                  onClick={() => setCallOpen(true)}
-                >
-                  Start your project
-                </MagneticButton>
-                <MagneticButton href={phone} variant="ghost">
-                  Book a consultation call
-                </MagneticButton>
-              </div>
             </div>
 
             <ServiceSchematic service={service} items={items} />

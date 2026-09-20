@@ -259,7 +259,7 @@ export default function HowWeWork() {
       gsap
         .timeline({
           defaults: { ease: "power2.out" },
-          scrollTrigger: { trigger: root, start: "top 85%", end: "top top", scrub: 0.6 },
+          scrollTrigger: { trigger: root, start: "top 88%", end: "top top", scrub: 1.0 },
         })
         .fromTo(".how__head", { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0)
         .fromTo(".how__board", { y: 60, opacity: 0, scale: 0.97 }, { y: 0, opacity: 1, scale: 1, duration: 1 }, 0.1);
@@ -281,9 +281,9 @@ export default function HowWeWork() {
         animation: tl,
         trigger: root,
         start: "top top",
-        end: mode === "compact" ? `+=${COMPACT_SCROLL}%` : `+=${stages.length * 80}%`,
+        end: mode === "compact" ? "+=140%" : `+=${stages.length * 95}%`,
         pin: true,
-        scrub: 0.6,
+        scrub: 1.0,
         anticipatePin: 1,
       });
     }, root);
@@ -341,9 +341,9 @@ export default function HowWeWork() {
           ease: "none",
           scrollTrigger: {
             trigger: ".how__journey",
-            start: "top 58%",
-            end: "bottom 58%",
-            scrub: 0.5,
+            start: "top 62%",
+            end: "bottom 55%",
+            scrub: 0.95,
             onUpdate: update,
             onRefresh: update,
           },

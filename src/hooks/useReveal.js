@@ -18,7 +18,7 @@ export function useReveal(deps = []) {
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+      { rootMargin: '0px 0px -6% 0px', threshold: 0.04 },
     );
 
     nodes.forEach((node) => observer.observe(node));

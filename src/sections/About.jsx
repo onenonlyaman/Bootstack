@@ -125,8 +125,8 @@ export default function About() {
             trigger: root,
             start: "top bottom",
             endTrigger: rule,
-            end: "center 62%",
-            scrub: 0.6,
+            end: "center 60%",
+            scrub: 1.0,
             onUpdate: (self) =>
               setLit(root.querySelector(".about__chip"), self.progress > 0.97),
           },
@@ -141,9 +141,9 @@ export default function About() {
           defaults: { ease: "none" },
           scrollTrigger: {
             trigger: rule,
-            start: "center 66%",
-            end: "center 34%",
-            scrub: 0.6,
+            start: "center 72%",
+            end: "center 30%",
+            scrub: 1.0,
             onUpdate: (self) =>
               nodes.forEach((node, i) =>
                 setLit(node, self.progress > 0.25 + i * 0.16),
@@ -180,9 +180,9 @@ export default function About() {
           ease: "none",
           scrollTrigger: {
             trigger: ".about__visual-space",
-            start: "top 92%",
-            end: "top 38%",
-            scrub: 0.6,
+            start: "top 95%",
+            end: "top 25%",
+            scrub: 1.05,
           },
         },
       );
@@ -195,9 +195,9 @@ export default function About() {
           ease: "none",
           scrollTrigger: {
             trigger: ".about__visual-space",
-            start: "top 92%",
-            end: "bottom 40%",
-            scrub: 0.6,
+            start: "top 95%",
+            end: "bottom 35%",
+            scrub: 1.05,
           },
         },
       );
@@ -218,9 +218,9 @@ export default function About() {
           ease: "power1.out",
           scrollTrigger: {
             trigger: ".about__title",
-            start: "top 86%",
-            end: "bottom 60%",
-            scrub: 0.6,
+            start: "top 88%",
+            end: "bottom 50%",
+            scrub: 1.0,
           },
         },
       );
@@ -236,9 +236,9 @@ export default function About() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: el,
-              start: "top 92%",
-              end: "top 68%",
-              scrub: 0.6,
+              start: "top 90%",
+              end: "top 55%",
+              scrub: 1.0,
             },
           },
         );

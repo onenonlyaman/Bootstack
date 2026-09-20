@@ -28,10 +28,10 @@ export default function FinalCta() {
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.from(".cta__line > span", {
           yPercent: 112,
-          duration: 1.15,
+          duration: 1.35,
           ease: "expo.out",
           stagger: 0.1,
-          scrollTrigger: { trigger: ".cta__heading", start: "top 82%" },
+          scrollTrigger: { trigger: ".cta__heading", start: "top 85%" },
         });
       });
     }, rootRef);

@@ -211,9 +211,9 @@ export default function BigIdea() {
         animation: tl,
         trigger: root,
         start: "top top",
-        end: "+=300%",
+        end: "+=320%",
         pin: true,
-        scrub: 0.6,
+        scrub: 1.0,
         anticipatePin: 1,
         onUpdate: (self) => {
           const time = self.progress * tl.duration();
@@ -326,7 +326,7 @@ export default function BigIdea() {
         start: "top top",
         end: () => `+=${Math.round(window.innerHeight * STAGE_SCROLL)}`,
         pin: true,
-        scrub: 0.5,
+        scrub: 0.95,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
@@ -355,7 +355,7 @@ export default function BigIdea() {
           {
             scaleY: 1,
             ease: "none",
-            scrollTrigger: { trigger: handoff, start: "top 85%", end: "bottom 55%", scrub: 0.5 },
+            scrollTrigger: { trigger: handoff, start: "top 85%", end: "bottom 55%", scrub: 0.9 },
           },
         );
       }
@@ -394,7 +394,7 @@ export default function BigIdea() {
             trigger: ".sysbus__modules",
             start: "top 70%",
             end: "bottom 62%",
-            scrub: 0.5,
+            scrub: 0.9,
             onUpdate: (self) => setBusConnected(self.progress > 0.985),
           },
         },
@@ -407,7 +407,7 @@ export default function BigIdea() {
         {
           scaleY: 1,
           ease: "none",
-          scrollTrigger: { trigger: ".sysbus__handoff", start: "top 65%", end: "bottom 65%", scrub: 0.5 },
+          scrollTrigger: { trigger: ".sysbus__handoff", start: "top 65%", end: "bottom 65%", scrub: 0.9 },
         },
       );
 
@@ -419,7 +419,7 @@ export default function BigIdea() {
             x: 0,
             opacity: 1,
             ease: "power2.out",
-            scrollTrigger: { trigger: module, start: "top 92%", end: "top 66%", scrub: 0.5 },
+            scrollTrigger: { trigger: module, start: "top 92%", end: "top 66%", scrub: 0.9 },
           },
         );
         gsap.fromTo(
@@ -432,7 +432,7 @@ export default function BigIdea() {
               trigger: module,
               start: "top 74%",
               end: "top 62%",
-              scrub: 0.5,
+              scrub: 0.9,
               onUpdate: (self) => module.setAttribute("data-lit", self.progress > 0.95 ? "true" : "false"),
             },
           },

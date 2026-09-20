@@ -163,9 +163,9 @@ Thank you.`;
               animation: tl,
               trigger: root,
               start: "top top",
-              end: "+=165%",
+              end: "+=200%",
               pin: true,
-              scrub: 0.6,
+              scrub: 1.0,
               anticipatePin: 1,
             }
           : {
@@ -173,8 +173,8 @@ Thank you.`;
               trigger: root,
               start: "top top",
               endTrigger: root.querySelector(".hero__stage"),
-              end: "bottom 40%",
-              scrub: 0.6,
+              end: "bottom 30%",
+              scrub: 0.9,
             },
       );
     }, rootRef);

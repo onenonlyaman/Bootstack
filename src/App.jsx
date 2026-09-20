@@ -16,6 +16,7 @@ import Capabilities from "./sections/Capabilities.jsx";
 import About from "./sections/About.jsx";
 import WhyBootstack from "./sections/WhyBootstack.jsx";
 import HowWeWork from "./sections/HowWeWork.jsx";
+import Blog from "./sections/Blog.jsx";
 // SelectedWork.jsx (with data/work.js and WorkVisual) stays in the codebase:
 // the Featured Work section is off the homepage until there are projects to
 // show. Re-import it and render it after <HowWeWork /> to bring it back.
@@ -152,6 +153,7 @@ export default function App() {
         <Capabilities />
         <WhyBootstack />
         <HowWeWork />
+        <Blog />
         <Faq />
         <FinalCta />
       </main>

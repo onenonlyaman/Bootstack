@@ -34,8 +34,8 @@ export default function BackgroundStage() {
         const setColor = () =>
           gsap.to(stage, {
             backgroundColor: color,
-            duration: 0.65,
-            ease: 'power2.inOut',
+            duration: 0.85,
+            ease: 'power1.out',
             overwrite: 'auto',
           });
 
